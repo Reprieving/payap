@@ -10,14 +10,13 @@
   <version>1.0</version>
   <modules>
     <module>payment</module>
-    <module>settlement</module>
     <module>account</module>
-    <module>consumer</module>
     <module>configuration</module>
-    <module>billing</module>
+    <module>finance</module>
     <module>secret</module>
     <module>transaction</module>
-      <module>gateway</module>
+    <module>gateway</module>
+    <module>liquidation</module>
   </modules>
 
   <name>payap</name>
