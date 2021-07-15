@@ -4,11 +4,15 @@ import lombok.Getter;
 
 @Getter
 public enum TransactionType {
-    PAY("PAY", "支付"),
-    PROFIT("PROFIT", "分账"),
-    REFUND("REFUND", "退款"),
-    RENEW("RENEW", "续费"),
-
+    GUARANTEE("PAY", "担保交易"),
+    INSTANT("INSTANT", "即时交易"),
+    GOON("GOON", "继续支付"),
+    SETTLE("SETTLE", "结算"),
+    QUERY("QUERY", "查询"),
+    REFUND("REFUND", "续费"),
+    FREEZE("FREEZE", "冻结"),
+    UNFREEZE("UNFREEZE", "解冻"),
+    WITHDRAW("WITHDRAW", "提现"),
     ;
     private String type;
     private String message;

@@ -3,7 +3,6 @@ package com.byritium.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.Optional;
 
 @RestController
@@ -46,11 +45,6 @@ public class OrderController {
 
     @RequestMapping("unfreeze")
     public ResponseEntity<?> unfreeze() {
-        return ResponseEntity.of(Optional.of("hello"));
-    }
-
-    @RequestMapping("recharge")
-    public ResponseEntity<?> recharge() {
         return ResponseEntity.of(Optional.of("hello"));
     }
 
