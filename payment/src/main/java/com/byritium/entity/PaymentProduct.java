@@ -12,6 +12,5 @@ public class PaymentProduct {
     private String id;
     private TransactionType transactionType;
     private PaymentProductCode paymentProductCode;
-    private BigDecimal paymentAmount;
     private Timestamp timestamp;
 }
