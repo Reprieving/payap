@@ -18,7 +18,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="billing" target="1.8" />
       <module name="consumer" target="1.8" />
+      <module name="settlement" target="1.8" />
       <module name="untitled" target="11" />
     </bytecodeTargetLevel>
   </component>

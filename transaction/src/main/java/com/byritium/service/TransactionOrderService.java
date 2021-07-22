@@ -20,7 +20,6 @@ public class TransactionOrderService {
         TransactionClientAgreement agreement = new TransactionClientAgreement();
 
         TransactionOrder transactionOrder = new TransactionOrder();
-
         transactionOrder.setClientId(clientId);
         transactionOrder.setBusinessOrderId(businessOrderId);
 
@@ -39,6 +38,7 @@ public class TransactionOrderService {
         transactionOrder.setTransactionState(TransactionState.TRANSACTION_PENDING);
         transactionOrder.setOs(Os.USABLE);
         transactionOrder.setCreateTime(new Timestamp(System.currentTimeMillis()));
+
 
 
     }

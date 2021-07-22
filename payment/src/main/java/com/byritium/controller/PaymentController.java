@@ -6,18 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PaymentController {
 
-    @RequestMapping("account")
-    public void account() {
+    @RequestMapping("pick")
+    public void pick() {
 
     }
 
-    @RequestMapping("platform")
-    public void platform() {
 
-    }
-
-    @RequestMapping("phone")
-    public void phone() {
-
-    }
 }
