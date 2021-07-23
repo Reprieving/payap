@@ -24,7 +24,7 @@ public class PaymentController {
 
     }
 
-    @RequestMapping("query")
+    @RequestMapping("withdraw")
     public void query() {
 
     }
