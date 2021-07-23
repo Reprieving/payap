@@ -3,7 +3,7 @@ package com.byritium.constance;
 import lombok.Getter;
 
 @Getter
-public enum PaymentProductCode {
+public enum PaymentProductType {
     PAY("PAY", "支付"),
     SETTLE("SETTLE", "结算"),
     REFUND("REFUND", "退款"),
@@ -12,7 +12,7 @@ public enum PaymentProductCode {
     private String code;
     private String message;
 
-    PaymentProductCode(String code, String message) {
+    PaymentProductType(String code, String message) {
         this.code = code;
         this.message = message;
     }

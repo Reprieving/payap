@@ -1,14 +1,16 @@
 package com.byritium.entity;
 
-import com.byritium.constance.*;
+import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentProductType;
+import com.byritium.constance.PaymentState;
+import com.byritium.constance.TransactionProductType;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Data
-public class TransactionOrder {
+public class PaymentOrder {
     private String id;
     private String clientId;
     private String businessOrderId;
@@ -16,9 +18,10 @@ public class TransactionOrder {
     private String payeeId;
     private String subject;
     private BigDecimal orderAmount;
-    private BigDecimal payAmount;
     private PaymentChannel paymentChannel;
-    private TransactionType transactionType;
-    private TransactionState transactionState;
+    private TransactionProductType transactionProductType;
+    private PaymentProductType paymentProductType;
+    private PaymentState paymentState;
     private Timestamp createTime;
+
 }
