@@ -17,8 +17,6 @@ import java.util.Map;
 
 @Slf4j
 public class WechatPayService {
-
-
     public Map<String, String> buildHeader(String method, String path, String body, String nonceStr, String michId, String certificateSerialNo, String privateKeyPath) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException {
         long timestamp = System.currentTimeMillis() / 1000;
         String message = buildMessage(method, path, timestamp, nonceStr, body);

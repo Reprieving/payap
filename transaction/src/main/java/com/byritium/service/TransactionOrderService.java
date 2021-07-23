@@ -36,9 +36,7 @@ public class TransactionOrderService {
         transactionOrder.setSubject(subject);
         transactionOrder.setTransactionType(TransactionType.GUARANTEE);
         transactionOrder.setTransactionState(TransactionState.TRANSACTION_PENDING);
-        transactionOrder.setOs(Os.USABLE);
         transactionOrder.setCreateTime(new Timestamp(System.currentTimeMillis()));
-
 
 
     }

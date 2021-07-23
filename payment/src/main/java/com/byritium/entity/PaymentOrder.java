@@ -18,6 +18,7 @@ public class PaymentOrder {
     private String payeeId;
     private String subject;
     private BigDecimal orderAmount;
+    private BigDecimal payAmount;
     private PaymentChannel paymentChannel;
     private TransactionProductType transactionProductType;
     private PaymentProductType paymentProductType;
