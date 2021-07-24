@@ -6,6 +6,9 @@ import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionProductType;
 import com.byritium.entity.PaymentOrder;
 import com.byritium.entity.PaymentProduct;
+import com.byritium.service.PaymentOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,22 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PaymentController {
 
+    @Autowired
+    private PaymentOrderService paymentOrderService;
+
+
     @RequestMapping("pay")
     public void pay(@RequestBody PaymentOrder paymentOrder) {
-        TransactionProductType transactionProductType = paymentOrder.getTransactionProductType();
-
-        //DB QUERY
-        PaymentProductType paymentProductType = new PaymentProduct().getPaymentProductType();
-        PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
-
-
-
-        PaymentState paymentState = paymentOrder.getPaymentState();
-        if (paymentState == PaymentState.PAYMENT_SUCCESS) {
-            //记账
-        }
-
-
+        paymentOrder.setPaymentState(PaymentState.PAYMENT_PENDING);
+        paymentOrderService.pay(paymentOrder);
     }
 
     @RequestMapping("refund")

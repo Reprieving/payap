@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: configuration
+    name: account
   config:
     activate:
       on-profile: dev

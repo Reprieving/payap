@@ -1,11 +1,17 @@
 package com.byritium.service.impl;
 
 
+import com.byritium.constance.PaymentChannel;
+import com.byritium.dto.PayParam;
+import com.byritium.dto.PaymentExtra;
 import com.byritium.dto.WechatPayConfig;
+import com.byritium.service.PayService;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,7 +22,8 @@ import java.util.Base64;
 import java.util.Map;
 
 @Slf4j
-public class WechatPayService {
+@Service
+public class WechatPayService implements PayService {
     public Map<String, String> buildHeader(String method, String path, String body, String nonceStr, String michId, String certificateSerialNo, String privateKeyPath) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException {
         long timestamp = System.currentTimeMillis() / 1000;
         String message = buildMessage(method, path, timestamp, nonceStr, body);
@@ -37,7 +44,6 @@ public class WechatPayService {
                 "Accept", "application/json"
         );
     }
-
 
     private String buildMessage(String method, String path, long timestamp, String nonceStr, String body) {
         return method + "\n"
@@ -76,5 +82,15 @@ public class WechatPayService {
         } catch (InvalidKeySpecException e) {
             throw new RuntimeException("无效的密钥格式");
         }
+    }
+
+    @Override
+    public PaymentChannel channel() {
+        return PaymentChannel.WECHAT_PAY;
+    }
+
+    @Override
+    public PayParam pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra) {
+        return null;
     }
 }

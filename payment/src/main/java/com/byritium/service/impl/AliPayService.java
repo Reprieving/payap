@@ -15,21 +15,25 @@ import com.alipay.api.response.AlipayFundTransUniTransferResponse;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.byritium.constance.BaseConst;
+import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.alipay.AliPayCode;
 import com.byritium.dto.AliPayConfig;
 import com.byritium.dto.PayParam;
+import com.byritium.dto.PaymentExtra;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.PayService;
 import com.byritium.service.RefundService;
 import com.byritium.service.WithdrawService;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 
 @Slf4j
+@Service
 public class AliPayService implements PayService, RefundService, WithdrawService {
     private CertAlipayRequest buildRequest(AliPayConfig aliPayConfig) {
         //构造client
@@ -55,9 +59,13 @@ public class AliPayService implements PayService, RefundService, WithdrawService
         return certAlipayRequest;
     }
 
+    @Override
+    public PaymentChannel channel() {
+        return PaymentChannel.ALI_PAY;
+    }
 
     @Override
-    public PayParam pay(String businessOrderId, String subject, BigDecimal orderAmount) {
+    public PayParam pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra) {
         String notifyUrl = BaseConst.GATEWAY_URL.concat("/transaction/alipay/pay");
         AliPayConfig aliPayConfig = new AliPayConfig();
 
@@ -84,7 +92,7 @@ public class AliPayService implements PayService, RefundService, WithdrawService
             Assert.state(!StringUtils.hasText(body), "支付宝签名失败");
 
             PayParam payParam = new PayParam();
-            payParam.setPrePayId(body);
+            payParam.setSign(body);
 
             return payParam;
         } catch (AlipayApiException e) {
@@ -167,4 +175,6 @@ public class AliPayService implements PayService, RefundService, WithdrawService
             throw new BusinessException("支付宝渠道提现失败");
         }
     }
+
+
 }
