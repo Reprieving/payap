@@ -7,7 +7,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("order")
-public class OrderController {
+public class TransactionController {
     @RequestMapping("guarantee")
     public ResponseEntity<?> guarantee() {
         return ResponseEntity.of(Optional.of("hello"));
@@ -30,6 +30,11 @@ public class OrderController {
 
     @RequestMapping("query")
     public ResponseEntity<?> query() {
+        return ResponseEntity.of(Optional.of("hello"));
+    }
+
+    @RequestMapping("transfer")
+    public ResponseEntity<?> transfer() {
         return ResponseEntity.of(Optional.of("hello"));
     }
 
