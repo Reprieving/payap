@@ -23,9 +23,8 @@ import java.util.Base64;
 import java.util.Map;
 
 @Slf4j
-@Service
-public class WechatPayService implements PayService {
-    public Map<String, String> buildHeader(String method, String path, String body, String nonceStr, String michId, String certificateSerialNo, String privateKeyPath) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException {
+public abstract class WechatPayService implements PayService {
+    protected Map<String, String> buildHeader(String method, String path, String body, String nonceStr, String michId, String certificateSerialNo, String privateKeyPath) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException {
         long timestamp = System.currentTimeMillis() / 1000;
         String message = buildMessage(method, path, timestamp, nonceStr, body);
         String signature = sign(message.getBytes(StandardCharsets.UTF_8), privateKeyPath);
@@ -55,7 +54,6 @@ public class WechatPayService implements PayService {
     }
 
     private String sign(byte[] message, String privateKeyPath) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException {
-
         Signature sign = Signature.getInstance("SHA256withRSA");
         sign.initSign(getPrivateKey(privateKeyPath));
         sign.update(message);
@@ -69,7 +67,7 @@ public class WechatPayService implements PayService {
      * @param filename 私钥文件路径  (required)
      * @return 私钥对象
      */
-    public PrivateKey getPrivateKey(String filename) throws IOException {
+    private PrivateKey getPrivateKey(String filename) throws IOException {
         String content = new String(Files.readAllBytes(Paths.get(filename)), StandardCharsets.UTF_8);
         try {
             String privateKey = content.replace("-----BEGIN PRIVATE KEY-----", "")
@@ -99,4 +97,7 @@ public class WechatPayService implements PayService {
     public PayParam pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra) {
         return null;
     }
+
+
+
 }
