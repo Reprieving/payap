@@ -24,7 +24,7 @@ public class PaymentOrderService {
         TransactionProductType transactionProductType = paymentOrder.getTransactionProductType();
 
         //DB QUERY
-        PaymentProductType paymentProductType = new PaymentProduct().getPaymentProductType();
+        PaymentProductType paymentProductType = paymentOrder.getPaymentProductType();
         PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
 
         PaymentState paymentState = paymentOrder.getPaymentState();
@@ -36,8 +36,8 @@ public class PaymentOrderService {
         PayParam payParam;
         switch (paymentState) {
             case PAYMENT_PENDING:
-                //access pay channel
                 payParam = payChannelService.pay(paymentOrder.getBusinessOrderId(), paymentOrder.getSubject(), paymentOrder.getPayAmount(), paymentExtra);
+
                 break;
 
             case PAYMENT_SUCCESS:

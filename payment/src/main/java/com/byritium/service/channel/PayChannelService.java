@@ -3,6 +3,7 @@ package com.byritium.service.channel;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
+import com.byritium.exception.BusinessException;
 import com.byritium.service.PayService;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -40,8 +41,7 @@ public class PayChannelService implements ApplicationContextAware, PayService {
         PaymentChannel paymentChannel = paymentExtra.getPaymentChannel();
         PayService payService = channelPayServiceMap.get(paymentChannel);
         if (payService == null) {
-            //TODO throw exception
-            System.out.println(paymentChannel.getMessage() + "暂不开放");
+            throw new BusinessException(paymentChannel.getMessage() + "暂不开放");
         }
 
         return payService.pay(businessOrderId, subject, payAmount, paymentExtra);

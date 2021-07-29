@@ -9,6 +9,8 @@ import java.sql.Timestamp;
 @Data
 public class PaymentProduct {
     private String id;
+    private String payerId;
+    private String payeeId;
     private TransactionProductType transactionProductType;
     private PaymentProductType paymentProductType;
     private Timestamp createTime;

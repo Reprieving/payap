@@ -9,7 +9,7 @@ public enum TransactionProductType {
     GOON("GOON", "继续支付"),
     SETTLE("SETTLE", "结算"),
     QUERY("QUERY", "查询"),
-    REFUND("REFUND", "续费"),
+    REFUND("REFUND", "退款"),
     FREEZE("FREEZE", "冻结"),
     UNFREEZE("UNFREEZE", "解冻"),
     WITHDRAW("WITHDRAW", "提现"),
