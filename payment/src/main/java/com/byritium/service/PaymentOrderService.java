@@ -3,7 +3,7 @@ package com.byritium.service;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentProduct;
 import com.byritium.constance.PaymentState;
-import com.byritium.constance.TransactionProductType;
+import com.byritium.constance.TransactionProduct;
 import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.entity.PaymentOrder;
@@ -19,9 +19,6 @@ public class PaymentOrderService {
     private PayModelService payModelService;
 
     public void pay(PaymentOrder paymentOrder) {
-        TransactionProductType transactionProductType = paymentOrder.getTransactionProductType();
-
-        //DB QUERY
         PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
         PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
 
@@ -30,6 +27,8 @@ public class PaymentOrderService {
 
         PaymentExtra paymentExtra = new PaymentExtra();
         paymentExtra.setPaymentChannel(paymentChannel);
+        paymentExtra.setPaymentProduct(paymentProduct);
+
 
         PayParam payParam;
         switch (paymentState) {

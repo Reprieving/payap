@@ -3,7 +3,7 @@ package com.byritium.entity;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentProduct;
 import com.byritium.constance.PaymentState;
-import com.byritium.constance.TransactionProductType;
+import com.byritium.constance.TransactionProduct;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -19,7 +19,7 @@ public class PaymentOrder {
     private BigDecimal orderAmount;
     private BigDecimal payAmount;
     private PaymentChannel paymentChannel;
-    private TransactionProductType transactionProductType;
+    private TransactionProduct transactionProduct;
     private PaymentProduct paymentProduct;
     private PaymentState paymentState;
     private Timestamp createTime;

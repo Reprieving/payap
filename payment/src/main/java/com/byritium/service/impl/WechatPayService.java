@@ -2,6 +2,7 @@ package com.byritium.service.impl;
 
 
 import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentProduct;
 import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.dto.WechatPayConfig;
@@ -82,6 +83,11 @@ public class WechatPayService implements PayService {
         } catch (InvalidKeySpecException e) {
             throw new RuntimeException("无效的密钥格式");
         }
+    }
+
+    @Override
+    public PaymentProduct product() {
+        return PaymentProduct.PLATFORM_ONLINE_PAY;
     }
 
     @Override

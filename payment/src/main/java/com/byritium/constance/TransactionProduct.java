@@ -3,7 +3,7 @@ package com.byritium.constance;
 import lombok.Getter;
 
 @Getter
-public enum TransactionProductType {
+public enum TransactionProduct {
     GUARANTEE("GUARANTEE", "担保交易"),
     INSTANT("INSTANT", "即时交易"),
     GOON("GOON", "继续支付"),
@@ -17,7 +17,7 @@ public enum TransactionProductType {
     private String type;
     private String message;
 
-    TransactionProductType(String type, String message) {
+    TransactionProduct(String type, String message) {
         this.type = type;
         this.message = message;
     }
