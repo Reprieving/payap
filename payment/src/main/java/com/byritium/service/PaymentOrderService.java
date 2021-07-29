@@ -1,15 +1,13 @@
 package com.byritium.service;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentProductType;
+import com.byritium.constance.PaymentProduct;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionProductType;
 import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.entity.PaymentOrder;
-import com.byritium.entity.PaymentProduct;
-import com.byritium.service.channel.PayChannelService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.byritium.service.channel.PayModelService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,13 +16,13 @@ import javax.annotation.Resource;
 public class PaymentOrderService {
 
     @Resource
-    private PayChannelService payChannelService;
+    private PayModelService payModelService;
 
     public void pay(PaymentOrder paymentOrder) {
         TransactionProductType transactionProductType = paymentOrder.getTransactionProductType();
 
         //DB QUERY
-        PaymentProductType paymentProductType = paymentOrder.getPaymentProductType();
+        PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
         PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
 
         PaymentState paymentState = paymentOrder.getPaymentState();
@@ -36,7 +34,7 @@ public class PaymentOrderService {
         PayParam payParam;
         switch (paymentState) {
             case PAYMENT_PENDING:
-                payParam = payChannelService.pay(paymentOrder.getBusinessOrderId(), paymentOrder.getSubject(), paymentOrder.getPayAmount(), paymentExtra);
+                payParam = payModelService.pay(paymentOrder.getBusinessOrderId(), paymentOrder.getSubject(), paymentOrder.getPayAmount(), paymentExtra);
 
                 break;
 

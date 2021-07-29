@@ -1,7 +1,7 @@
 package com.byritium.dto;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentProductType;
+import com.byritium.constance.PaymentProduct;
 import com.byritium.constance.TransactionProductType;
 import lombok.Data;
 
@@ -17,6 +17,6 @@ public class PaymentRequest {
     private BigDecimal payAmount;
     private PaymentChannel paymentChannel;
     private TransactionProductType transactionProductType;
-    private PaymentProductType paymentProductType;
+    private PaymentProduct paymentProduct;
     private Timestamp createTime;
 }
