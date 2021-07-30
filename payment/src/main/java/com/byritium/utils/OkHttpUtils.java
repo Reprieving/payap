@@ -30,9 +30,6 @@ import java.util.concurrent.TimeUnit;
 public class OkHttpUtils {
     private static final Logger log = LoggerFactory.getLogger(OkHttpUtils.class);
 
-    private static final String HTTP_JSON = "application/json; charset=utf-8";
-    private static final String HTTP_FORM = "application/x-www-form-urlencoded; charset=utf-8";
-
     private static final ConcurrentHashMap<InterfaceProvider, OkHttpClient> sslClientMap = new ConcurrentHashMap<>();
 
     private static final OkHttpClient okHttpClient = new OkHttpClient.Builder()
