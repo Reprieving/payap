@@ -14,11 +14,10 @@ public class WechatPayConfig {
     private String p12Path;//商户证书
     private String apiKey;//apiKey（商户平台密钥）
     private String apiV3Key;//apiV3Key
-    private String host = "https://api.mch.weixin.qq.com";
-    private String payPath = "/v3/pay/transactions/app";
-    private String contractPath = "/pay/contractorder";
-    private String refundPath = "/v3/refund/domestic/refunds";
-    private String withdrawPath = "/mmpaymkttransfers/promotion/transfers";
+    private String payUrl = "https://api.mch.weixin.qq.com/v3/pay/transactions/app";
+    private String contractUrl = "https://api.mch.weixin.qq.com/pay/contractorder";
+    private String refundUrl = "https://api.mch.weixin.qq.com/v3/refund/domestic/refunds";
+    private String withdrawUrl = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
     private String jsAppKey;
     private String jsAppSecret;
 

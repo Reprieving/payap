@@ -57,7 +57,7 @@ public class AliPayOnLineService extends AliPayService implements PayService, Re
             model.setTotalAmount(orderAmount.toPlainString());
             model.setProductCode("QUICK_MSECURITY_PAY");
             request.setBizModel(model);
-            request.setNotifyUrl(notifyUrl);
+            request.setNotifyUrl(BaseConst.ALIPAY_NOTICE_URL);
 
             //这里和普通的接口调用不同，使用的是sdkExecute
             AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);

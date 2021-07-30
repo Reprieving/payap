@@ -70,13 +70,10 @@ public abstract class AliPayService implements PayService, RefundService, Withdr
     }
 
     @Override
-    public PayParam pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra) {
-        return null;
-    }
+    public abstract PayParam pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra);
 
     @Override
-    public void refund(String businessOrderId, BigDecimal orderAmount, BigDecimal refundAmount) {
-        String notifyUrl = BaseConst.GATEWAY_URL.concat("/transaction/alipay/pay");
+    public void refund(String businessOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount) {
         AliPayConfig aliPayConfig = new AliPayConfig();
 
         //构造request
@@ -86,16 +83,13 @@ public abstract class AliPayService implements PayService, RefundService, Withdr
         AlipayClient alipayClient;
         try {
             alipayClient = new DefaultAlipayClient(certAlipayRequest);
-            //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.transaction
             AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
-            //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
             AlipayTradeRefundModel model = new AlipayTradeRefundModel();
             model.setOutTradeNo(businessOrderId);
             model.setRefundAmount(refundAmount.toPlainString());
             request.setBizModel(model);
-            request.setNotifyUrl(notifyUrl + "/ali");
+            request.setNotifyUrl(BaseConst.ALIPAY_NOTICE_URL);
 
-            //这里和普通的接口调用不同，使用的是sdkExecute
             AlipayTradeRefundResponse response = alipayClient.certificateExecute(request);
             String code = response.getCode();
             if (!response.isSuccess() || !AliPayCode.SUCCESS.code().equals(code)) {
