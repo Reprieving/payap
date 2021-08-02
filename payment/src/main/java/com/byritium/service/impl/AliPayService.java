@@ -23,6 +23,7 @@ import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.PayService;
+import com.byritium.service.QueryService;
 import com.byritium.service.RefundService;
 import com.byritium.service.WithdrawService;
 import com.google.gson.Gson;
@@ -31,10 +32,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import javax.management.Query;
 import java.math.BigDecimal;
 
 @Slf4j
-public abstract class AliPayService implements PayService, RefundService, WithdrawService {
+public abstract class AliPayService implements PayService, RefundService, WithdrawService, QueryService {
     protected CertAlipayRequest buildRequest(AliPayConfig aliPayConfig) {
         //构造client
         CertAlipayRequest certAlipayRequest = new CertAlipayRequest();
@@ -104,7 +106,7 @@ public abstract class AliPayService implements PayService, RefundService, Withdr
     }
 
     @Override
-    public void withdraw(String businessOrderId, String userId, BigDecimal amount) {
+    public void withdraw(String businessOrderId, String userId, BigDecimal amount, PaymentExtra paymentExtra) {
         AliPayConfig aliPayConfig = new AliPayConfig();
         CertAlipayRequest certAlipayRequest = buildRequest(aliPayConfig);
         AlipayClient alipayClient;
@@ -144,4 +146,8 @@ public abstract class AliPayService implements PayService, RefundService, Withdr
     }
 
 
+    @Override
+    public PayParam query(String businessOrderId, PaymentExtra paymentExtra) {
+        return null;
+    }
 }

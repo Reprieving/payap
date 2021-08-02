@@ -15,6 +15,7 @@ import com.byritium.dto.wechat.WechatRefundRequest;
 import com.byritium.dto.wechat.WechatWithdrawRequest;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.PayService;
+import com.byritium.service.QueryService;
 import com.byritium.service.RefundService;
 import com.byritium.service.WithdrawService;
 import com.byritium.utils.MD5Util;
@@ -43,7 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-public abstract class WechatPayService implements PayService, RefundService, WithdrawService {
+public abstract class WechatPayService implements PayService, RefundService, WithdrawService, QueryService {
     protected Map<String, String> buildHeader(String method, String url, String body, String nonceStr, String michId, String certificateSerialNo, String privateKeyPath) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException {
         long timestamp = System.currentTimeMillis() / 1000;
         String message = buildMessage(method, url, timestamp, nonceStr, body);
@@ -184,7 +185,7 @@ public abstract class WechatPayService implements PayService, RefundService, Wit
     }
 
     @Override
-    public void withdraw(String businessOrderId, String sdkId, BigDecimal amount) {
+    public void withdraw(String businessOrderId, String sdkId, BigDecimal amount, PaymentExtra paymentExtra) {
         WechatPayConfig wechatPayConfig = new WechatPayConfig();
 
         String url = wechatPayConfig.getWithdrawUrl();
