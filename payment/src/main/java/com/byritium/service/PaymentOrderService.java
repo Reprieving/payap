@@ -53,4 +53,56 @@ public class PaymentOrderService {
         }
     }
 
+    public void refund(PaymentOrder paymentOrder) {
+        PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
+        PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
+
+        PaymentState paymentState = paymentOrder.getPaymentState();
+
+
+        PaymentExtra paymentExtra = new PaymentExtra();
+        paymentExtra.setPaymentChannel(paymentChannel);
+        paymentExtra.setPaymentProduct(paymentProduct);
+
+    }
+
+
+    public void withdraw(PaymentOrder paymentOrder) {
+        PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
+        PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
+
+        PaymentState paymentState = paymentOrder.getPaymentState();
+
+
+        PaymentExtra paymentExtra = new PaymentExtra();
+        paymentExtra.setPaymentChannel(paymentChannel);
+        paymentExtra.setPaymentProduct(paymentProduct);
+
+    }
+
+    public void query(PaymentOrder paymentOrder) {
+        PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
+        PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
+
+        PaymentState paymentState = paymentOrder.getPaymentState();
+
+
+        PaymentExtra paymentExtra = new PaymentExtra();
+        paymentExtra.setPaymentChannel(paymentChannel);
+        paymentExtra.setPaymentProduct(paymentProduct);
+
+    }
+
+    public void settle(PaymentOrder paymentOrder) {
+        PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
+        PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
+
+        PaymentState paymentState = paymentOrder.getPaymentState();
+
+
+        PaymentExtra paymentExtra = new PaymentExtra();
+        paymentExtra.setPaymentChannel(paymentChannel);
+        paymentExtra.setPaymentProduct(paymentProduct);
+
+    }
 }

@@ -23,18 +23,27 @@ public class PaymentController {
     }
 
     @RequestMapping("refund")
-    public void refund() {
+    public void refund(@RequestBody PaymentRequest paymentRequest) {
+        PaymentOrder paymentOrder = new PaymentOrder();
+        paymentOrderService.refund(paymentOrder);
+    }
 
+    @RequestMapping("withdraw")
+    public void withdraw(@RequestBody PaymentRequest paymentRequest) {
+        PaymentOrder paymentOrder = new PaymentOrder();
+        paymentOrderService.withdraw(paymentOrder);
     }
 
     @RequestMapping("query")
-    public void query() {
-
+    public void query(@RequestBody PaymentRequest paymentRequest) {
+        PaymentOrder paymentOrder = new PaymentOrder();
+        paymentOrderService.query(paymentOrder);
     }
 
     @RequestMapping("settle")
-    public void settle() {
-
+    public void settle(@RequestBody PaymentRequest paymentRequest) {
+        PaymentOrder paymentOrder = new PaymentOrder();
+        paymentOrderService.settle(paymentOrder);
     }
 
 }

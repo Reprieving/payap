@@ -67,4 +67,8 @@ public class WechatPayOnlineService extends WechatPayService {
         return null;
     }
 
+    @Override
+    public void refund(String businessOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount, PaymentExtra paymentExtra) {
+
+    }
 }

@@ -5,12 +5,13 @@ import com.byritium.constance.PaymentProduct;
 import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.service.PayService;
+import com.byritium.service.RefundService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
-public class AccountPayService implements PayService {
+public class AccountPayService implements PayService, RefundService {
 
     @Override
     public PaymentProduct product() {
@@ -33,5 +34,9 @@ public class AccountPayService implements PayService {
         return null;
     }
 
+    @Override
+    public void refund(String businessOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount, PaymentExtra paymentExtra) {
+
+    }
 
 }
