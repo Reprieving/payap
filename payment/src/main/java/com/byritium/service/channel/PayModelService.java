@@ -15,13 +15,14 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+@Service
 public class PayModelService implements ApplicationContextAware, PayService {
     private static Table<PaymentProduct, PaymentChannel, PayService> payServiceTable;
 
