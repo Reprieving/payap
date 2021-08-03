@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class PaymentModel {
-    private PaymentProduct productType;
+    private PaymentProduct productProduct;
     private PaymentChannel paymentChannel;
 }

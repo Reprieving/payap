@@ -16,12 +16,18 @@ import java.sql.Timestamp;
 @Service
 public class TransactionOrderService {
 
-    private void guarantee(String clientId, String businessOrderId, BigDecimal orderAmount, BigDecimal payAmount, String subject, String payeeId, String payerId, PaymentChannel paymentChannel) {
+    public void guarantee(String clientId, String businessOrderId, BigDecimal orderAmount, BigDecimal payAmount, String subject, String paymentModelId) {
         TransactionClientAgreement agreement = new TransactionClientAgreement();
+
+
+        String payeeId = "";
+        String payerId = "";
+        PaymentChannel paymentChannel = null;
 
         TransactionOrder transactionOrder = new TransactionOrder();
         transactionOrder.setClientId(clientId);
         transactionOrder.setBusinessOrderId(businessOrderId);
+
 
         if (!StringUtils.hasText(agreement.getPayeeId())) {
             transactionOrder.setPayeeId(payeeId);
