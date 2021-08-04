@@ -49,11 +49,6 @@ public class TransactionController {
         return ResponseEntity.of(Optional.of("hello"));
     }
 
-    @RequestMapping("refund")
-    public ResponseEntity<?> refund() {
-        return ResponseEntity.of(Optional.of("hello"));
-    }
-
     @RequestMapping("freeze")
     public ResponseEntity<?> frozen() {
         return ResponseEntity.of(Optional.of("hello"));

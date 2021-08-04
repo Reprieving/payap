@@ -13,6 +13,5 @@ public class TransactionRequest {
     private BigDecimal orderAmount;
     private BigDecimal payAmount;
     private String subject;
-
-    private PaymentChannel paymentChannel;
+    private String paymentModelId;
 }

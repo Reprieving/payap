@@ -6,7 +6,7 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Data
-public class TransactionClientAgreement {
+public class TransactionBusinessPayModel {
     private String id;
     private String clientId;
     private TransactionType transactionType;
