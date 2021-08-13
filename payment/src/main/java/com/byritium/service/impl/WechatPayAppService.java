@@ -25,7 +25,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-public class WechatPayOnlineService extends WechatPayService {
+public class WechatPayAppService extends WechatPayService {
 
     @Override
     public PayParam pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra) {
@@ -70,5 +70,10 @@ public class WechatPayOnlineService extends WechatPayService {
     @Override
     public void refund(String businessOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount, PaymentExtra paymentExtra) {
 
+    }
+
+    @Override
+    public PayParam query(String businessOrderId, PaymentExtra paymentExtra) {
+        return null;
     }
 }

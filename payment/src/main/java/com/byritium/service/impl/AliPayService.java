@@ -72,9 +72,6 @@ public abstract class AliPayService implements PayService, RefundService, Withdr
     }
 
     @Override
-    public abstract PayParam pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra);
-
-    @Override
     public void refund(String businessOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount, PaymentExtra paymentExtra) {
         AliPayConfig aliPayConfig = new AliPayConfig();
 

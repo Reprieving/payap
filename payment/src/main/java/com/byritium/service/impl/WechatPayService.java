@@ -147,9 +147,6 @@ public abstract class WechatPayService implements PayService, RefundService, Wit
     }
 
     @Override
-    public abstract PayParam pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra);
-
-    @Override
     public void refund(String businessOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount, PaymentExtra paymentExtra) {
         WechatPayConfig wechatPayConfig = new WechatPayConfig();
         String url = wechatPayConfig.getRefundUrl();
