@@ -7,8 +7,6 @@ import com.byritium.dto.PaymentExtra;
 import java.math.BigDecimal;
 
 public interface WithdrawService {
-    PaymentProduct product();
-
     PaymentChannel channel();
 
     void withdraw(String businessOrderId, String userId, BigDecimal amount, PaymentExtra paymentExtra);

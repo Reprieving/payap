@@ -7,8 +7,6 @@ import com.byritium.dto.PaymentExtra;
 import org.springframework.stereotype.Service;
 
 public interface QueryService {
-    PaymentProduct product();
-
     PaymentChannel channel();
 
     PayParam query(String businessOrderId, PaymentExtra paymentExtra);

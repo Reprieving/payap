@@ -16,28 +16,24 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
 public class WithdrawModelService implements ApplicationContextAware, WithdrawService {
-    private static Table<PaymentProduct, PaymentChannel, WithdrawService> withdrawServiceTable;
+    private static Map<PaymentChannel, WithdrawService> serviceMap;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        withdrawServiceTable = HashBasedTable.create();
+        serviceMap = new HashMap<>();
         Map<String, WithdrawService> map = applicationContext.getBeansOfType(WithdrawService.class);
 
         map.forEach((key, value) -> {
-            if (value.product() != null && value.channel() != null)
-                withdrawServiceTable.put(value.product(), value.channel(), value);
+            if (value.channel() != null)
+                serviceMap.put(value.channel(), value);
         });
 
 
-    }
-
-    @Override
-    public PaymentProduct product() {
-        return null;
     }
 
     @Override
@@ -47,15 +43,13 @@ public class WithdrawModelService implements ApplicationContextAware, WithdrawSe
 
     @Override
     public void withdraw(String businessOrderId, String userId, BigDecimal amount, PaymentExtra paymentExtra) {
-        PaymentProduct paymentProduct = paymentExtra.getPaymentProduct();
         PaymentChannel paymentChannel = paymentExtra.getPaymentChannel();
 
-        Assert.notNull(paymentProduct, "未选择支付产品");
         Assert.notNull(paymentChannel, "未选择支付渠道");
 
-        WithdrawService withdrawService = withdrawServiceTable.get(paymentProduct, paymentChannel);
+        WithdrawService withdrawService = serviceMap.get(paymentChannel);
         if (withdrawService == null) {
-            throw new BusinessException(paymentProduct.getMessage() + "-" + paymentChannel.getMessage() + "暂不开放");
+            throw new BusinessException(paymentChannel.getMessage() + "暂不开放");
         }
 
         withdrawService.withdraw(businessOrderId, userId, amount, paymentExtra);

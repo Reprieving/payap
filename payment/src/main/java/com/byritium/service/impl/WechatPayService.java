@@ -5,7 +5,6 @@ import com.byritium.constance.BaseConst;
 import com.byritium.constance.InterfaceProvider;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentProduct;
-import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.dto.SSLRequest;
 import com.byritium.dto.WechatPayConfig;
@@ -27,7 +26,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -137,13 +135,8 @@ public abstract class WechatPayService implements PayService, RefundService, Wit
     }
 
     @Override
-    public PaymentProduct product() {
-        return PaymentProduct.PLATFORM_ONLINE_PAY;
-    }
-
-    @Override
     public PaymentChannel channel() {
-        return PaymentChannel.WECHAT_PAY;
+        return PaymentChannel.WECHAT_APP_PAY;
     }
 
     @Override

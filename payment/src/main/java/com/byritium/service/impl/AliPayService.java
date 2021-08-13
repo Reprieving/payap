@@ -62,11 +62,6 @@ public abstract class AliPayService implements PayService, RefundService, Withdr
     }
 
     @Override
-    public PaymentProduct product() {
-        return null;
-    }
-
-    @Override
     public PaymentChannel channel() {
         return null;
     }

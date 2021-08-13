@@ -27,14 +27,10 @@ import java.math.BigDecimal;
 @Service
 @Slf4j
 public class AliPayAppService extends AliPayService implements PayService, RefundService, WithdrawService {
-    @Override
-    public PaymentProduct product() {
-        return PaymentProduct.PLATFORM_ONLINE_PAY;
-    }
 
     @Override
     public PaymentChannel channel() {
-        return PaymentChannel.ALI_PAY;
+        return PaymentChannel.ALI_APP_PAY;
     }
 
     @Override

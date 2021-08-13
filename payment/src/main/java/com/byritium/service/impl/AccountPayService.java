@@ -14,11 +14,6 @@ import java.math.BigDecimal;
 public class AccountPayService implements PayService, RefundService {
 
     @Override
-    public PaymentProduct product() {
-        return PaymentProduct.ACCOUNT_PAY;
-    }
-
-    @Override
     public PaymentChannel channel() {
         return PaymentChannel.ACCOUNT_PAY;
     }
