@@ -16,9 +16,4 @@ public class FundController {
 
     }
 
-    @RequestMapping("transfer")
-    public void transfer() {
-
-    }
-
 }
