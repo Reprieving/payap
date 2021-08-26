@@ -17,6 +17,8 @@
     <module>transaction</module>
     <module>gateway</module>
     <module>liquidation</module>
+    <module>recharge</module>
+    <module>withdraw</module>
   </modules>
 
   <name>payap</name>
@@ -27,12 +29,10 @@
     <version>2.5.2</version>
   </parent>
 
-
   <properties>
     <spring-cloud.version>2020.0.3</spring-cloud.version>
   </properties>
 
-  <!-- 项目依赖管理 父项目只是声明依赖，子项目需要写明需要的依赖(可以省略版本信息) -->
   <dependencyManagement>
     <dependencies>
       <!-- spring cloud 依赖 -->

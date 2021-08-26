@@ -8,10 +8,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="gateway" />
+        <module name="withdraw" />
         <module name="payment" />
         <module name="account" />
         <module name="liquidation" />
         <module name="transaction" />
+        <module name="recharge" />
         <module name="finance" />
         <module name="configuration" />
         <module name="secret" />
@@ -34,9 +36,11 @@
       <module name="liquidation" options="-parameters" />
       <module name="payap" options="-parameters" />
       <module name="payment" options="-parameters" />
+      <module name="recharge" options="-parameters" />
       <module name="secret" options="-parameters" />
       <module name="transaction" options="-parameters" />
       <module name="untitled" options="-parameters" />
+      <module name="withdraw" options="-parameters" />
     </option>
   </component>
 </project>
