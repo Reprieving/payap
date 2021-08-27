@@ -1,8 +1,11 @@
 package com.byritium.dto.wechat;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class WechatPayCallBackNotifyParam {
     private String id;
     private String appid;//appid

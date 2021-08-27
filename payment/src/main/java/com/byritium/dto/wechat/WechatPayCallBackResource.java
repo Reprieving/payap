@@ -1,8 +1,11 @@
 package com.byritium.dto.wechat;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class WechatPayCallBackResource {
     private String algorithm;
     private String ciphertext;
