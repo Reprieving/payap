@@ -15,4 +15,8 @@ public class SettleController {
         PaymentOrder paymentOrder = new PaymentOrder();
     }
 
+    @RequestMapping("query")
+    public void query(@RequestBody PaymentRequest paymentRequest) {
+        PaymentOrder paymentOrder = new PaymentOrder();
+    }
 }

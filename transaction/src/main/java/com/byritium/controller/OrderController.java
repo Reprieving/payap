@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("order")
-public class TransactionController {
+public class OrderController {
     @Autowired
     private TransactionOrderService transactionOrderService;
 
@@ -26,19 +26,13 @@ public class TransactionController {
         return ResponseEntity.of(Optional.of("hello"));
     }
 
-    @RequestMapping("goon")
-    public ResponseEntity<?> goon() {
-        return ResponseEntity.of(Optional.of("hello"));
-    }
-
-    @RequestMapping("settle")
-    public ResponseEntity<?> settlement() {
-        return ResponseEntity.of(Optional.of("hello"));
-    }
-
     @RequestMapping("query")
     public ResponseEntity<?> query() {
         return ResponseEntity.of(Optional.of("hello"));
     }
 
+    @RequestMapping("notice")
+    public ResponseEntity<?> notice() {
+        return ResponseEntity.of(Optional.of("hello"));
+    }
 }
