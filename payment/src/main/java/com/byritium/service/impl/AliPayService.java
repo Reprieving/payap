@@ -28,6 +28,7 @@ import com.byritium.service.RefundService;
 import com.byritium.service.WithdrawService;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+
 import java.math.BigDecimal;
 
 @Slf4j
@@ -62,7 +63,7 @@ public abstract class AliPayService implements PayService, RefundService, Withdr
     }
 
     @Override
-    public void refund(String businessOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount, PaymentExtra paymentExtra) {
+    public void refund(String paymentOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount, PaymentExtra paymentExtra) {
         AliPayConfig aliPayConfig = new AliPayConfig();
 
         //构造request
@@ -74,7 +75,8 @@ public abstract class AliPayService implements PayService, RefundService, Withdr
             alipayClient = new DefaultAlipayClient(certAlipayRequest);
             AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
             AlipayTradeRefundModel model = new AlipayTradeRefundModel();
-            model.setOutTradeNo(businessOrderId);
+            model.setOutTradeNo(paymentOrderId);
+            model.setTradeNo(refundOrderId);
             model.setRefundAmount(refundAmount.toPlainString());
             request.setBizModel(model);
             request.setNotifyUrl(BaseConst.ALIPAY_NOTICE_URL);
@@ -87,7 +89,7 @@ public abstract class AliPayService implements PayService, RefundService, Withdr
             }
 
         } catch (AlipayApiException e) {
-            log.error("支付宝渠道退款失败，支付订单id：{}", businessOrderId, e);
+            log.error("支付宝渠道退款失败，支付订单id：{}", paymentOrderId, e);
             throw new BusinessException("支付宝渠道退款失败");
         }
     }

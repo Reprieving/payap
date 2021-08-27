@@ -139,7 +139,7 @@ public abstract class WechatPayService implements PayService, RefundService, Wit
     }
 
     @Override
-    public void refund(String businessOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount, PaymentExtra paymentExtra) {
+    public void refund(String paymentOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount, PaymentExtra paymentExtra) {
         WechatPayConfig wechatPayConfig = new WechatPayConfig();
         String url = wechatPayConfig.getRefundUrl();
 
@@ -149,7 +149,7 @@ public abstract class WechatPayService implements PayService, RefundService, Wit
         String privateKeyPath = wechatPayConfig.getPrivateKeyPath();
 
         WechatRefundRequest wechatRefundRequest = new WechatRefundRequest();
-        wechatRefundRequest.setOut_trade_no(businessOrderId);
+        wechatRefundRequest.setOut_trade_no(paymentOrderId);
         wechatRefundRequest.setOut_refund_no(refundOrderId);
         wechatRefundRequest.setNotify_url(BaseConst.WECHATPAY_NOTICE_URL);
         wechatRefundRequest.setAmount(new WechatRefundAmount(orderAmount, refundAmount));
