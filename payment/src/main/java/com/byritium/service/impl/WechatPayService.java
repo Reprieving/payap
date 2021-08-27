@@ -64,7 +64,7 @@ public abstract class WechatPayService implements PayService, RefundService, Wit
 
     private String buildMessage(String method, String url, long timestamp, String nonceStr, String body) {
         HttpUrl httpUrl = HttpUrl.parse(url);
-        Assert.notNull(httpUrl, "url异常");
+        Assert.notNull(httpUrl, "url空异常");
         String canonicalUrl = httpUrl.encodedPath();
         if (httpUrl.encodedQuery() != null) {
             canonicalUrl += "?" + httpUrl.encodedQuery();
@@ -112,10 +112,10 @@ public abstract class WechatPayService implements PayService, RefundService, Wit
     }
 
     /**
-     * 获取私钥。
+     * get private key
      *
-     * @param filename 私钥文件路径  (required)
-     * @return 私钥对象
+     * @param filename
+     * @return
      */
     private PrivateKey getPrivateKey(String filename) throws IOException {
         String content = Files.readString(Paths.get(filename));
@@ -135,7 +135,7 @@ public abstract class WechatPayService implements PayService, RefundService, Wit
 
     @Override
     public PaymentChannel channel() {
-        return PaymentChannel.WECHAT_APP_PAY;
+        return PaymentChannel.WECHAT_PAY;
     }
 
     @Override

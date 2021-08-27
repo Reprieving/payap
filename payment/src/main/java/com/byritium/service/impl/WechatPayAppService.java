@@ -12,6 +12,7 @@ import com.byritium.utils.OkHttpUtils;
 import com.byritium.utils.RandomUtils;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -52,7 +53,7 @@ public class WechatPayAppService extends WechatPayService {
 
         String str;
         try {
-            Map<String, String> map = buildHeader("POST", url, json, nonceStr, michId, certificateSerialNo, privateKeyPath);
+            Map<String, String> map = buildHeader(HttpMethod.POST.toString(), url, json, nonceStr, michId, certificateSerialNo, privateKeyPath);
             str = OkHttpUtils.httpPostJson(url, map, json);
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | IOException e) {
             throw new BusinessException("微信支付渠道支付失败");

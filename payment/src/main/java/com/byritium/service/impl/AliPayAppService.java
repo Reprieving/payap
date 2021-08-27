@@ -35,7 +35,6 @@ public class AliPayAppService extends AliPayService implements PayService, Refun
 
     @Override
     public PayParam pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra) {
-        String notifyUrl = BaseConst.GATEWAY_URL.concat("/transaction/alipay/pay");
         AliPayConfig aliPayConfig = new AliPayConfig();
 
         CertAlipayRequest certAlipayRequest = buildRequest(aliPayConfig);

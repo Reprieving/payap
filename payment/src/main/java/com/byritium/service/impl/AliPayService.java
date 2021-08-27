@@ -28,11 +28,6 @@ import com.byritium.service.RefundService;
 import com.byritium.service.WithdrawService;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
-
-import javax.management.Query;
 import java.math.BigDecimal;
 
 @Slf4j
@@ -63,7 +58,7 @@ public abstract class AliPayService implements PayService, RefundService, Withdr
 
     @Override
     public PaymentChannel channel() {
-        return null;
+        return PaymentChannel.ALI_PAY;
     }
 
     @Override
@@ -112,7 +107,7 @@ public abstract class AliPayService implements PayService, RefundService, Withdr
             model.setProductCode("TRANS_ACCOUNT_NO_PWD");
 
             model.setBizScene("DIRECT_TRANSFER");
-            model.setOrderTitle("仟伴达人APP提现");
+            model.setOrderTitle("资产提现");
 
             Participant payeeInfo = new Participant();
             payeeInfo.setIdentity(userId);
