@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -36,10 +37,7 @@ import java.nio.file.Paths;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 public abstract class WechatPayService implements PayService, RefundService, WithdrawService, QueryService {
@@ -66,6 +64,7 @@ public abstract class WechatPayService implements PayService, RefundService, Wit
 
     private String buildMessage(String method, String url, long timestamp, String nonceStr, String body) {
         HttpUrl httpUrl = HttpUrl.parse(url);
+        Assert.notNull(httpUrl, "url异常");
         String canonicalUrl = httpUrl.encodedPath();
         if (httpUrl.encodedQuery() != null) {
             canonicalUrl += "?" + httpUrl.encodedQuery();
@@ -119,7 +118,7 @@ public abstract class WechatPayService implements PayService, RefundService, Wit
      * @return 私钥对象
      */
     private PrivateKey getPrivateKey(String filename) throws IOException {
-        String content = new String(Files.readAllBytes(Paths.get(filename)), StandardCharsets.UTF_8);
+        String content = Files.readString(Paths.get(filename));
         try {
             String privateKey = content.replace("-----BEGIN PRIVATE KEY-----", "")
                     .replace("-----END PRIVATE KEY-----", "")
