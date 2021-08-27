@@ -3,7 +3,11 @@ package com.byritium.dto;
 import com.byritium.constance.InterfaceProvider;
 import lombok.Data;
 
-@Data
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class SSLRequest {
     private InterfaceProvider interfaceProvider;
     private String certPath;

@@ -2,7 +2,11 @@ package com.byritium.dto.wechat;
 
 import lombok.Data;
 
-@Data
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class WechatPayRequest {
     private String appid;//公众号id
     private String mchid;//商户号

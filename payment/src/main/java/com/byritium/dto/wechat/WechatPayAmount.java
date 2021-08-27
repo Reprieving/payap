@@ -4,7 +4,11 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
-@Data
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class WechatPayAmount {
     private Integer total;//金额（分）
     private String currency = "CNY";//货币类型

@@ -6,7 +6,11 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-@Data
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class SSLContextDto {
     private SSLContext sslContext;
     private X509TrustManager x509TrustManager;

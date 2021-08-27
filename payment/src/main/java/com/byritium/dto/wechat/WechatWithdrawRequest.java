@@ -2,7 +2,11 @@ package com.byritium.dto.wechat;
 
 import lombok.Data;
 
-@Data
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class WechatWithdrawRequest {
     private String mch_appid;
     private String mchid;

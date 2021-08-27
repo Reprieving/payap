@@ -3,8 +3,11 @@ package com.byritium.dto.wechat;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class WechatRefundAmount {
     private Integer total;//总金额（分）
     private Integer refund;//退款金额（分）

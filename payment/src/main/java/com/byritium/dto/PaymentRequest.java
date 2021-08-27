@@ -3,12 +3,14 @@ package com.byritium.dto;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentProduct;
 import com.byritium.constance.TransactionProduct;
-import lombok.Data;
-
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-@Data
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class PaymentRequest {
     private String clientId;
     private String businessOrderId;

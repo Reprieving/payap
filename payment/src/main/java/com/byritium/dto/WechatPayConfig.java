@@ -1,10 +1,13 @@
 package com.byritium.dto;
 
 import lombok.Data;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-@Data
-@Slf4j
+import lombok.Getter;
+
+@Getter
+@Setter
 public class WechatPayConfig {
     private String appId;//AppId
     private String michId;//商户Id

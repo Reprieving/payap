@@ -2,9 +2,11 @@ package com.byritium.dto;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentProduct;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class PaymentExtra {
     private PaymentProduct paymentProduct;
     private PaymentChannel paymentChannel;
