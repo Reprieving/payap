@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PayParam {
-    private String sign;
+    private String prePayId;
     private BigDecimal amount;
     private PaymentChannel paymentChannel;
     private PaymentState paymentState;

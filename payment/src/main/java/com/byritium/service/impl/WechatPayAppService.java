@@ -65,16 +65,18 @@ public class WechatPayAppService extends WechatPayService {
             throw new BusinessException("支付失败");
         }
 
+        PayParam payParam = new PayParam();
+        payParam.setPrePayId(wechatPayResult.getPrepay_id());
         return null;
     }
 
     @Override
     public void refund(String businessOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount, PaymentExtra paymentExtra) {
-
+        super.refund(businessOrderId, refundOrderId, orderAmount, refundAmount, paymentExtra);
     }
 
     @Override
     public PayParam query(String businessOrderId, PaymentExtra paymentExtra) {
-        return null;
+        return super.query(businessOrderId, paymentExtra);
     }
 }

@@ -5,6 +5,7 @@ import com.byritium.constance.BaseConst;
 import com.byritium.constance.InterfaceProvider;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentProduct;
+import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.dto.SSLRequest;
 import com.byritium.dto.WechatPayConfig;
@@ -26,6 +27,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
+import org.springframework.http.HttpMethod;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -159,10 +161,10 @@ public abstract class WechatPayService implements PayService, RefundService, Wit
         String str;
 
         try {
-            Map<String, String> map = buildHeader("POST", url, json, nonceStr, michId, certificateSerialNo, privateKeyPath);
+            Map<String, String> map = buildHeader(HttpMethod.POST.toString(), url, json, nonceStr, michId, certificateSerialNo, privateKeyPath);
             str = OkHttpUtils.httpPostJson(url, map, json);
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | IOException e) {
-            log.error("微信支付构建请求头失败，json:{}", json);
+            log.error("微信支付构建请求头失败:{}", json);
             throw new BusinessException("微信支付渠道退款失败");
         }
 
@@ -207,7 +209,7 @@ public abstract class WechatPayService implements PayService, RefundService, Wit
         Map<String, String> param;
 
         try {
-            map = buildHeader("POST", url, json, nonceStr, michId, certificateSerialNo, privateKeyPath);
+            map = buildHeader(HttpMethod.POST.toString(), url, json, nonceStr, michId, certificateSerialNo, privateKeyPath);
 
             param = gson.fromJson(json, TypeToken.getParameterized(Map.class, String.class, String.class).getType());
             String sign = buildWechatSign(param, apiKey);
@@ -217,7 +219,7 @@ public abstract class WechatPayService implements PayService, RefundService, Wit
             SSLRequest sslRequest = new SSLRequest(InterfaceProvider.WECHAT_PAY, p12Path, michId);
             str = OkHttpUtils.httpPostXml(url, map, xml, sslRequest);
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | IOException e) {
-            log.error("微信支付构建请求头失败，json:{}", json);
+            log.error("微信支付构建请求头失败:{}", json);
             throw new BusinessException("微信支付渠道提现失败");
         }
 
@@ -228,7 +230,10 @@ public abstract class WechatPayService implements PayService, RefundService, Wit
             log.error("微信支付提现失败，参数：{}", gson.toJson(resultMap));
             throw new BusinessException(resultMap.get("return_msg"));
         }
-
     }
 
+    @Override
+    public PayParam query(String businessOrderId, PaymentExtra paymentExtra) {
+        return null;
+    }
 }

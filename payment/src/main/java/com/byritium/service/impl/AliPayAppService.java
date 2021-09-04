@@ -9,7 +9,6 @@ import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.byritium.constance.BaseConst;
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentProduct;
 import com.byritium.dto.AliPayConfig;
 import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
@@ -60,7 +59,7 @@ public class AliPayAppService extends AliPayService implements PayService, Refun
             Assert.state(!StringUtils.hasText(body), "支付宝签名失败");
 
             PayParam payParam = new PayParam();
-            payParam.setSign(body);
+            payParam.setPrePayId(body);
 
             return payParam;
         } catch (AlipayApiException e) {
