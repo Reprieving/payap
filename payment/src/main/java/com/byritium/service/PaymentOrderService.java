@@ -3,14 +3,13 @@ package com.byritium.service;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentProduct;
 import com.byritium.constance.PaymentState;
-import com.byritium.constance.TransactionProduct;
 import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.entity.PaymentOrder;
-import com.byritium.service.channel.PayModelService;
-import com.byritium.service.channel.QueryModelService;
-import com.byritium.service.channel.RefundModelService;
-import com.byritium.service.channel.WithdrawModelService;
+import com.byritium.service.channel.PayWrapperService;
+import com.byritium.service.channel.QueryWrapperService;
+import com.byritium.service.channel.RefundWrapperService;
+import com.byritium.service.channel.WithdrawWrapperService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,16 +19,16 @@ import java.math.BigDecimal;
 public class PaymentOrderService {
 
     @Resource
-    private PayModelService payModelService;
+    private PayWrapperService payWrapperService;
 
     @Resource
-    private RefundModelService refundModelService;
+    private RefundWrapperService refundWrapperService;
 
     @Resource
-    private WithdrawModelService withdrawModelService;
+    private WithdrawWrapperService withdrawWrapperService;
 
     @Resource
-    private QueryModelService queryModelService;
+    private QueryWrapperService queryWrapperService;
 
     public void pay(PaymentOrder paymentOrder) {
         PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
@@ -48,7 +47,7 @@ public class PaymentOrderService {
         PayParam payParam;
         switch (paymentState) {
             case PAYMENT_PENDING:
-                payParam = payModelService.pay(paymentOrder.getBusinessOrderId(), paymentOrder.getSubject(), paymentOrder.getPayAmount(), paymentExtra);
+                payParam = payWrapperService.pay(paymentOrder.getBusinessOrderId(), paymentOrder.getSubject(), paymentOrder.getPayAmount(), paymentExtra);
 
                 break;
 
@@ -82,7 +81,7 @@ public class PaymentOrderService {
         BigDecimal orderAmount = BigDecimal.valueOf(0);
         BigDecimal refundAmount = BigDecimal.valueOf(0);
 
-        refundModelService.refund(businessOrderId, refundOrderId, orderAmount, refundAmount, paymentExtra);
+        refundWrapperService.refund(businessOrderId, refundOrderId, orderAmount, refundAmount, paymentExtra);
 
     }
 
@@ -101,7 +100,7 @@ public class PaymentOrderService {
         BigDecimal withdrawAmount = BigDecimal.valueOf(0);
 
 
-        withdrawModelService.withdraw(businessOrderId, sdkId, withdrawAmount, paymentExtra);
+        withdrawWrapperService.withdraw(businessOrderId, sdkId, withdrawAmount, paymentExtra);
 
     }
 
@@ -118,7 +117,7 @@ public class PaymentOrderService {
 
         String businessOrderId = "";
 
-        queryModelService.query(businessOrderId, paymentExtra);
+        queryWrapperService.query(businessOrderId, paymentExtra);
 
     }
 

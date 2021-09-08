@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class WithdrawModelService implements ApplicationContextAware, WithdrawService {
+public class WithdrawWrapperService implements ApplicationContextAware, WithdrawService {
     private static Map<PaymentChannel, WithdrawService> serviceMap;
 
     @Override
