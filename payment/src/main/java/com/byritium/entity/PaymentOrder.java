@@ -29,6 +29,9 @@ public class PaymentOrder {
     @Column(name = "business_order_id", unique = true, nullable = false, length = 32)
     private String businessOrderId;
 
+    @Column(name = "transaction_order_id", unique = true, nullable = false, length = 32)
+    private String transactionOrderId;
+
     @Column(name = "payer_id", unique = true, nullable = false, length = 32)
     private String payerId;
 

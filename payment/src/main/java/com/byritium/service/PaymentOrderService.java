@@ -3,6 +3,7 @@ package com.byritium.service;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentProduct;
 import com.byritium.constance.PaymentState;
+import com.byritium.dao.PaymentOrderRepository;
 import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.entity.PaymentOrder;
@@ -30,6 +31,9 @@ public class PaymentOrderService {
     @Resource
     private QueryWrapperService queryWrapperService;
 
+    @Resource
+    private PaymentOrderRepository paymentOrderRepository;
+
     public void pay(PaymentOrder paymentOrder) {
         PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
         PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
@@ -41,20 +45,21 @@ public class PaymentOrderService {
         paymentExtra.setPaymentChannel(paymentChannel);
         paymentExtra.setPaymentProduct(paymentProduct);
 
-        String businessOrderId = paymentOrder.getBusinessOrderId();
+        PaymentOrder save = paymentOrderRepository.save(paymentOrder);
+        String paymentOrderId = save.getId();
 
 
         PayParam payParam;
         switch (paymentState) {
             case PAYMENT_PENDING:
-                payParam = payWrapperService.pay(paymentOrder.getBusinessOrderId(), paymentOrder.getSubject(), paymentOrder.getPayAmount(), paymentExtra);
+                payParam = payWrapperService.pay(paymentOrderId, paymentOrder.getSubject(), paymentOrder.getPayAmount(), paymentExtra);
 
                 break;
 
             case PAYMENT_SUCCESS:
                 //查询支付状态
 
-                //调用清算服务，确定扣款人id和账户，收款人id和账户
+                //调用清算服务
 
                 //通知交易服务
 
