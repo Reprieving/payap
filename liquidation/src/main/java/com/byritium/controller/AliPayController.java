@@ -4,9 +4,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class LiquidationController {
+public class AliPayController {
 
-    @RequestMapping()
+    @RequestMapping("")
     public void action(String businessOrderId) {
 
     }

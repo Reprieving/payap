@@ -9,12 +9,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="gateway" />
         <module name="withdraw" />
+        <module name="finance" />
         <module name="payment" />
         <module name="account" />
         <module name="liquidation" />
         <module name="transaction" />
         <module name="recharge" />
-        <module name="finance" />
         <module name="configuration" />
         <module name="secret" />
       </profile>
