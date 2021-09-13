@@ -5,8 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AliPayController {
-
-    @RequestMapping("")
+    @RequestMapping("pay")
     public void action(String businessOrderId) {
 
     }

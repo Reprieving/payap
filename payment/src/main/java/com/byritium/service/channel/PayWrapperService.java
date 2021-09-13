@@ -29,8 +29,6 @@ public class PayWrapperService implements ApplicationContextAware, PayService {
             if (value.channel() != null)
                 serviceMap.put(value.channel(), value);
         });
-
-
     }
 
     @Override
