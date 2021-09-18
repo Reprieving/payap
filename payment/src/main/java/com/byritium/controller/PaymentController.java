@@ -1,6 +1,6 @@
 package com.byritium.controller;
 
-import com.byritium.constance.PaymentState;
+import com.byritium.constance.PaymentStatus;
 import com.byritium.dto.PaymentRequest;
 import com.byritium.entity.PaymentOrder;
 import com.byritium.service.PaymentOrderService;
@@ -18,7 +18,7 @@ public class PaymentController {
     @RequestMapping("action")
     public void action(@RequestBody PaymentRequest paymentRequest) {
         PaymentOrder paymentOrder = new PaymentOrder();
-        paymentOrder.setPaymentState(PaymentState.PAYMENT_PENDING);
+        paymentOrder.setPaymentStatus(PaymentStatus.PAYMENT_PENDING);
         paymentOrderService.pay(paymentOrder);
     }
 

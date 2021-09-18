@@ -2,7 +2,7 @@ package com.byritium.service;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentProduct;
-import com.byritium.constance.PaymentState;
+import com.byritium.constance.PaymentStatus;
 import com.byritium.dao.PaymentOrderRepository;
 import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
@@ -38,7 +38,7 @@ public class PaymentOrderService {
         PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
         PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
 
-        PaymentState paymentState = paymentOrder.getPaymentState();
+        PaymentStatus paymentStatus = paymentOrder.getPaymentStatus();
 
 
         PaymentExtra paymentExtra = new PaymentExtra();
@@ -50,7 +50,7 @@ public class PaymentOrderService {
 
 
         PayParam payParam;
-        switch (paymentState) {
+        switch (paymentStatus) {
             case PAYMENT_PENDING:
                 payParam = payWrapperService.pay(paymentOrderId, paymentOrder.getSubject(), paymentOrder.getPayAmount(), paymentExtra);
 
@@ -113,7 +113,7 @@ public class PaymentOrderService {
         PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
         PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
 
-        PaymentState paymentState = paymentOrder.getPaymentState();
+        PaymentStatus paymentStatus = paymentOrder.getPaymentStatus();
 
 
         PaymentExtra paymentExtra = new PaymentExtra();
@@ -130,7 +130,7 @@ public class PaymentOrderService {
         PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
         PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
 
-        PaymentState paymentState = paymentOrder.getPaymentState();
+        PaymentStatus paymentStatus = paymentOrder.getPaymentStatus();
 
 
         PaymentExtra paymentExtra = new PaymentExtra();

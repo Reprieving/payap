@@ -1,8 +1,7 @@
 package com.byritium.dto;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentState;
-import lombok.Data;
+import com.byritium.constance.PaymentStatus;
 
 import java.math.BigDecimal;
 import lombok.Getter;
@@ -14,5 +13,5 @@ public class PayParam {
     private String prePayId;
     private BigDecimal amount;
     private PaymentChannel paymentChannel;
-    private PaymentState paymentState;
+    private PaymentStatus paymentStatus;
 }

@@ -1,8 +1,6 @@
 package com.byritium.controller;
 
-import com.byritium.constance.PaymentState;
 import com.byritium.dto.PaymentRequest;
-import com.byritium.entity.PaymentOrder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

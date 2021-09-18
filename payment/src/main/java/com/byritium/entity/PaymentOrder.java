@@ -2,7 +2,7 @@ package com.byritium.entity;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentProduct;
-import com.byritium.constance.PaymentState;
+import com.byritium.constance.PaymentStatus;
 import com.byritium.constance.TransactionProduct;
 import lombok.Getter;
 import lombok.Setter;
@@ -57,7 +57,7 @@ public class PaymentOrder {
     private PaymentProduct paymentProduct;
 
     @Column(name = "payment_state", nullable = false)
-    private PaymentState paymentState;
+    private PaymentStatus paymentStatus;
 
     @Column(name = "create_time", nullable = false)
     private Timestamp createTime;
