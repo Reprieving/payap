@@ -1,28 +1,28 @@
-package com.byritium.service.channel;
+package com.byritium.service.wrapper;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentProduct;
+import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.exception.BusinessException;
-import com.byritium.service.SettleService;
+import com.byritium.service.PayService;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
-public class SettleWrapperService implements ApplicationContextAware, SettleService {
-
-    private static Map<PaymentChannel, SettleService> serviceMap;
+@Service
+public class PayWrapperService implements ApplicationContextAware, PayService {
+    private static Map<PaymentChannel, PayService> serviceMap;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         serviceMap = new HashMap<>();
-        Map<String, SettleService> map = applicationContext.getBeansOfType(SettleService.class);
+        Map<String, PayService> map = applicationContext.getBeansOfType(PayService.class);
 
         map.forEach((key, value) -> {
             if (value.channel() != null)
@@ -36,20 +36,16 @@ public class SettleWrapperService implements ApplicationContextAware, SettleServ
     }
 
     @Override
-    public void settle(String businessOrderId, PaymentExtra paymentExtra) {
-        PaymentProduct paymentProduct = paymentExtra.getPaymentProduct();
+    public PayParam pay(String businessOrderId, String subject, BigDecimal payAmount, PaymentExtra paymentExtra) {
         PaymentChannel paymentChannel = paymentExtra.getPaymentChannel();
 
-        Assert.notNull(paymentProduct, "未选择支付产品");
         Assert.notNull(paymentChannel, "未选择支付渠道");
 
-        SettleService settleService = serviceMap.get(paymentChannel);
-        if (settleService == null) {
-            throw new BusinessException(paymentProduct.getMessage() + "-" + paymentChannel.getMessage() + "结算暂不开放");
+        PayService payService = serviceMap.get(paymentChannel);
+        if (payService == null) {
+            throw new BusinessException(paymentChannel.getMessage() + "暂不开放");
         }
 
-        settleService.settle(businessOrderId, paymentExtra);
+        return payService.pay(businessOrderId, subject, payAmount, paymentExtra);
     }
-
-
 }

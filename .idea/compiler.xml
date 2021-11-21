@@ -9,12 +9,13 @@
         <outputRelativeToContentRoot value="true" />
         <module name="gateway" />
         <module name="withdraw" />
-        <module name="finance" />
+        <module name="common" />
         <module name="payment" />
         <module name="account" />
         <module name="liquidation" />
         <module name="transaction" />
         <module name="recharge" />
+        <module name="finance" />
         <module name="configuration" />
         <module name="secret" />
       </profile>
@@ -29,6 +30,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="account" options="-parameters" />
+      <module name="common" options="-parameters" />
       <module name="configuration" options="-parameters" />
       <module name="consumer" options="-parameters" />
       <module name="finance" options="-parameters" />

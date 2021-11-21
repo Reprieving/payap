@@ -1,33 +1,32 @@
-package com.byritium.service.channel;
+package com.byritium.service.wrapper;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.exception.BusinessException;
-import com.byritium.service.QueryService;
+import com.byritium.service.RefundService;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class QueryWrapperService implements ApplicationContextAware, QueryService {
-    private static Map<PaymentChannel, QueryService> serviceMap;
+public class RefundWrapperService implements ApplicationContextAware, RefundService {
+    private static Map<PaymentChannel, RefundService> serviceMap;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         serviceMap = new HashMap<>();
-        Map<String, QueryService> map = applicationContext.getBeansOfType(QueryService.class);
+        Map<String, RefundService> map = applicationContext.getBeansOfType(RefundService.class);
 
         map.forEach((key, value) -> {
             if (value.channel() != null)
                 serviceMap.put(value.channel(), value);
         });
-
     }
 
     @Override
@@ -36,17 +35,18 @@ public class QueryWrapperService implements ApplicationContextAware, QueryServic
     }
 
     @Override
-    public PayParam query(String businessOrderId, PaymentExtra paymentExtra) {
+    public void refund(String businessOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount, PaymentExtra paymentExtra) {
         PaymentChannel paymentChannel = paymentExtra.getPaymentChannel();
 
         Assert.notNull(paymentChannel, "未选择支付渠道");
 
-        QueryService queryService = serviceMap.get(paymentChannel);
-        if (queryService == null) {
+        RefundService refundService = serviceMap.get(paymentChannel);
+        if (refundService == null) {
             throw new BusinessException(paymentChannel.getMessage() + "暂不开放");
         }
 
-        return queryService.query(businessOrderId, paymentExtra);
+        refundService.refund(businessOrderId, refundOrderId, orderAmount, refundAmount, paymentExtra);
     }
+
 
 }

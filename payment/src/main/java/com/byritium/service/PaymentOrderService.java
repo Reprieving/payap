@@ -7,10 +7,10 @@ import com.byritium.dao.PaymentOrderRepository;
 import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.entity.PaymentOrder;
-import com.byritium.service.channel.PayWrapperService;
-import com.byritium.service.channel.QueryWrapperService;
-import com.byritium.service.channel.RefundWrapperService;
-import com.byritium.service.channel.WithdrawWrapperService;
+import com.byritium.service.wrapper.PayWrapperService;
+import com.byritium.service.wrapper.QueryWrapperService;
+import com.byritium.service.wrapper.RefundWrapperService;
+import com.byritium.service.wrapper.WithdrawWrapperService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,7 +34,7 @@ public class PaymentOrderService {
     @Resource
     private PaymentOrderRepository paymentOrderRepository;
 
-    public void pay(PaymentOrder paymentOrder) {
+    public PayParam pay(PaymentOrder paymentOrder) {
         PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
         PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
 
@@ -49,7 +49,7 @@ public class PaymentOrderService {
         String paymentOrderId = save.getId();
 
 
-        PayParam payParam;
+        PayParam payParam = null;
         switch (paymentStatus) {
             case PAYMENT_PENDING:
                 payParam = payWrapperService.pay(paymentOrderId, paymentOrder.getSubject(), paymentOrder.getPayAmount(), paymentExtra);
@@ -70,6 +70,7 @@ public class PaymentOrderService {
 
                 break;
         }
+        return payParam;
     }
 
     public void refund(PaymentOrder paymentOrder) {

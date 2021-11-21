@@ -19,6 +19,7 @@
     <module>liquidation</module>
     <module>recharge</module>
     <module>withdraw</module>
+    <module>common</module>
   </modules>
 
   <name>payap</name>
