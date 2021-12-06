@@ -1,5 +1,6 @@
 package com.byritium.controller;
 
+import com.byritium.constance.PaymentChannel;
 import com.byritium.dto.TransactionRequest;
 import com.byritium.service.TransactionOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("order")
-public class OrderController {
+public class TransactionController {
     @Autowired
     private TransactionOrderService transactionOrderService;
 
@@ -26,13 +26,9 @@ public class OrderController {
         return ResponseEntity.of(Optional.of("hello"));
     }
 
-    @RequestMapping("query")
-    public ResponseEntity<?> query() {
+    @RequestMapping("settle")
+    public ResponseEntity<?> settle() {
         return ResponseEntity.of(Optional.of("hello"));
     }
 
-    @RequestMapping("notice")
-    public ResponseEntity<?> notice() {
-        return ResponseEntity.of(Optional.of("hello"));
-    }
 }

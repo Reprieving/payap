@@ -27,7 +27,6 @@ public class TransactionOrderService {
         transactionOrder.setPaymentState(PaymentState.PAYMENT_PENDING);
         transactionOrder.setCreateTime(new Timestamp(System.currentTimeMillis()));
 
-
     }
 
     private void instant() {
