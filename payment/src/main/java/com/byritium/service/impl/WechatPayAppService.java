@@ -8,6 +8,7 @@ import com.byritium.dto.wechat.WechatPayAmount;
 import com.byritium.dto.wechat.WechatPayRequest;
 import com.byritium.dto.wechat.WechatPayResult;
 import com.byritium.exception.BusinessException;
+import com.byritium.service.PayService;
 import com.byritium.utils.OkHttpUtils;
 import com.byritium.utils.RandomUtils;
 import com.google.gson.Gson;
@@ -26,7 +27,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-public class WechatPayAppService extends WechatPayService {
+public class WechatPayAppService extends WechatPayService implements PayService {
 
     @Override
     public PayParam pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra) {

@@ -25,7 +25,7 @@ import java.math.BigDecimal;
 
 @Service
 @Slf4j
-public class AliPayAppService extends AliPayService implements PayService, RefundService, WithdrawService {
+public class AliPayAppService extends AliPayService implements PayService {
 
     @Override
     public PaymentChannel channel() {

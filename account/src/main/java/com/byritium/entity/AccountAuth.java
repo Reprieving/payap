@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @Setter
 public class AccountAuth {
     private String id;
-    private String typeId;
+    private String entityId;
     private Boolean payPermit;
     private Boolean rechargePermit;
     private Boolean withdrawPermit;

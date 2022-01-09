@@ -10,8 +10,8 @@ public enum PaymentChannel {//支付渠道
     PLATFORM_PAY("PLATFORM_PAY", "余额支付"),
 
     ;
-    private String channel;
-    private String message;
+    private final String channel;
+    private final String message;
 
     PaymentChannel(String channel, String message) {
         this.channel = channel;

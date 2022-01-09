@@ -2,18 +2,20 @@ package com.byritium.entity;
 
 
 import com.byritium.constance.AccountIdType;
-import com.byritium.constance.AccountPrimaryStatus;
+import com.byritium.constance.AccountState;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 import java.sql.Timestamp;
 
 @Getter
 @Setter
 public class AccountCore {
+    @Id
     private String id;
-    private String objectId;
+    private String userId;
     private AccountIdType idType;
     private Timestamp crateTime;
-    private AccountPrimaryStatus status;
+    private AccountState state;
 }

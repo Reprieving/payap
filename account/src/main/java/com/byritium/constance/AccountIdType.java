@@ -1,12 +1,13 @@
 package com.byritium.constance;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 
 @Getter
 public enum AccountIdType {
-    USER("USER", "用户类型"),
-    ENTERPRISE("ENTERPRISE", "企业类型"),
-    BUSINESS("BUSINESS", "业务线类型"),
+    USER("USER", "用户"),
+    ENTERPRISE("ENTERPRISE", "企业"),
+    BUSINESS("BUSINESS", "业务线"),
 
     ;
     private String type;

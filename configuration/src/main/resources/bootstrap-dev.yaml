@@ -15,9 +15,8 @@ spring:
         git:
           uri: https://gitee.com/byritium/payap-configuration.git
           username: 13432280678
-          password: byritium1994.
+          password:
           search-paths: /**
-
 management:
   endpoints:
     web:

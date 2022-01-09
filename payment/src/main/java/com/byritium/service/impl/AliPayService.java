@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
 
 @Slf4j
-public abstract class AliPayService implements PayService, RefundService, WithdrawService, QueryService {
+public abstract class AliPayService implements RefundService, WithdrawService, QueryService {
     protected CertAlipayRequest buildRequest(AliPayConfig aliPayConfig) {
         //构造client
         CertAlipayRequest certAlipayRequest = new CertAlipayRequest();

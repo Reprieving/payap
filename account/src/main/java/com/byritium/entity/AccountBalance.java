@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @Setter
 public class AccountBalance {
     private String id;
-    private String typeId;
+    private String entityId;
     private BigDecimal total;
     private BigDecimal free;
     private BigDecimal frozen;

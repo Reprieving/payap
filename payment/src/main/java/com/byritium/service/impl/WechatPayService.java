@@ -4,7 +4,6 @@ package com.byritium.service.impl;
 import com.byritium.constance.BaseConst;
 import com.byritium.constance.InterfaceProvider;
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentProduct;
 import com.byritium.dto.PayParam;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.dto.SSLRequest;
@@ -14,7 +13,6 @@ import com.byritium.dto.wechat.WechatRefundAmount;
 import com.byritium.dto.wechat.WechatRefundRequest;
 import com.byritium.dto.wechat.WechatWithdrawRequest;
 import com.byritium.exception.BusinessException;
-import com.byritium.service.PayService;
 import com.byritium.service.QueryService;
 import com.byritium.service.RefundService;
 import com.byritium.service.WithdrawService;
@@ -39,10 +37,13 @@ import java.nio.file.Paths;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
-public abstract class WechatPayService implements PayService, RefundService, WithdrawService, QueryService {
+public abstract class WechatPayService implements RefundService, WithdrawService, QueryService {
     protected Map<String, String> buildHeader(String method, String url, String body, String nonceStr, String michId, String certificateSerialNo, String privateKeyPath) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException {
         long timestamp = System.currentTimeMillis() / 1000;
         String message = buildMessage(method, url, timestamp, nonceStr, body);
