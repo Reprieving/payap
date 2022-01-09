@@ -27,7 +27,6 @@ public class DataSourceConfig {
         hikariConfig.setConnectionTestQuery("SELECT 1");
         hikariConfig.setValidationTimeout(30000);
         return new HikariDataSource(hikariConfig);
-
     }
 
 }
