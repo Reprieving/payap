@@ -1,9 +1,0 @@
-com\byritium\dto\ResponseBody.class
-com\byritium\constance\TransactionState.class
-com\byritium\constance\PaymentChannel.class
-com\byritium\utils\TestUtils.class
-com\byritium\constance\TransactionType.class
-com\byritium\constance\Os.class
-com\byritium\constance\PaymentStatus.class
-com\byritium\constance\PaymentProduct.class
-com\byritium\constance\PaymentState.class
