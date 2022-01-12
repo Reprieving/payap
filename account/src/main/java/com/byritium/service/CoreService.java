@@ -25,7 +25,6 @@ public class CoreService {
 
     public void register(AccountCore accountCore) {
         coreRepository.save(accountCore);
-
         String coreId = accountCore.getId();
         List<AccountEntityType> accountEntityTypeList = entityTypeRepository.findByInitFlag(true);
         for (AccountEntityType accountEntityType : accountEntityTypeList) {
