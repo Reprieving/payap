@@ -36,4 +36,32 @@ public class EntityController {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseBody.build().data(map));
     }
 
+    @RequestMapping("deposit")
+    public ResponseEntity<?> deposit() {
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseBody.build().data(null));
+    }
+
+    @RequestMapping("withdraw")
+    public ResponseEntity<?> withdraw() {
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseBody.build().data(null));
+    }
+
+    @RequestMapping("recorded")
+    public ResponseEntity<?> recorded() {
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseBody.build().data(null));
+    }
+
+    @RequestMapping("payment")
+    public ResponseEntity<?> payment() {
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseBody.build().data(null));
+    }
+
 }

@@ -1,8 +1,10 @@
 package com.byritium.service;
 
+import com.byritium.entity.AccountBalance;
 import com.byritium.entity.AccountCore;
 import com.byritium.entity.AccountEntity;
 import com.byritium.entity.AccountEntityType;
+import com.byritium.respository.BalanceRepository;
 import com.byritium.respository.CoreRepository;
 import com.byritium.respository.EntityRepository;
 import com.byritium.respository.EntityTypeRepository;
@@ -21,6 +23,9 @@ public class CoreService {
     private EntityRepository entityRepository;
 
     @Resource
+    private BalanceRepository balanceRepository;
+
+    @Resource
     private EntityTypeRepository entityTypeRepository;
 
     public void register(AccountCore accountCore) {
@@ -30,6 +35,9 @@ public class CoreService {
         for (AccountEntityType accountEntityType : accountEntityTypeList) {
             AccountEntity accountEntity = new AccountEntity(coreId, accountEntityType);
             entityRepository.save(accountEntity);
+
+            AccountBalance accountBalance = new AccountBalance(accountEntity);
+            balanceRepository.save(accountBalance);
         }
     }
 

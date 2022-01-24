@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ public class AccountEntity {
     private String accountTypeId;
     private String accountName;
     private AccountState state;
-    private Timestamp crateTime;
+    private LocalDateTime crateTime;
 
     public AccountEntity() {
     }
@@ -28,6 +29,6 @@ public class AccountEntity {
         this.accountTypeId = accountEntityType.getId();
         this.accountName = accountEntityType.getTypeName();
         this.state = AccountState.NORMAL;
-        this.crateTime = new Timestamp(System.currentTimeMillis());
+        this.crateTime = LocalDateTime.now();
     }
 }
