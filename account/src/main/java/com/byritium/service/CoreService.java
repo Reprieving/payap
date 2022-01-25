@@ -1,43 +1,45 @@
 package com.byritium.service;
 
-import com.byritium.entity.AccountBalance;
-import com.byritium.entity.AccountCore;
-import com.byritium.entity.AccountEntity;
-import com.byritium.entity.AccountEntityType;
-import com.byritium.respository.BalanceRepository;
-import com.byritium.respository.CoreRepository;
-import com.byritium.respository.EntityRepository;
-import com.byritium.respository.EntityTypeRepository;
+import com.byritium.constance.AccountType;
+import com.byritium.entity.*;
+import com.byritium.respository.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CoreService {
 
     @Resource
+    private EntityService entityService;
+
+    @Resource
     private CoreRepository coreRepository;
 
-    @Resource
-    private EntityRepository entityRepository;
-
-    @Resource
-    private BalanceRepository balanceRepository;
 
     @Resource
     private EntityTypeRepository entityTypeRepository;
 
+
+    @Resource
+    private AuthTemplateRepository authTemplateRepository;
+
     public void register(AccountCore accountCore) {
+        List<AccountEntityType> accountEntityTypeList = entityTypeRepository.findByInitFlag(true);
+        Iterable<AccountAuthTemplate> accountAuthTemplates = authTemplateRepository.findAll();
+        Map<String, AccountAuthTemplate> map = new HashMap<>(20);
+        accountAuthTemplates.forEach(accountAuthTemplate -> map.put(accountAuthTemplate.getTypeId(), accountAuthTemplate));
+
+
         coreRepository.save(accountCore);
         String coreId = accountCore.getId();
-        List<AccountEntityType> accountEntityTypeList = entityTypeRepository.findByInitFlag(true);
-        for (AccountEntityType accountEntityType : accountEntityTypeList) {
-            AccountEntity accountEntity = new AccountEntity(coreId, accountEntityType);
-            entityRepository.save(accountEntity);
 
-            AccountBalance accountBalance = new AccountBalance(accountEntity);
-            balanceRepository.save(accountBalance);
+        for (AccountEntityType accountEntityType : accountEntityTypeList) {
+            AccountAuthTemplate accountAuthTemplate = map.get(accountEntityType.getId());
+            entityService.create(coreId, accountEntityType, accountAuthTemplate);
         }
     }
 
