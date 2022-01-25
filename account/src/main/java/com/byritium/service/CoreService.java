@@ -33,7 +33,6 @@ public class CoreService {
         Map<String, AccountAuthTemplate> map = new HashMap<>(20);
         accountAuthTemplates.forEach(accountAuthTemplate -> map.put(accountAuthTemplate.getTypeId(), accountAuthTemplate));
 
-
         coreRepository.save(accountCore);
         String coreId = accountCore.getId();
 

@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,7 +16,7 @@ public class AccountAuthTemplate {
     private Boolean rechargePermit;
     private Boolean withdrawPermit;
     private Boolean transferPermit;
-    private Timestamp crateTime;
+    private LocalDateTime crateTime;
 
     public AccountAuth toAuth(String entityId) {
         AccountAuth accountAuth = new AccountAuth();

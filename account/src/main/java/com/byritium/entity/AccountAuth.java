@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,5 +16,5 @@ public class AccountAuth {
     private Boolean rechargePermit;
     private Boolean withdrawPermit;
     private Boolean transferPermit;
-    private Timestamp crateTime;
+    private LocalDateTime crateTime;
 }
