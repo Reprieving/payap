@@ -19,10 +19,8 @@ public class CoreService {
     @Resource
     private CoreRepository coreRepository;
 
-
     @Resource
     private EntityTypeRepository entityTypeRepository;
-
 
     @Resource
     private AuthTemplateRepository authTemplateRepository;
