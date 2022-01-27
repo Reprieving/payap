@@ -41,7 +41,7 @@ public class EntityController {
     }
 
     @RequestMapping("deposit")
-    public ResponseEntity<?> deposit() {
+    public ResponseEntity<?> deposit(String goodsId) {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseBody.build().data(null));
     }
 
