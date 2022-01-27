@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
-public class AccountEntityType {
+public class AccountEntityType extends CommonEntity{
     @Id
     private String id;
     private String typeName;

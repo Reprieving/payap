@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
-public class AccountCore {
+public class AccountCore extends CommonEntity{
     @Id
     private String id;
     private String userId;

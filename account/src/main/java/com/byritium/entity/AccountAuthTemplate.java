@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class AccountAuthTemplate {
+public class AccountAuthTemplate extends CommonEntity{
     private String id;
     private String typeId;
     private Boolean payPermit;

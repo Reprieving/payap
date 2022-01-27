@@ -7,10 +7,9 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
-public class AccountSdk {
+public class AccountSdk extends CommonEntity{
     private String id;
     private String typeId;
     private String sdkId;
     private String sdkAppId;
-    private Timestamp crateTime;
 }

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AccountEntityTypeRel {
+public class AccountEntityTypeRel extends CommonEntity{
     private String id;
     private String typeId;
     private String pid;

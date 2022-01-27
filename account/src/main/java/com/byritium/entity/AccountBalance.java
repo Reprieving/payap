@@ -9,13 +9,12 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class AccountBalance {
+public class AccountBalance extends CommonEntity{
     private String id;
     private String entityId;
     private BigDecimal total;
     private BigDecimal free;
     private BigDecimal frozen;
-    private LocalDateTime crateTime;
 
     public AccountBalance() {
     }

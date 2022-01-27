@@ -1,18 +1,19 @@
 package com.byritium.entity;
 
+import com.byritium.constance.AppClient;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class AccountAuth extends CommonEntity{
+public class AccountDepositGoods extends CommonEntity{
     private String id;
-    private String entityId;
-    private Boolean payPermit;
+    private AppClient client;
+    private BigDecimal price;
+    private BigDecimal amount;
     private Boolean rechargePermit;
     private Boolean withdrawPermit;
     private Boolean transferPermit;

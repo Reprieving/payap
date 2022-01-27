@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class AccountEntity {
+public class AccountEntity extends CommonEntity{
     @Id
     private String id;
     private String pid;
@@ -19,7 +19,6 @@ public class AccountEntity {
     private String accountTypeId;
     private String accountName;
     private AccountState state;
-    private LocalDateTime crateTime;
 
     public AccountEntity() {
     }
