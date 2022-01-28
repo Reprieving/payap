@@ -1,10 +1,7 @@
 package com.byritium.controller;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.dto.GuaranteeTransaction;
-import com.byritium.dto.InstantTransaction;
-import com.byritium.dto.SettleTransaction;
-import com.byritium.dto.TransactionRequest;
+import com.byritium.dto.*;
 import com.byritium.service.TransactionOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +18,23 @@ public class TransactionController {
 
     @RequestMapping("guarantee")
     public ResponseEntity<?> guarantee(@RequestBody GuaranteeTransaction guaranteeTransaction) {
+        
 
         return ResponseEntity.of(Optional.of("hello"));
     }
 
     @RequestMapping("instant")
     public ResponseEntity<?> instant(@RequestBody InstantTransaction instantTransaction) {
+        return ResponseEntity.of(Optional.of("hello"));
+    }
+
+    @RequestMapping("deposit")
+    public ResponseEntity<?> deposit(@RequestBody DepositTransaction depositTransaction) {
+        return ResponseEntity.of(Optional.of("hello"));
+    }
+
+    @RequestMapping("withdraw")
+    public ResponseEntity<?> withdraw(@RequestBody WithdrawTransaction withdrawTransaction) {
         return ResponseEntity.of(Optional.of("hello"));
     }
 
