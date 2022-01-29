@@ -5,13 +5,13 @@ import lombok.Getter;
 
 @Getter
 public enum AccountIdType {
-    USER("USER", "用户"),
+    MEMBER("MEMBER", "会员"),
     ENTERPRISE("ENTERPRISE", "企业"),
     BUSINESS("BUSINESS", "业务线"),
 
     ;
-    private String type;
-    private String message;
+    private final String type;
+    private final String message;
 
     AccountIdType(String type, String message) {
         this.type = type;

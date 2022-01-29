@@ -52,8 +52,6 @@ public class EntityController {
 
     @RequestMapping("recorded")
     public ResponseEntity<?> recorded() {
-
-
         return ResponseEntity.status(HttpStatus.OK).body(ResponseBody.build().data(null));
     }
 

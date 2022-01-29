@@ -1,9 +1,10 @@
 package com.byritium.dto;
 
-import com.byritium.constance.PaymentChannel;
+
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class TransactionRequest {
@@ -13,5 +14,6 @@ public class TransactionRequest {
     private BigDecimal orderAmount;
     private BigDecimal payAmount;
     private String subject;
-    private String paymentModelId;
+    private List<Deduction> deductionList;
+
 }
