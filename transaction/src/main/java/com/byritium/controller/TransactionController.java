@@ -2,7 +2,7 @@ package com.byritium.controller;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.dto.*;
-import com.byritium.service.GuaranteeTxService;
+import com.byritium.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,11 +14,11 @@ import java.util.Optional;
 @RestController
 public class TransactionController {
     @Autowired
-    private GuaranteeTxService guaranteeTxService;
+    private TransactionService transactionService;
 
     @RequestMapping("guarantee")
     public ResponseEntity<?> guarantee(@RequestBody GuaranteeTransaction guaranteeTransaction) {
-
+        transactionService.guarantee(guaranteeTransaction);
         return ResponseEntity.of(Optional.of("hello"));
     }
 
