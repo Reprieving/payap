@@ -1,12 +1,9 @@
 package com.byritium.entity;
 
 import com.byritium.constance.AccountState;
-import com.byritium.constance.AccountType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
