@@ -13,6 +13,7 @@ public class TransactionRequest {
     private BigDecimal orderAmount;
     private BigDecimal payAmount;
     private String subject;
+    private List<String> couponList;
     private List<Deduction> deductionList;
 
 
