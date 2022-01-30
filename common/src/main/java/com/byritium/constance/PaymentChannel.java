@@ -4,21 +4,27 @@ import lombok.Getter;
 
 @Getter
 public enum PaymentChannel {//支付渠道
+    PLATFORM_PAY("PLATFORM_PAY", "平台支付"),
+
     ALI_PAY("ALI_PAY", "支付宝支付"),
+    ALI_APP_PAY("ALI_APP_PAY", "支付宝APP支付"),
+
     WECHAT_PAY("WECHAT_PAY", "微信支付"),
+    WECHAT_APP_PAY("WECHAT_APP_PAY", "微信APP支付"),
+
     APPLE_PAY("APPLE_PAY", "苹果支付"),
-    PLATFORM_PAY("PLATFORM_PAY", "余额支付"),
+
 
     ;
-    private final String channel;
-    private final String message;
+    private String channel;
+    private String message;
 
     PaymentChannel(String channel, String message) {
         this.channel = channel;
         this.message = message;
     }
 
-    public String type() {
+    public String channel() {
         return this.channel;
     }
 

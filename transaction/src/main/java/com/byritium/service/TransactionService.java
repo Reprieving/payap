@@ -9,6 +9,8 @@ public class TransactionService {
 
         //鉴权
 
+        //锁优惠券&抵扣资产
+
         //拆单
 
         //发送支付订单
