@@ -18,7 +18,6 @@ public class TransactionController {
 
     @RequestMapping("guarantee")
     public ResponseEntity<?> guarantee(@RequestBody GuaranteeTransaction guaranteeTransaction) {
-        transactionService.guarantee(guaranteeTransaction);
         return ResponseEntity.of(Optional.of("hello"));
     }
 

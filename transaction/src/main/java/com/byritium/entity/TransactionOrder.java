@@ -17,8 +17,6 @@ public class TransactionOrder {
     private String subject;
     private BigDecimal orderAmount;
     private BigDecimal payAmount;
-    private String paymentModelId;
-    private TransactionType transactionType;
     private TransactionState transactionState;
     private PaymentState paymentState;
     private Timestamp createTime;

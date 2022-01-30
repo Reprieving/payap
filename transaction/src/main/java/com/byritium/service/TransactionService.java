@@ -5,9 +5,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TransactionService {
+    public void guarantee(String token, GuaranteeTransaction guaranteeTransaction) {
 
+        //鉴权
 
-    public void guarantee(GuaranteeTransaction guaranteeTransaction) {
+        //拆单
+
+        //发送支付订单
+
+        //
 
     }
 }
