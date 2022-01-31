@@ -1,11 +1,12 @@
 package com.byritium.service;
 
 import com.byritium.dto.GuaranteeTransaction;
+import com.byritium.dto.TransactionResult;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TransactionService {
-    public void guarantee(String token, GuaranteeTransaction guaranteeTransaction) {
+    public TransactionResult guarantee(String token, GuaranteeTransaction guaranteeTransaction) {
 
         //鉴权
 
@@ -17,5 +18,6 @@ public class TransactionService {
 
         //返回结果
 
+        return null;
     }
 }
