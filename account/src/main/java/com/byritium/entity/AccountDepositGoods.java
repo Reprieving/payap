@@ -14,8 +14,5 @@ public class AccountDepositGoods extends CommonEntity{
     private AppClient client;
     private BigDecimal price;
     private BigDecimal amount;
-    private Boolean rechargePermit;
-    private Boolean withdrawPermit;
-    private Boolean transferPermit;
 
 }

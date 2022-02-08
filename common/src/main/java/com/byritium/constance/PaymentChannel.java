@@ -16,8 +16,8 @@ public enum PaymentChannel {//支付渠道
 
 
     ;
-    private String channel;
-    private String message;
+    private final String channel;
+    private final String message;
 
     PaymentChannel(String channel, String message) {
         this.channel = channel;

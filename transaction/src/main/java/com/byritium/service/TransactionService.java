@@ -6,11 +6,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TransactionService {
-    public TransactionResult guarantee(String token, GuaranteeTransaction guaranteeTransaction) {
-
-        //鉴权
-
-        //锁优惠券&抵扣资产
+    public TransactionResult guarantee(GuaranteeTransaction guaranteeTransaction) {
+        //核销优惠券
 
         //拆单
 
