@@ -22,11 +22,6 @@ public class PaymentController {
         paymentOrderService.pay(paymentOrder);
     }
 
-    @RequestMapping("query")
-    public void query(@RequestBody PaymentRequest paymentRequest) {
-        PaymentOrder paymentOrder = new PaymentOrder();
-        paymentOrderService.query(paymentOrder);
-    }
 
 
 
