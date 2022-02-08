@@ -11,11 +11,10 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
-public class AccountCore extends CommonEntity{
+public class AccountCore extends CommonEntity {
     @Id
     private String id;
     private String userId;
     private AccountIdType idType;
-    private Timestamp crateTime;
     private AccountState state;
 }

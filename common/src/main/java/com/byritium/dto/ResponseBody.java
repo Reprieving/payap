@@ -5,30 +5,26 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ResponseBody {
+public class ResponseBody<T> {
     private Integer code = 0;
-    private Object data;
+    private T data;
     private String message;
 
     public ResponseBody() {
 
     }
 
-    public static ResponseBody build() {
-        return new ResponseBody();
-    }
-
-    public ResponseBody code(Integer code) {
+    public ResponseBody<T> code(Integer code) {
         this.code = code;
         return this;
     }
 
-    public ResponseBody data(Object data) {
+    public ResponseBody<T> data(T data) {
         this.data = data;
         return this;
     }
 
-    public ResponseBody message(String message) {
+    public ResponseBody<T> message(String message) {
         this.message = message;
         return this;
     }

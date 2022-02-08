@@ -23,21 +23,21 @@ public class GlobalHandler implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
-        ResponseBody responseBody = new ResponseBody();
+        ResponseBody<Object> responseBody = new ResponseBody<>();
         responseBody.setData(o);
         return responseBody;
     }
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<?> exceptionHandler(Exception e) {
-        ResponseBody responseBody = new ResponseBody();
+        ResponseBody<?> responseBody = new ResponseBody<>();
         responseBody.setMessage("System error");
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(responseBody);
     }
 
     @ExceptionHandler(value = BusinessException.class)
     public ResponseEntity<?> exceptionHandler(BusinessException e) {
-        ResponseBody responseBody = new ResponseBody();
+        ResponseBody<?> responseBody = new ResponseBody<>();
         responseBody.setCode(e.getCode());
         responseBody.setMessage(e.getMessage());
 
