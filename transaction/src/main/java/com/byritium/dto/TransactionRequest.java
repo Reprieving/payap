@@ -20,5 +20,4 @@ public class TransactionRequest {
     private List<String> couponList;
     private List<Deduction> deductionList;
 
-
 }

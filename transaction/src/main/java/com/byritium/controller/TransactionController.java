@@ -16,17 +16,17 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @RequestMapping("create")
-    public Object guarantee(@RequestBody GuaranteeTransaction guaranteeTransaction) {
+    public TransactionResult guarantee(@RequestBody TransactionRequest transaction) {
         return null;
     }
 
     @RequestMapping("query")
-    public Object query(@RequestBody GuaranteeTransaction guaranteeTransaction) {
+    public TransactionResult query() {
         return null;
     }
 
     @RequestMapping("notice")
-    public Object notice(@RequestBody GuaranteeTransaction guaranteeTransaction) {
+    public Object notice() {
         return null;
     }
 }
