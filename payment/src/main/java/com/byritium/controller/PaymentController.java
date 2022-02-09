@@ -15,14 +15,12 @@ public class PaymentController {
     @Autowired
     private PaymentOrderService paymentOrderService;
 
-    @RequestMapping("action")
-    public void action(@RequestBody PaymentRequest paymentRequest) {
+    @RequestMapping("call")
+    public void call(@RequestBody PaymentRequest paymentRequest) {
         PaymentOrder paymentOrder = new PaymentOrder();
         paymentOrder.setPaymentStatus(PaymentStatus.PAYMENT_PENDING);
         paymentOrderService.pay(paymentOrder);
     }
-
-
 
 
 }

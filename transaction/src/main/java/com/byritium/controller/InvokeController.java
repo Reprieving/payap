@@ -1,6 +1,5 @@
 package com.byritium.controller;
 
-import com.byritium.constance.PaymentChannel;
 import com.byritium.dto.*;
 import com.byritium.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-public class TransactionController {
+public class InvokeController {
     @Autowired
     private TransactionService transactionService;
 
