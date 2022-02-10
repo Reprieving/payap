@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("refund")
 public class RefundController {
-    @RequestMapping("action")
+    @RequestMapping("call")
     public void action(@RequestBody PaymentRequest paymentRequest) {
 
     }

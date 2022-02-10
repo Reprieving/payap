@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("settle")
 public class SettleController {
-    @RequestMapping("action")
+    @RequestMapping("call")
     public void action(@RequestBody PaymentRequest paymentRequest) {
         PaymentOrder paymentOrder = new PaymentOrder();
     }

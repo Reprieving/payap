@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("pay")
-public class PaymentController {
+public class PayController {
     @Autowired
     private PaymentOrderService paymentOrderService;
 
@@ -21,6 +20,5 @@ public class PaymentController {
         paymentOrder.setPaymentStatus(PaymentStatus.PAYMENT_PENDING);
         paymentOrderService.pay(paymentOrder);
     }
-
 
 }
