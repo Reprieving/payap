@@ -21,6 +21,11 @@ public class TransactionController {
         return null;
     }
 
+    @RequestMapping("pay")
+    public TransactionResult pay(@RequestBody TransactionRequest request) {
+        return null;
+    }
+
     @RequestMapping("query")
     public TransactionResult query(@RequestBody TransactionRequest request) {
         return null;
