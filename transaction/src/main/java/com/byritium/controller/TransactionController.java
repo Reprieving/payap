@@ -3,13 +3,10 @@ package com.byritium.controller;
 import com.byritium.dto.*;
 import com.byritium.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @RestController
 public class TransactionController {
@@ -18,7 +15,7 @@ public class TransactionController {
 
     @RequestMapping("create")
     public TransactionResult guarantee(@RequestBody TransactionRequest request) {
-        return null;
+        return transactionService.create();
     }
 
     @RequestMapping("pay")
