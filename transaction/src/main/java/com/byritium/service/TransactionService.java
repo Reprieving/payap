@@ -17,33 +17,21 @@ public class TransactionService {
 
     public TransactionResult call(String clientId, TransactionParam param) {
         TransactionOrder transactionOrder = new TransactionOrder(clientId, param);
+        String userId = param.getUserId();
+
+
+
 
         //TODO coupon
+        String couponId = param.getCouponId();
 
 
         //TODO deduction
-
+        String deductionId = param.getDeductionId();
 
 
         transactionOrderRepository.save(transactionOrder);
 
-
-
-
-
-//        switch (param.getTransactionType()) {
-//            case GUARANTEE:
-//
-//
-//
-//                break;
-//
-//            case INSTANT:
-//                break;
-//
-//            default:
-//                throw new BusinessException("error tx type");
-//        }
         return null;
     }
 }

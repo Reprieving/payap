@@ -10,8 +10,8 @@ public enum TransactionState {
     TRANSACTION_CLOSE("TRANSACTION_CLOSE", "交易关闭"),
 
     ;
-    private String state;
-    private String message;
+    private final String state;
+    private final String message;
 
     TransactionState(String state, String message) {
         this.state = state;
