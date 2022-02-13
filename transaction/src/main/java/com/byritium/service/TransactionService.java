@@ -19,12 +19,8 @@ public class TransactionService {
         TransactionOrder transactionOrder = new TransactionOrder(clientId, param);
         String userId = param.getUserId();
 
-
-
-
         //TODO coupon
         String couponId = param.getCouponId();
-
 
         //TODO deduction
         String deductionId = param.getDeductionId();
