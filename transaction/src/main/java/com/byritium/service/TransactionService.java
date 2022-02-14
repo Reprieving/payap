@@ -32,11 +32,13 @@ public class TransactionService {
         String userId = param.getUserId();
 
         {
-            //TODO coupon
+
             String couponId = param.getCouponId();
             TransactionPayOrder couponPayOrder = new TransactionPayOrder();
             couponPayOrder.setTransactionOrderId(transactionOrder.getId());
             couponPayOrder.setPaymentChannel(PaymentChannel.COUPON_PAY);
+            //TODO coupon payerId
+            couponPayOrder.setPayerId(null);
             couponPayOrder.setPayMediumId(couponId);
             couponPayOrder.setPaymentTitle(PaymentChannel.COUPON_PAY.getMessage());
             couponPayOrder.setOrderAmount(BigDecimal.ZERO);
@@ -52,6 +54,7 @@ public class TransactionService {
             TransactionPayOrder deductionPayOrder = new TransactionPayOrder();
             deductionPayOrder.setTransactionOrderId(transactionOrder.getId());
             deductionPayOrder.setPaymentChannel(deduction.getPaymentChannel());
+            deductionPayOrder.setPayerId(userId);
             deductionPayOrder.setPaymentTitle(deduction.getPaymentChannel().getMessage());
             deductionPayOrder.setOrderAmount(BigDecimal.ZERO);
             deductionPayOrder.setState(PaymentState.PAYMENT_WAITING);
