@@ -6,6 +6,8 @@ import lombok.Getter;
 public enum PaymentChannel {//支付渠道
     PLATFORM_PAY("PLATFORM_PAY", "平台支付"),
 
+    COUPON_PAY("COUPON_PAY", "优惠券支付"),
+
     ALI_PAY("ALI_PAY", "支付宝支付"),
     ALI_APP_PAY("ALI_APP_PAY", "支付宝APP支付"),
 

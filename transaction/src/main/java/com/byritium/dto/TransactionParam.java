@@ -20,6 +20,6 @@ public class TransactionParam {
     private TransactionType transactionType;
     private PaymentChannel paymentChannel;
     private String couponId;
-    private String deductionId;
+    private Deduction deduction;
 
 }
