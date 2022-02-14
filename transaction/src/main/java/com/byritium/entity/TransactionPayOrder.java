@@ -11,7 +11,7 @@ public class TransactionPayOrder extends CommonEntity {
     private String id;
     private String transactionOrderId;
     private PaymentChannel paymentChannel;
-    private String payMediumId; //couponId | deductionId(accountTypeId)
+    private String payMediumId;
     private String paymentTitle;
     private BigDecimal orderAmount;
     private PaymentState state;
