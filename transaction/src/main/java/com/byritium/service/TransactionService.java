@@ -26,13 +26,16 @@ public class TransactionService {
 
 
     public TransactionResult call(String clientId, TransactionParam param) {
+        TransactionResult result = new TransactionResult();
+
+
+        PaymentChannel paymentChannel = param.getPaymentChannel();
         TransactionOrder transactionOrder = new TransactionOrder(clientId, param);
         transactionOrderRepository.save(transactionOrder);
 
         String userId = param.getUserId();
 
         {
-
             String couponId = param.getCouponId();
             TransactionPayOrder couponPayOrder = new TransactionPayOrder();
             couponPayOrder.setTransactionOrderId(transactionOrder.getId());
@@ -62,6 +65,11 @@ public class TransactionService {
         }
 
 
-        return null;
+        if (paymentChannel != null) {
+
+        }
+
+
+        return result;
     }
 }
