@@ -35,6 +35,10 @@ public class TransactionService {
 
         String userId = param.getUserId();
 
+        if (paymentChannel != null) {
+
+        }
+
         {
             String couponId = param.getCouponId();
             TransactionPayOrder couponPayOrder = new TransactionPayOrder();
@@ -65,9 +69,7 @@ public class TransactionService {
         }
 
 
-        if (paymentChannel != null) {
 
-        }
 
 
         return result;
