@@ -31,12 +31,8 @@ public class TransactionService {
     @Resource
     private TransactionPayOrderRepository transactionPayOrderRepository;
 
-    @Autowired
-    private PaymentPayRpc paymentPayRpc;
-
     public TransactionResult call(String clientId, TransactionParam param) {
         TransactionResult result = new TransactionResult();
-
 
         PaymentChannel paymentChannel = param.getPaymentChannel();
         TransactionOrder transactionOrder = new TransactionOrder(clientId, param);
@@ -48,11 +44,10 @@ public class TransactionService {
         transactionPayOrderService.buildOrder(transactionOrderId, paymentChannel, BigDecimal.ZERO, null, null);
 
         String couponId = param.getCouponId();
-        transactionPayOrderService.buildOrder(transactionOrderId, paymentChannel, BigDecimal.ZERO, null, couponId);
+        transactionPayOrderService.buildOrder(transactionOrderId, PaymentChannel.COUPON_PAY, BigDecimal.ZERO, null, couponId);
 
         Deduction deduction = param.getDeduction();
         transactionPayOrderService.buildOrder(transactionOrderId, deduction.getPaymentChannel(), BigDecimal.ZERO, userId, couponId);
-
 
 
         return result;
