@@ -36,7 +36,15 @@ public class TransactionService {
         String userId = param.getUserId();
 
         if (paymentChannel != null) {
+            TransactionPayOrder corePayOrder = new TransactionPayOrder();
+            corePayOrder.setTransactionOrderId(transactionOrder.getId());
+            corePayOrder.setPaymentChannel(paymentChannel);
+            corePayOrder.setPayerId(null);
+            corePayOrder.setPaymentTitle(paymentChannel.getMessage());
+            corePayOrder.setOrderAmount(BigDecimal.ZERO);
+            corePayOrder.setState(PaymentState.PAYMENT_WAITING);
 
+            transactionPayOrderRepository.save(corePayOrder);
         }
 
         {
@@ -54,7 +62,6 @@ public class TransactionService {
             transactionPayOrderRepository.save(couponPayOrder);
         }
 
-
         {
             //TODO deduction
             Deduction deduction = param.getDeduction();
@@ -67,9 +74,6 @@ public class TransactionService {
             deductionPayOrder.setState(PaymentState.PAYMENT_WAITING);
             transactionPayOrderRepository.save(deductionPayOrder);
         }
-
-
-
 
 
         return result;
