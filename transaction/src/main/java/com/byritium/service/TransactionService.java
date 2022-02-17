@@ -17,6 +17,9 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
@@ -31,7 +34,7 @@ public class TransactionService {
     private TransactionTemplate transactionTemplate;
 
     public TransactionResult call(String clientId, TransactionParam param) {
-        TransactionResult result = new TransactionResult();
+        TransactionResult transactionResult = new TransactionResult();
 
         PaymentChannel paymentChannel = param.getPaymentChannel();
         TransactionOrder transactionOrder = new TransactionOrder(clientId, param);
@@ -69,6 +72,25 @@ public class TransactionService {
         });
 
 
-        return result;
+        List<CompletableFuture<TransactionPayOrder>> transactionFutureList = transactionOrderList.stream().map(
+                transactionPayOrder -> transactionPayOrderService.payOrder(transactionPayOrder)).collect(Collectors.toList()
+        );
+
+        CompletableFuture<Void> allFutures =
+                CompletableFuture
+                        .allOf(transactionFutureList.toArray(new CompletableFuture[transactionFutureList.size()]));
+
+        CompletableFuture<List<TransactionPayOrder>> futureResult = allFutures.thenApply(v -> transactionFutureList.stream().map(CompletableFuture::join)
+                .collect(Collectors.toList()));
+
+
+        try {
+            List<TransactionPayOrder> transactionPayOrders = futureResult.get();
+            transactionPayOrders.forEach(transactionPayOrder -> transactionPayOrderService.saveOrder(transactionPayOrder));
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return transactionResult;
     }
 }

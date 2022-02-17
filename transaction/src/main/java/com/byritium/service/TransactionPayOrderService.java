@@ -43,6 +43,10 @@ public class TransactionPayOrderService {
         return payOrder;
     }
 
+    public TransactionPayOrder saveOrder(TransactionPayOrder transactionPayOrder) {
+        return transactionPayOrderRepository.save(transactionPayOrder);
+    }
+
     public CompletableFuture<TransactionPayOrder> payOrder(TransactionPayOrder transactionPayOrder) {
 
         return CompletableFuture.supplyAsync(() -> {
