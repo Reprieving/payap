@@ -38,16 +38,17 @@ public class TransactionService {
 
         PaymentChannel paymentChannel = param.getPaymentChannel();
         TransactionOrder transactionOrder = new TransactionOrder(clientId, param);
-        transactionOrderRepository.save(transactionOrder);
-
-        String userId = param.getUserId();
-        String transactionOrderId = transactionOrder.getId();
 
         List<TransactionPayOrder> transactionOrderList = new ArrayList<>();
 
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+                transactionOrderRepository.save(transactionOrder);
+
+                String userId = param.getUserId();
+                String transactionOrderId = transactionOrder.getId();
+
                 {
                     transactionOrderList.add(
                             transactionPayOrderService.saveOrder(transactionOrderId, paymentChannel, BigDecimal.ZERO, null, null)
@@ -70,7 +71,6 @@ public class TransactionService {
 
             }
         });
-
 
         List<CompletableFuture<TransactionPayOrder>> transactionFutureList = transactionOrderList.stream().map(
                 transactionPayOrder -> transactionPayOrderService.payOrder(transactionPayOrder)).collect(Collectors.toList()
