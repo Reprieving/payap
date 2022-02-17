@@ -29,5 +29,9 @@ public class ResponseBody<T> {
         return this;
     }
 
+    public boolean success() {
+        return this.getCode() == 0;
+    }
+
 
 }
