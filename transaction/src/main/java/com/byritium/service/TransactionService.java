@@ -49,7 +49,7 @@ public class TransactionService {
                 String userId = param.getUserId();
                 String transactionOrderId = transactionOrder.getId();
 
-                {
+                if (paymentChannel != null) {
                     transactionOrderList.add(
                             transactionPayOrderService.saveOrder(transactionOrderId, paymentChannel, BigDecimal.ZERO, null, null)
                     );
@@ -61,7 +61,6 @@ public class TransactionService {
                             transactionPayOrderService.saveOrder(transactionOrderId, PaymentChannel.COUPON_PAY, BigDecimal.ZERO, null, couponId)
                     );
                 }
-
                 {
                     Deduction deduction = param.getDeduction();
                     transactionOrderList.add(
@@ -80,9 +79,9 @@ public class TransactionService {
                 CompletableFuture
                         .allOf(transactionFutureList.toArray(new CompletableFuture[transactionFutureList.size()]));
 
+
         CompletableFuture<List<TransactionPayOrder>> futureResult = allFutures.thenApply(v -> transactionFutureList.stream().map(CompletableFuture::join)
                 .collect(Collectors.toList()));
-
 
         try {
             List<TransactionPayOrder> transactionPayOrders = futureResult.get();
