@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -61,5 +62,7 @@ public class TransactionPayOrderService {
         });
     }
 
-
+    public boolean verifySuccess(List<TransactionPayOrder> list) {
+        return list.stream().filter(transactionPayOrder -> transactionPayOrder.getState() == PaymentState.PAYMENT_SUCCESS).count() == list.size();
+    }
 }

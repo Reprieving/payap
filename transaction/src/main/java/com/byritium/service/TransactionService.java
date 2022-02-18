@@ -7,6 +7,7 @@ import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.entity.TransactionPayOrder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
@@ -23,6 +24,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class TransactionService {
 
     @Autowired
@@ -88,10 +90,19 @@ public class TransactionService {
         try {
             List<TransactionPayOrder> transactionPayOrders = futureResult.get();
             transactionPayOrders.forEach(transactionPayOrder -> transactionPayOrderService.saveOrder(transactionPayOrder));
+
+            //TODO send result account service
+            if (paymentChannel != null && transactionPayOrderService.verifySuccess(transactionPayOrders)) {
+
+            }
+
+
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            log.error("get payment order exception", e);
         }
 
         return transactionResult;
     }
+
+
 }
