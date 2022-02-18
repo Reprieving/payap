@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -55,14 +56,15 @@ public class TransactionService {
                     );
                 }
 
-                {
-                    String couponId = param.getCouponId();
+                String couponId = param.getCouponId();
+                if (StringUtils.hasText(couponId)) {
                     transactionOrderList.add(
                             transactionPayOrderService.saveOrder(transactionOrderId, PaymentChannel.COUPON_PAY, BigDecimal.ZERO, null, couponId)
                     );
                 }
-                {
-                    Deduction deduction = param.getDeduction();
+
+                Deduction deduction = param.getDeduction();
+                if (deduction != null) {
                     transactionOrderList.add(
                             transactionPayOrderService.saveOrder(transactionOrderId, deduction.getPaymentChannel(), BigDecimal.ZERO, userId, null)
                     );
