@@ -92,7 +92,7 @@ public class TransactionService {
             transactionPayOrders.forEach(transactionPayOrder -> transactionPayOrderService.saveOrder(transactionPayOrder));
 
             //TODO send result account service
-            if (paymentChannel != null && transactionPayOrderService.verifySuccess(transactionPayOrders)) {
+            if (paymentChannel != null && transactionPayOrderService.verifyAllSuccess(transactionPayOrders)) {
 
             }
 

@@ -62,7 +62,7 @@ public class TransactionPayOrderService {
         });
     }
 
-    public boolean verifySuccess(List<TransactionPayOrder> list) {
+    public boolean verifyAllSuccess(List<TransactionPayOrder> list) {
         return list.stream().filter(transactionPayOrder -> transactionPayOrder.getState() == PaymentState.PAYMENT_SUCCESS).count() == list.size();
     }
 }
