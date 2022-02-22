@@ -16,8 +16,8 @@ public class TransactionController {
     }
 
     @RequestMapping("pay")
-    public TransactionResult pay(@RequestBody TransactionParam request) {
-        return null;
+    public TransactionResult pay(@RequestHeader String clientId,@RequestBody TransactionParam request) {
+        return transactionService.pay(clientId,request);
     }
 
     @RequestMapping("query")
