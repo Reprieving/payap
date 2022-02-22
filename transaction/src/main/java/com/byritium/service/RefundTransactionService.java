@@ -6,10 +6,10 @@ import com.byritium.dto.TransactionResult;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WithdrawTransactionService implements ITransactionService {
+public class RefundTransactionService implements ITransactionService{
     @Override
     public TransactionType type() {
-        return TransactionType.WITHDRAW;
+        return TransactionType.REFUND;
     }
 
     @Override
