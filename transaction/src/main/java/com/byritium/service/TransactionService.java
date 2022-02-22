@@ -56,5 +56,9 @@ public class TransactionService implements ApplicationContextAware, ITransaction
         return transactionServiceMap.get(param.getTransactionType()).call(clientId, param);
     }
 
+    public TransactionResult pay(String clientId, TransactionParam param) {
+        return null;
+    }
+
 
 }
