@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class GuaranteeTransactionService implements ITransactionService{
+public class GuaranteeTransactionService implements ITransactionService {
     @Autowired
     private TransactionPayOrderService transactionPayOrderService;
 
@@ -96,7 +96,7 @@ public class GuaranteeTransactionService implements ITransactionService{
             List<TransactionPayOrder> transactionPayOrders = futureResult.get();
             transactionPayOrders.forEach(transactionPayOrder -> transactionPayOrderService.saveOrder(transactionPayOrder));
 
-            //TODO send result account service
+            //支付入账
             if (paymentChannel != null && transactionPayOrderService.verifyAllSuccess(transactionPayOrders)) {
 
             }
