@@ -7,9 +7,11 @@ import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.entity.TransactionPayOrder;
+import com.byritium.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -41,27 +43,23 @@ public class InstantTransactionService implements ITransactionService {
         PaymentChannel paymentChannel = param.getPaymentChannel();
         TransactionOrder transactionOrder = new TransactionOrder(clientId, param);
 
-        List<TransactionPayOrder> transactionOrderList = new ArrayList<>();
+        TransactionPayOrder transactionPayOrder = transactionTemplate.execute(transactionStatus -> {
+            transactionOrderRepository.save(transactionOrder);
 
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                transactionOrderRepository.save(transactionOrder);
+            String userId = param.getUserId();
+            String transactionOrderId = transactionOrder.getId();
 
-                String userId = param.getUserId();
-                String transactionOrderId = transactionOrder.getId();
-
-                if (paymentChannel != null) {
-                    transactionOrderList.add(
-                            transactionPayOrderService.saveOrder(transactionOrderId, paymentChannel, BigDecimal.ZERO, null, null)
-                    );
-                }
+            if (paymentChannel != null) {
+                return transactionPayOrderService.saveOrder(transactionOrderId, paymentChannel, transactionOrder.getOrderAmount(), userId, null);
             }
+            return null;
         });
 
-        if (transactionOrderList.size() > 0) {
-            transactionPayOrderService.payOrder(transactionOrderList.get(0));
+        if (transactionPayOrder == null) {
+            throw new BusinessException("order exception");
         }
+
+        transactionPayOrderService.payOrder(transactionPayOrder);
 
         return transactionResult;
     }
