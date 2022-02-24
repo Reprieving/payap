@@ -3,6 +3,7 @@ package com.byritium.service;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.dao.TransactionPayOrderRepository;
+import com.byritium.dto.Deduction;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.ResponseBody;
 import com.byritium.entity.TransactionPayOrder;
@@ -42,6 +43,18 @@ public class TransactionPayOrderService {
         transactionPayOrderRepository.save(payOrder);
 
         return payOrder;
+    }
+
+    public TransactionPayOrder saveCoreOrder(String transactionOrderId, PaymentChannel paymentChannel, BigDecimal amount) {
+        return null;
+    }
+
+    public TransactionPayOrder saveCouponOrder(String transactionOrderId, PaymentChannel paymentChannel, String couponId) {
+        return null;
+    }
+
+    public TransactionPayOrder saveDeductionOrder(String transactionOrderId, Deduction deduction) {
+        return null;
     }
 
     public TransactionPayOrder saveOrder(TransactionPayOrder transactionPayOrder) {
