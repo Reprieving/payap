@@ -3,11 +3,14 @@ package com.byritium.service;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.dao.TransactionPayOrderRepository;
+import com.byritium.dto.CouponInfo;
 import com.byritium.dto.Deduction;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.ResponseBody;
 import com.byritium.entity.TransactionPayOrder;
+import com.byritium.rpc.CouponRpc;
 import com.byritium.rpc.PaymentPayRpc;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -19,8 +22,11 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class TransactionPayOrderService {
 
-    @Resource
+    @Autowired
     private PaymentPayRpc paymentPayRpc;
+
+    @Autowired
+    private CouponRpc couponRpc;
 
     @Resource
     private TransactionPayOrderRepository transactionPayOrderRepository;
@@ -46,16 +52,65 @@ public class TransactionPayOrderService {
     }
 
     public TransactionPayOrder saveCoreOrder(String transactionOrderId, PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
+        TransactionPayOrder payOrder = new TransactionPayOrder();
+        payOrder.setTransactionOrderId(transactionOrderId);
+        payOrder.setPaymentChannel(paymentChannel);
+        payOrder.setPayerId(null);
+        if (StringUtils.hasText(payerId)) {
+            payOrder.setPayerId(payerId);
+        }
+        payOrder.setPaymentTitle(paymentChannel.getMessage());
+        payOrder.setOrderAmount(amount);
+        payOrder.setState(PaymentState.PAYMENT_WAITING);
+
+        transactionPayOrderRepository.save(payOrder);
+
         return null;
     }
 
     public TransactionPayOrder saveCouponOrder(String transactionOrderId, String couponId) {
         PaymentChannel paymentChannel = PaymentChannel.COUPON_PAY;
-        return null;
+
+        ResponseBody<CouponInfo> responseBody = couponRpc.get(couponId);
+        CouponInfo couponInfo = responseBody.getData();
+        String payerId = couponInfo.getPayerId();
+        BigDecimal amount = couponInfo.getAmount();
+
+        TransactionPayOrder payOrder = new TransactionPayOrder();
+        payOrder.setTransactionOrderId(transactionOrderId);
+        payOrder.setPaymentChannel(paymentChannel);
+        payOrder.setPayerId(null);
+        if (StringUtils.hasText(payerId)) {
+            payOrder.setPayerId(payerId);
+        }
+        if (StringUtils.hasText(couponId)) {
+            payOrder.setPayMediumId(couponId);
+        }
+        payOrder.setPaymentTitle(paymentChannel.getMessage());
+        payOrder.setOrderAmount(amount);
+        payOrder.setState(PaymentState.PAYMENT_WAITING);
+
+
+        return transactionPayOrderRepository.save(payOrder);
     }
 
     public TransactionPayOrder saveDeductionOrder(String transactionOrderId, String payerId, Deduction deduction) {
-        return null;
+        PaymentChannel paymentChannel = deduction.getPaymentChannel();
+
+        TransactionPayOrder payOrder = new TransactionPayOrder();
+        payOrder.setTransactionOrderId(transactionOrderId);
+        payOrder.setPaymentChannel(paymentChannel);
+        payOrder.setPayerId(null);
+        if (StringUtils.hasText(payerId)) {
+            payOrder.setPayerId(payerId);
+        }
+        payOrder.setPaymentTitle(paymentChannel.getMessage());
+        //TODO calculate deduction amount
+        payOrder.setOrderAmount(BigDecimal.ZERO);
+        payOrder.setState(PaymentState.PAYMENT_WAITING);
+
+
+        return transactionPayOrderRepository.save(payOrder);
     }
 
     public TransactionPayOrder saveOrder(TransactionPayOrder transactionPayOrder) {
