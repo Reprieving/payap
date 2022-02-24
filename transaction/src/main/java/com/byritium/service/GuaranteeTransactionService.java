@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.StringUtils;
@@ -47,37 +48,35 @@ public class GuaranteeTransactionService implements ITransactionService {
         PaymentChannel paymentChannel = param.getPaymentChannel();
         TransactionOrder transactionOrder = new TransactionOrder(clientId, param);
 
-        List<TransactionPayOrder> transactionOrderList = new ArrayList<>();
+        List<TransactionPayOrder> transactionOrderList = transactionTemplate.execute(transactionStatus -> {
+            List<TransactionPayOrder> transactionOrderList1 = new ArrayList<>();
 
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                transactionOrderRepository.save(transactionOrder);
+            transactionOrderRepository.save(transactionOrder);
 
-                String userId = param.getUserId();
-                String transactionOrderId = transactionOrder.getId();
+            String userId = param.getUserId();
+            String transactionOrderId = transactionOrder.getId();
 
-                if (paymentChannel != null) {
-                    transactionOrderList.add(
-                            transactionPayOrderService.saveCoreOrder(transactionOrderId, paymentChannel, userId, BigDecimal.ZERO)
-                    );
-                }
-
-                String couponId = param.getCouponId();
-                if (StringUtils.hasText(couponId)) {
-                    transactionOrderList.add(
-                            transactionPayOrderService.saveCouponOrder(transactionOrderId, couponId)
-                    );
-                }
-
-                Deduction deduction = param.getDeduction();
-                if (deduction != null) {
-                    transactionOrderList.add(
-                            transactionPayOrderService.saveDeductionOrder(transactionOrderId, userId, deduction)
-                    );
-                }
-
+            if (paymentChannel != null) {
+                transactionOrderList1.add(
+                        transactionPayOrderService.saveCoreOrder(transactionOrderId, paymentChannel, userId, BigDecimal.ZERO)
+                );
             }
+
+            String couponId = param.getCouponId();
+            if (StringUtils.hasText(couponId)) {
+                transactionOrderList1.add(
+                        transactionPayOrderService.saveCouponOrder(transactionOrderId, couponId)
+                );
+            }
+
+            Deduction deduction = param.getDeduction();
+            if (deduction != null) {
+                transactionOrderList1.add(
+                        transactionPayOrderService.saveDeductionOrder(transactionOrderId, userId, deduction)
+                );
+            }
+
+            return transactionOrderList1;
         });
 
         List<CompletableFuture<TransactionPayOrder>> transactionFutureList = transactionOrderList.stream().map(
