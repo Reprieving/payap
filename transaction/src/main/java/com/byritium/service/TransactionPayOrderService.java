@@ -45,15 +45,16 @@ public class TransactionPayOrderService {
         return payOrder;
     }
 
-    public TransactionPayOrder saveCoreOrder(String transactionOrderId, PaymentChannel paymentChannel, BigDecimal amount) {
+    public TransactionPayOrder saveCoreOrder(String transactionOrderId, PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
         return null;
     }
 
-    public TransactionPayOrder saveCouponOrder(String transactionOrderId, PaymentChannel paymentChannel, String couponId) {
+    public TransactionPayOrder saveCouponOrder(String transactionOrderId, String couponId) {
+        PaymentChannel paymentChannel = PaymentChannel.COUPON_PAY;
         return null;
     }
 
-    public TransactionPayOrder saveDeductionOrder(String transactionOrderId, Deduction deduction) {
+    public TransactionPayOrder saveDeductionOrder(String transactionOrderId, String payerId, Deduction deduction) {
         return null;
     }
 

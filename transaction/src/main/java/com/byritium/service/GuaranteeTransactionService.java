@@ -59,21 +59,21 @@ public class GuaranteeTransactionService implements ITransactionService {
 
                 if (paymentChannel != null) {
                     transactionOrderList.add(
-                            transactionPayOrderService.saveCoreOrder(transactionOrderId, paymentChannel, BigDecimal.ZERO)
+                            transactionPayOrderService.saveCoreOrder(transactionOrderId, paymentChannel, userId, BigDecimal.ZERO)
                     );
                 }
 
                 String couponId = param.getCouponId();
                 if (StringUtils.hasText(couponId)) {
                     transactionOrderList.add(
-                            transactionPayOrderService.saveCouponOrder(transactionOrderId, PaymentChannel.COUPON_PAY, couponId)
+                            transactionPayOrderService.saveCouponOrder(transactionOrderId, couponId)
                     );
                 }
 
                 Deduction deduction = param.getDeduction();
                 if (deduction != null) {
                     transactionOrderList.add(
-                            transactionPayOrderService.saveDeductionOrder(transactionOrderId, deduction)
+                            transactionPayOrderService.saveDeductionOrder(transactionOrderId, userId, deduction)
                     );
                 }
 
