@@ -28,14 +28,17 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class GuaranteeTransactionService implements ITransactionService {
-    @Autowired
-    private TransactionPayOrderService transactionPayOrderService;
+    private final TransactionPayOrderService transactionPayOrderService;
 
     @Resource
     private TransactionOrderRepository transactionOrderRepository;
 
     @Resource
     private TransactionTemplate transactionTemplate;
+
+    public GuaranteeTransactionService(TransactionPayOrderService transactionPayOrderService) {
+        this.transactionPayOrderService = transactionPayOrderService;
+    }
 
     @Override
     public TransactionType type() {
@@ -80,12 +83,12 @@ public class GuaranteeTransactionService implements ITransactionService {
         });
 
         List<CompletableFuture<TransactionPayOrder>> transactionFutureList = transactionOrderList.stream().map(
-                transactionPayOrder -> transactionPayOrderService.payOrder(transactionPayOrder)).collect(Collectors.toList()
+                transactionPayOrderService::payOrder).collect(Collectors.toList()
         );
 
         CompletableFuture<Void> allFutures =
                 CompletableFuture
-                        .allOf(transactionFutureList.toArray(new CompletableFuture[transactionFutureList.size()]));
+                        .allOf(transactionFutureList.toArray(new CompletableFuture[0]));
 
 
         CompletableFuture<List<TransactionPayOrder>> futureResult = allFutures.thenApply(v -> transactionFutureList.stream().map(CompletableFuture::join)
@@ -93,7 +96,7 @@ public class GuaranteeTransactionService implements ITransactionService {
 
         try {
             List<TransactionPayOrder> transactionPayOrders = futureResult.get();
-            transactionPayOrders.forEach(transactionPayOrder -> transactionPayOrderService.saveOrder(transactionPayOrder));
+            transactionPayOrders.forEach(transactionPayOrderService::saveOrder);
 
             //支付入账
             if (paymentChannel != null && transactionPayOrderService.verifyAllSuccess(transactionPayOrders)) {
