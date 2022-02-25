@@ -22,10 +22,10 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class TransactionPayOrderService {
 
-    @Autowired
+    @Resource
     private PaymentPayRpc paymentPayRpc;
 
-    @Autowired
+    @Resource
     private CouponRpc couponRpc;
 
     @Resource

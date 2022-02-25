@@ -22,7 +22,7 @@ import java.util.List;
 
 @Service
 public class InstantTransactionService implements ITransactionService {
-    @Autowired
+    @Resource
     private TransactionPayOrderService transactionPayOrderService;
 
     @Resource
@@ -50,7 +50,7 @@ public class InstantTransactionService implements ITransactionService {
             String transactionOrderId = transactionOrder.getId();
 
             if (paymentChannel != null) {
-                return transactionPayOrderService.saveOrder(transactionOrderId, paymentChannel, transactionOrder.getOrderAmount(), userId, null);
+                return transactionPayOrderService.saveCoreOrder(transactionOrderId, paymentChannel, userId, transactionOrder.getOrderAmount());
             }
             return null;
         });
