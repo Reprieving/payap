@@ -118,14 +118,14 @@ public class TransactionPayOrderService {
     }
 
     public CompletableFuture<TransactionPayOrder> payOrder(TransactionPayOrder transactionPayOrder) {
-
         return CompletableFuture.supplyAsync(() -> {
             ResponseBody<PaymentResult> response = paymentPayRpc.pay(transactionPayOrder);
+            PaymentResult result = response.getData();
             if (response.success()) {
-                PaymentResult result = response.getData();
                 transactionPayOrder.setState(result.getState());
+                transactionPayOrder.setSign(result.getSign());
             } else {
-                //TODO Log
+                transactionPayOrder.setState(PaymentState.PAYMENT_FAIL);
             }
             return transactionPayOrder;
         });
