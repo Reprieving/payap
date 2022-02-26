@@ -24,8 +24,11 @@ public class TransactionOrder extends CommonEntity {
     private TransactionType transactionType;
     private TransactionState transactionState;
     private PaymentChannel paymentChannel;
+    private PaymentState paymentState;
 
     public TransactionOrder() {
+        this.transactionState = TransactionState.TRANSACTION_PENDING;
+        this.paymentState = PaymentState.PAYMENT_PENDING;
     }
 
     public TransactionOrder(String clientId, TransactionParam param) {
