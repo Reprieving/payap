@@ -1,6 +1,7 @@
 package com.byritium.service;
 
 import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionOrderRepository;
 import com.byritium.dto.TransactionParam;
@@ -18,6 +19,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -60,6 +62,17 @@ public class InstantTransactionService implements ITransactionService {
         }
 
         transactionPayOrderService.payOrder(transactionPayOrder);
+
+        PaymentState state = transactionPayOrder.getState();
+        transactionResult.setPaymentState(state);
+        transactionPayOrderService.saveOrder(transactionPayOrder);
+        if (state == PaymentState.PAYMENT_SUCCESS) {
+            //支付入账
+
+            //结算
+
+        }
+
 
         return transactionResult;
     }
