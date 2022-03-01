@@ -5,12 +5,14 @@ import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionOrderRepository;
 import com.byritium.dto.AccountJournal;
+import com.byritium.dto.LiquidationParam;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.entity.TransactionPayOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
+import com.byritium.rpc.LiquidationRpc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
@@ -42,6 +44,9 @@ public class InstantTransactionService implements ITransactionService {
 
     @Resource
     private AccountRpc accountRpc;
+
+    @Resource
+    private LiquidationRpc liquidationRpc;
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
@@ -77,7 +82,8 @@ public class InstantTransactionService implements ITransactionService {
             accountRpc.record(accountJournal);
 
             //清算
-
+            LiquidationParam liquidationParam = new LiquidationParam();
+            liquidationRpc.call(liquidationParam);
         }
 
 
