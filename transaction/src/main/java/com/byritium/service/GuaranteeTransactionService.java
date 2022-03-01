@@ -4,12 +4,15 @@ import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionOrderRepository;
+import com.byritium.dto.AccountJournal;
 import com.byritium.dto.Deduction;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.entity.TransactionPayOrder;
+import com.byritium.rpc.AccountRpc;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -35,6 +38,9 @@ public class GuaranteeTransactionService implements ITransactionService {
 
     @Resource
     private TransactionTemplate transactionTemplate;
+
+    @Resource
+    private AccountRpc accountRpc;
 
     @Override
     public TransactionType type() {
@@ -90,7 +96,8 @@ public class GuaranteeTransactionService implements ITransactionService {
                 transactionOrderRepository.save(transactionOrder);
 
                 //支付入账
-
+                AccountJournal accountJournal = new AccountJournal();
+                accountRpc.record(accountJournal);
             }
 
 

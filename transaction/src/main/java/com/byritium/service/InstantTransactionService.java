@@ -4,11 +4,13 @@ import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionOrderRepository;
+import com.byritium.dto.AccountJournal;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.entity.TransactionPayOrder;
 import com.byritium.exception.BusinessException;
+import com.byritium.rpc.AccountRpc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
@@ -37,6 +39,9 @@ public class InstantTransactionService implements ITransactionService {
 
     @Resource
     private TransactionTemplate transactionTemplate;
+
+    @Resource
+    private AccountRpc accountRpc;
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
@@ -68,8 +73,10 @@ public class InstantTransactionService implements ITransactionService {
         transactionPayOrderService.saveOrder(transactionPayOrder);
         if (state == PaymentState.PAYMENT_SUCCESS) {
             //支付入账
+            AccountJournal accountJournal = new AccountJournal();
+            accountRpc.record(accountJournal);
 
-            //结算
+            //清算
 
         }
 
