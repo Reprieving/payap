@@ -12,4 +12,5 @@ import java.util.Map;
 public class TransactionResult {
     private Map<PaymentChannel, TransactionPayOrder> result;
     private PaymentState paymentState;
+    private String transactionOrderId;
 }
