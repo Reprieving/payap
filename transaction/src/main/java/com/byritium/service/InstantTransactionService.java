@@ -64,12 +64,8 @@ public class InstantTransactionService implements ITransactionService {
             if (paymentChannel != null) {
                 return transactionPayOrderService.saveCoreOrder(transactionOrderId, paymentChannel, userId, transactionOrder.getOrderAmount());
             }
-            return null;
-        });
-
-        if (transactionPayOrder == null) {
             throw new BusinessException("order exception");
-        }
+        });
 
         transactionPayOrderService.payOrder(transactionPayOrder);
 
