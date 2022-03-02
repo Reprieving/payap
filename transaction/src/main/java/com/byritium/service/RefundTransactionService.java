@@ -2,19 +2,18 @@ package com.byritium.service;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.TransactionType;
-import com.byritium.dao.TransactionOrderRepository;
+import com.byritium.dao.TransactionReceiptOrderRepository;
 import com.byritium.dao.TransactionPayOrderRepository;
 import com.byritium.dao.TransactionRefundOrderRepository;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.ResponseBody;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.entity.TransactionOrder;
 import com.byritium.entity.TransactionPayOrder;
+import com.byritium.entity.TransactionReceiptOrder;
 import com.byritium.entity.TransactionRefundOrder;
 import com.byritium.rpc.PaymentPayRpc;
 import com.byritium.utils.ResponseBodyUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,7 +27,7 @@ public class RefundTransactionService implements ITransactionService {
     }
 
     @Resource
-    private TransactionOrderRepository transactionOrderRepository;
+    private TransactionReceiptOrderRepository transactionReceiptOrderRepository;
 
     @Resource
     private TransactionPayOrderRepository transactionPayOrderRepository;
@@ -46,7 +45,7 @@ public class RefundTransactionService implements ITransactionService {
     public TransactionResult call(String clientId, TransactionParam param) {
         TransactionResult transactionResult = new TransactionResult();
 
-        TransactionOrder transactionOrder = transactionOrderRepository.findByBusinessOrderId(param.getBusinessOrderId());
+        TransactionReceiptOrder transactionOrder = transactionReceiptOrderRepository.findByBusinessOrderId(param.getBusinessOrderId());
         String transactionOrderId = transactionOrder.getId();
         PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
         TransactionPayOrder transactionPayOrder = transactionPayOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);

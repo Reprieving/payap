@@ -3,7 +3,7 @@ package com.byritium.service;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionType;
-import com.byritium.dao.TransactionOrderRepository;
+import com.byritium.dao.TransactionReceiptOrderRepository;
 import com.byritium.dto.AccountJournal;
 import com.byritium.dto.Deduction;
 import com.byritium.dto.TransactionParam;
@@ -33,7 +33,7 @@ public class GuaranteeTransactionService implements ITransactionService {
     private TransactionPayOrderService transactionPayOrderService;
 
     @Resource
-    private TransactionOrderRepository transactionOrderRepository;
+    private TransactionReceiptOrderRepository transactionReceiptOrderRepository;
 
     @Resource
     private TransactionTemplate transactionTemplate;
@@ -55,7 +55,7 @@ public class GuaranteeTransactionService implements ITransactionService {
         List<TransactionPayOrder> transactionOrderList = transactionTemplate.execute(transactionStatus -> {
             List<TransactionPayOrder> list = new ArrayList<>();
 
-            transactionOrderRepository.save(transactionReceiptOrder);
+            transactionReceiptOrderRepository.save(transactionReceiptOrder);
 
             String userId = param.getUserId();
             String transactionOrderId = transactionReceiptOrder.getId();
@@ -92,7 +92,7 @@ public class GuaranteeTransactionService implements ITransactionService {
             if (paymentChannel != null && transactionPayOrderService.verifyAllSuccess(transactionPayOrders)) {
                 transactionResult.setPaymentState(PaymentState.PAYMENT_SUCCESS);
                 transactionReceiptOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-                transactionOrderRepository.save(transactionReceiptOrder);
+                transactionReceiptOrderRepository.save(transactionReceiptOrder);
 
                 //支付入账
                 AccountJournal accountJournal = new AccountJournal();

@@ -3,7 +3,7 @@ package com.byritium.service;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionType;
-import com.byritium.dao.TransactionOrderRepository;
+import com.byritium.dao.TransactionReceiptOrderRepository;
 import com.byritium.dto.AccountJournal;
 import com.byritium.dto.LiquidationParam;
 import com.byritium.dto.TransactionParam;
@@ -24,7 +24,7 @@ public class InstantTransactionService implements ITransactionService {
     private TransactionPayOrderService transactionPayOrderService;
 
     @Resource
-    private TransactionOrderRepository transactionOrderRepository;
+    private TransactionReceiptOrderRepository transactionReceiptOrderRepository;
 
     @Override
     public TransactionType type() {
@@ -48,7 +48,7 @@ public class InstantTransactionService implements ITransactionService {
         TransactionReceiptOrder transactionReceiptOrder = new TransactionReceiptOrder(clientId, param);
 
         TransactionPayOrder transactionPayOrder = transactionTemplate.execute(transactionStatus -> {
-            transactionOrderRepository.save(transactionReceiptOrder);
+            transactionReceiptOrderRepository.save(transactionReceiptOrder);
 
             String userId = param.getUserId();
             String transactionOrderId = transactionReceiptOrder.getId();
