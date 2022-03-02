@@ -10,6 +10,10 @@ import java.time.LocalDateTime;
 @Setter
 public class CommonEntity {
     protected ObjectState os;
-    protected LocalDateTime crateTime;
+    protected LocalDateTime createTime;
     protected LocalDateTime updateTime;
+
+    protected void init() {
+        this.os = ObjectState.USABLE;
+    }
 }

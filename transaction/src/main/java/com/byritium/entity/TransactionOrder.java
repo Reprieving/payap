@@ -2,12 +2,9 @@ package com.byritium.entity;
 
 import com.byritium.constance.*;
 import com.byritium.dto.TransactionParam;
-import com.byritium.exception.BusinessException;
 import lombok.Data;
-import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -42,6 +39,6 @@ public class TransactionOrder extends CommonEntity {
         transactionOrder.setOrderAmount(param.getOrderAmount());
         transactionOrder.setTransactionType(param.getTransactionType());
         transactionOrder.setTransactionState(TransactionState.TRANSACTION_PENDING);
-        transactionOrder.setCrateTime(LocalDateTime.now());
+        transactionOrder.setCreateTime(LocalDateTime.now());
     }
 }

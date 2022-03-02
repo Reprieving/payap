@@ -8,10 +8,12 @@ import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.entity.TransactionPayOrder;
+import com.byritium.entity.TransactionRefundOrder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 
 @Service
 public class RefundTransactionService implements ITransactionService {
@@ -36,9 +38,11 @@ public class RefundTransactionService implements ITransactionService {
         TransactionPayOrder transactionPayOrder = transactionPayOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
 
 
+        String transactionPayOrderId = transactionPayOrder.getId();
+        String userId = param.getUserId();
+        BigDecimal refundAmount = param.getOrderAmount();
+        TransactionRefundOrder transactionRefundOrder = new TransactionRefundOrder(userId, transactionPayOrderId, paymentChannel, refundAmount);
 
-
-        transactionOrderRepository.save(transactionOrder);
 
         return transactionResult;
     }
