@@ -32,6 +32,5 @@ public class TransactionRefundOrder extends CommonEntity {
         this.paymentChannel = paymentChannel;
         this.orderAmount = orderAmount;
         this.state = PaymentState.PAYMENT_PENDING;
-        super.init();
     }
 }

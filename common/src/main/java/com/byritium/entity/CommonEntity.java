@@ -15,5 +15,6 @@ public class CommonEntity {
 
     protected void init() {
         this.os = ObjectState.USABLE;
+        this.createTime = LocalDateTime.now();
     }
 }
