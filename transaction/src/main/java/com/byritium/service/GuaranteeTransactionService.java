@@ -8,11 +8,10 @@ import com.byritium.dto.AccountJournal;
 import com.byritium.dto.Deduction;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.entity.TransactionOrder;
+import com.byritium.entity.TransactionReceiptOrder;
 import com.byritium.entity.TransactionPayOrder;
 import com.byritium.rpc.AccountRpc;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -51,15 +50,15 @@ public class GuaranteeTransactionService implements ITransactionService {
         TransactionResult transactionResult = new TransactionResult();
 
         PaymentChannel paymentChannel = param.getPaymentChannel();
-        TransactionOrder transactionOrder = new TransactionOrder(clientId, param);
+        TransactionReceiptOrder transactionReceiptOrder = new TransactionReceiptOrder(clientId, param);
 
         List<TransactionPayOrder> transactionOrderList = transactionTemplate.execute(transactionStatus -> {
             List<TransactionPayOrder> list = new ArrayList<>();
 
-            transactionOrderRepository.save(transactionOrder);
+            transactionOrderRepository.save(transactionReceiptOrder);
 
             String userId = param.getUserId();
-            String transactionOrderId = transactionOrder.getId();
+            String transactionOrderId = transactionReceiptOrder.getId();
 
             if (paymentChannel != null) {
                 list.add(transactionPayOrderService.saveCoreOrder(transactionOrderId, paymentChannel, userId, BigDecimal.ZERO));
@@ -92,8 +91,8 @@ public class GuaranteeTransactionService implements ITransactionService {
 
             if (paymentChannel != null && transactionPayOrderService.verifyAllSuccess(transactionPayOrders)) {
                 transactionResult.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-                transactionOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-                transactionOrderRepository.save(transactionOrder);
+                transactionReceiptOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
+                transactionOrderRepository.save(transactionReceiptOrder);
 
                 //支付入账
                 AccountJournal accountJournal = new AccountJournal();

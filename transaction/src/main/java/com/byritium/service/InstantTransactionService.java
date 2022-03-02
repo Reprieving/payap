@@ -8,23 +8,15 @@ import com.byritium.dto.AccountJournal;
 import com.byritium.dto.LiquidationParam;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.entity.TransactionOrder;
+import com.byritium.entity.TransactionReceiptOrder;
 import com.byritium.entity.TransactionPayOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.LiquidationRpc;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 @Service
 public class InstantTransactionService implements ITransactionService {
@@ -53,16 +45,16 @@ public class InstantTransactionService implements ITransactionService {
         TransactionResult transactionResult = new TransactionResult();
 
         PaymentChannel paymentChannel = param.getPaymentChannel();
-        TransactionOrder transactionOrder = new TransactionOrder(clientId, param);
+        TransactionReceiptOrder transactionReceiptOrder = new TransactionReceiptOrder(clientId, param);
 
         TransactionPayOrder transactionPayOrder = transactionTemplate.execute(transactionStatus -> {
-            transactionOrderRepository.save(transactionOrder);
+            transactionOrderRepository.save(transactionReceiptOrder);
 
             String userId = param.getUserId();
-            String transactionOrderId = transactionOrder.getId();
+            String transactionOrderId = transactionReceiptOrder.getId();
 
             if (paymentChannel != null) {
-                return transactionPayOrderService.saveCoreOrder(transactionOrderId, paymentChannel, userId, transactionOrder.getOrderAmount());
+                return transactionPayOrderService.saveCoreOrder(transactionOrderId, paymentChannel, userId, transactionReceiptOrder.getOrderAmount());
             }
             throw new BusinessException("order exception");
         });
