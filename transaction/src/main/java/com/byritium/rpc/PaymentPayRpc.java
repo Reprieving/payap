@@ -4,10 +4,14 @@ import com.byritium.dto.PaymentResult;
 import com.byritium.dto.ResponseBody;
 import com.byritium.entity.TransactionPayOrder;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient(value = "payment")
 public interface PaymentPayRpc {
     @RequestMapping("pay")
-    ResponseBody<PaymentResult> pay(TransactionPayOrder transactionPayOrder);
+    ResponseBody<PaymentResult> pay(@RequestBody TransactionPayOrder transactionPayOrder);
+
+    @RequestMapping("refund")
+    ResponseBody<PaymentResult> refund(@RequestBody TransactionPayOrder transactionPayOrder);
 }
