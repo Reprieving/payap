@@ -22,4 +22,6 @@ public class TransactionParam {
     private String couponId;
     private Deduction deduction;
 
+    private String receiverIds;
+
 }
