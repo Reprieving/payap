@@ -1,17 +1,16 @@
 package com.byritium.service;
 
 import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionReceiptOrderRepository;
 import com.byritium.dao.TransactionPayOrderRepository;
 import com.byritium.dao.TransactionRefundOrderRepository;
-import com.byritium.dto.PaymentResult;
-import com.byritium.dto.ResponseBody;
-import com.byritium.dto.TransactionParam;
-import com.byritium.dto.TransactionResult;
+import com.byritium.dto.*;
 import com.byritium.entity.TransactionPayOrder;
 import com.byritium.entity.TransactionReceiptOrder;
 import com.byritium.entity.TransactionRefundOrder;
+import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.PaymentPayRpc;
 import com.byritium.utils.ResponseBodyUtils;
 import org.springframework.stereotype.Service;
@@ -39,6 +38,9 @@ public class RefundTransactionService implements ITransactionService {
     private PaymentPayRpc paymentPayRpc;
 
     @Resource
+    private AccountRpc accountRpc;
+
+    @Resource
     private ResponseBodyUtils<PaymentResult> resultResponseBodyUtils;
 
     @Override
@@ -60,7 +62,13 @@ public class RefundTransactionService implements ITransactionService {
         ResponseBody<PaymentResult> responseBody = paymentPayRpc.refund(transactionRefundOrder);
         PaymentResult paymentResult = resultResponseBodyUtils.get(responseBody);
 
+        PaymentState state = paymentResult.getState();
 
+        if(PaymentState.PAYMENT_SUCCESS== state){
+            //退款入账
+            AccountJournal accountJournal = new AccountJournal();
+            accountRpc.record(accountJournal);
+        }
         transactionResult.setTransactionOrderId(transactionRefundOrder.getId());
         transactionResult.setPaymentState(paymentResult.getState());
 
