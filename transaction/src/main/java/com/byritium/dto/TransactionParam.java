@@ -24,4 +24,6 @@ public class TransactionParam {
 
     private String receiverIds;
 
+    private String senderId;
+    private String receiverId;
 }

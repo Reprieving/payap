@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 public class TransactionPayOrder extends CommonEntity {
     private String id;
-    private String transactionOrderId;
+    private String transactionReceiptOrderId;
     private PaymentChannel paymentChannel;
     private String payerId;
     private String payMediumId;
