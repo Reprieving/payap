@@ -1,13 +1,16 @@
 package com.byritium.service;
 
+import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionReceiptOrderRepository;
 import com.byritium.dao.TransactionSettleOrderRepository;
-import com.byritium.dto.TransactionParam;
-import com.byritium.dto.TransactionResult;
+import com.byritium.dto.*;
 import com.byritium.entity.TransactionReceiptOrder;
 import com.byritium.entity.TransactionSettleOrder;
 import com.byritium.exception.BusinessException;
+import com.byritium.rpc.AccountRpc;
+import com.byritium.rpc.PaymentPayRpc;
+import com.byritium.utils.ResponseBodyUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
@@ -29,6 +32,15 @@ public class SettleTransactionService implements ITransactionService {
     @Resource
     private TransactionSettleOrderRepository transactionSettleOrderRepository;
 
+    @Resource
+    private PaymentPayRpc paymentPayRpc;
+
+    @Resource
+    private AccountRpc accountRpc;
+
+    @Resource
+    private ResponseBodyUtils<PaymentResult> resultResponseBodyUtils;
+
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
         TransactionResult transactionResult = new TransactionResult();
@@ -45,6 +57,18 @@ public class SettleTransactionService implements ITransactionService {
 
         transactionSettleOrderRepository.save(transactionSettleOrder);
 
+        ResponseBody<PaymentResult> responseBody = paymentPayRpc.settle(transactionSettleOrder);
+        PaymentResult paymentResult = resultResponseBodyUtils.get(responseBody);
+
+        PaymentState state = paymentResult.getState();
+
+        if (PaymentState.PAYMENT_SUCCESS == state) {
+            //退款入账
+            AccountJournal accountJournal = new AccountJournal();
+            accountRpc.record(accountJournal);
+        }
+        transactionResult.setTransactionOrderId(transactionSettleOrder.getId());
+        transactionResult.setPaymentState(paymentResult.getState());
 
         return transactionResult;
     }

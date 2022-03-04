@@ -9,6 +9,9 @@ public enum TransactionType {
     SETTLE("SETTLE", "结算"),
     REFUND("REFUND", "退款"),
     WITHDRAW("WITHDRAW", "提现"),
+    TRANSFER("TRANSFER", "转账"),
+    FREEZE("FREEZE", "冻结"),
+    UNFREEZE("UNFREEZE", "解冻"),
     ;
     private final String type;
     private final String message;
