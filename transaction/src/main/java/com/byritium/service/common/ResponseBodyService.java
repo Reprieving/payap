@@ -1,11 +1,11 @@
-package com.byritium.utils;
+package com.byritium.service.common;
 
 import com.byritium.dto.ResponseBody;
 import com.byritium.exception.BusinessException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ResponseBodyUtils<T> {
+public class ResponseBodyService<T> {
 
     public T get(ResponseBody<T> responseBody) {
         if (!responseBody.success()) {

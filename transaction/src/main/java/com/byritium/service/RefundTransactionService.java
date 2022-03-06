@@ -12,7 +12,7 @@ import com.byritium.entity.TransactionReceiptOrder;
 import com.byritium.entity.TransactionRefundOrder;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.PaymentPayRpc;
-import com.byritium.utils.ResponseBodyUtils;
+import com.byritium.service.common.ResponseBodyService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -41,7 +41,7 @@ public class RefundTransactionService implements ITransactionService {
     private AccountRpc accountRpc;
 
     @Resource
-    private ResponseBodyUtils<PaymentResult> resultResponseBodyUtils;
+    private ResponseBodyService<PaymentResult> responseBodyService;
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
@@ -60,7 +60,7 @@ public class RefundTransactionService implements ITransactionService {
         transactionRefundOrderRepository.save(transactionRefundOrder);
 
         ResponseBody<PaymentResult> responseBody = paymentPayRpc.refund(transactionRefundOrder);
-        PaymentResult paymentResult = resultResponseBodyUtils.get(responseBody);
+        PaymentResult paymentResult = responseBodyService.get(responseBody);
 
         PaymentState state = paymentResult.getState();
 

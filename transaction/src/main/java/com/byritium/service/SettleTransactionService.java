@@ -7,17 +7,13 @@ import com.byritium.dao.TransactionSettleOrderRepository;
 import com.byritium.dto.*;
 import com.byritium.entity.TransactionReceiptOrder;
 import com.byritium.entity.TransactionSettleOrder;
-import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.PaymentPayRpc;
-import com.byritium.utils.ResponseBodyUtils;
+import com.byritium.service.common.ResponseBodyService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.function.Supplier;
 
 @Service
 public class SettleTransactionService implements ITransactionService {
@@ -39,7 +35,7 @@ public class SettleTransactionService implements ITransactionService {
     private AccountRpc accountRpc;
 
     @Resource
-    private ResponseBodyUtils<PaymentResult> resultResponseBodyUtils;
+    private ResponseBodyService<PaymentResult> responseBodyService;
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
@@ -58,7 +54,7 @@ public class SettleTransactionService implements ITransactionService {
         transactionSettleOrderRepository.save(transactionSettleOrder);
 
         ResponseBody<PaymentResult> responseBody = paymentPayRpc.settle(transactionSettleOrder);
-        PaymentResult paymentResult = resultResponseBodyUtils.get(responseBody);
+        PaymentResult paymentResult = responseBodyService.get(responseBody);
 
         PaymentState state = paymentResult.getState();
 
