@@ -9,7 +9,7 @@ import com.byritium.dto.Deduction;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactionReceiptOrder;
-import com.byritium.entity.TransactionPayOrder;
+import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.rpc.AccountRpc;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +52,8 @@ public class GuaranteeTransactionService implements ITransactionService {
         PaymentChannel paymentChannel = param.getPaymentChannel();
         TransactionReceiptOrder transactionReceiptOrder = new TransactionReceiptOrder(clientId, param);
 
-        List<TransactionPayOrder> transactionOrderList = transactionTemplate.execute(transactionStatus -> {
-            List<TransactionPayOrder> list = new ArrayList<>();
+        List<TransactionPaymentOrder> transactionOrderList = transactionTemplate.execute(transactionStatus -> {
+            List<TransactionPaymentOrder> list = new ArrayList<>();
 
             transactionReceiptOrderRepository.save(transactionReceiptOrder);
 
@@ -77,19 +77,19 @@ public class GuaranteeTransactionService implements ITransactionService {
             return list;
         });
 
-        List<CompletableFuture<TransactionPayOrder>> transactionFutureList = transactionOrderList.stream().map(transactionPayOrderService::payOrder).collect(Collectors.toList());
+        List<CompletableFuture<TransactionPaymentOrder>> transactionFutureList = transactionOrderList.stream().map(transactionPayOrderService::payOrder).collect(Collectors.toList());
 
         CompletableFuture<Void> allFutures = CompletableFuture.allOf(transactionFutureList.toArray(new CompletableFuture[0]));
 
-        CompletableFuture<List<TransactionPayOrder>> futureResult = allFutures.thenApply(v -> transactionFutureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+        CompletableFuture<List<TransactionPaymentOrder>> futureResult = allFutures.thenApply(v -> transactionFutureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
 
         try {
-            List<TransactionPayOrder> transactionPayOrders = futureResult.get();
-            transactionPayOrders.forEach(transactionPayOrderService::saveOrder);
+            List<TransactionPaymentOrder> transactionPaymentOrders = futureResult.get();
+            transactionPaymentOrders.forEach(transactionPayOrderService::saveOrder);
 
-            transactionResult.setResult(transactionPayOrders.stream().collect(Collectors.toMap(TransactionPayOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
+            transactionResult.setResult(transactionPaymentOrders.stream().collect(Collectors.toMap(TransactionPaymentOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
 
-            if (paymentChannel != null && transactionPayOrderService.verifyAllSuccess(transactionPayOrders)) {
+            if (paymentChannel != null && transactionPayOrderService.verifyAllSuccess(transactionPaymentOrders)) {
                 transactionResult.setPaymentState(PaymentState.PAYMENT_SUCCESS);
                 transactionReceiptOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
                 transactionReceiptOrderRepository.save(transactionReceiptOrder);

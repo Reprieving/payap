@@ -7,7 +7,7 @@ import com.byritium.dao.TransactionReceiptOrderRepository;
 import com.byritium.dao.TransactionPayOrderRepository;
 import com.byritium.dao.TransactionRefundOrderRepository;
 import com.byritium.dto.*;
-import com.byritium.entity.TransactionPayOrder;
+import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.entity.TransactionReceiptOrder;
 import com.byritium.entity.TransactionRefundOrder;
 import com.byritium.rpc.AccountRpc;
@@ -50,10 +50,10 @@ public class RefundTransactionService implements ITransactionService {
         TransactionReceiptOrder transactionOrder = transactionReceiptOrderRepository.findByBusinessOrderId(param.getBusinessOrderId());
         String transactionOrderId = transactionOrder.getId();
         PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
-        TransactionPayOrder transactionPayOrder = transactionPayOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
+        TransactionPaymentOrder transactionPaymentOrder = transactionPayOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
 
 
-        String transactionPayOrderId = transactionPayOrder.getId();
+        String transactionPayOrderId = transactionPaymentOrder.getId();
         String userId = param.getUserId();
         BigDecimal refundAmount = param.getOrderAmount();
         TransactionRefundOrder transactionRefundOrder = new TransactionRefundOrder(userId, transactionPayOrderId, paymentChannel, refundAmount);

@@ -7,11 +7,13 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class TransactionPayOrder extends CommonEntity {
+public class TransactionPaymentOrder extends CommonEntity {
     private String id;
-    private String transactionReceiptOrderId;
+    private String businessOrderId;
+    private String transactionOrderId;
     private PaymentChannel paymentChannel;
     private String payerId;
+    private String payeeId;
     private String payMediumId;
     private String paymentTitle;
     private BigDecimal orderAmount;

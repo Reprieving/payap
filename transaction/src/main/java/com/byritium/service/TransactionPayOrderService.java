@@ -7,10 +7,9 @@ import com.byritium.dto.CouponInfo;
 import com.byritium.dto.Deduction;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.ResponseBody;
-import com.byritium.entity.TransactionPayOrder;
+import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.rpc.CouponRpc;
 import com.byritium.rpc.PaymentPayRpc;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -31,8 +30,8 @@ public class TransactionPayOrderService {
     @Resource
     private TransactionPayOrderRepository transactionPayOrderRepository;
 
-    public TransactionPayOrder saveOrder(String transactionOrderId, PaymentChannel paymentChannel, BigDecimal amount, String payerId, String mediumId) {
-        TransactionPayOrder payOrder = new TransactionPayOrder();
+    public TransactionPaymentOrder saveOrder(String transactionOrderId, PaymentChannel paymentChannel, BigDecimal amount, String payerId, String mediumId) {
+        TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
         payOrder.setTransactionReceiptOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(null);
@@ -51,8 +50,8 @@ public class TransactionPayOrderService {
         return payOrder;
     }
 
-    public TransactionPayOrder saveCoreOrder(String transactionOrderId, PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
-        TransactionPayOrder payOrder = new TransactionPayOrder();
+    public TransactionPaymentOrder saveCoreOrder(String transactionOrderId, PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
+        TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
         payOrder.setTransactionReceiptOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(null);
@@ -68,7 +67,7 @@ public class TransactionPayOrderService {
         return null;
     }
 
-    public TransactionPayOrder saveCouponOrder(String transactionOrderId, String couponId) {
+    public TransactionPaymentOrder saveCouponOrder(String transactionOrderId, String couponId) {
         PaymentChannel paymentChannel = PaymentChannel.COUPON_PAY;
 
         ResponseBody<CouponInfo> responseBody = couponRpc.get(couponId);
@@ -76,7 +75,7 @@ public class TransactionPayOrderService {
         String payerId = couponInfo.getPayerId();
         BigDecimal amount = couponInfo.getAmount();
 
-        TransactionPayOrder payOrder = new TransactionPayOrder();
+        TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
         payOrder.setTransactionReceiptOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(null);
@@ -94,10 +93,10 @@ public class TransactionPayOrderService {
         return transactionPayOrderRepository.save(payOrder);
     }
 
-    public TransactionPayOrder saveDeductionOrder(String transactionOrderId, String payerId, Deduction deduction) {
+    public TransactionPaymentOrder saveDeductionOrder(String transactionOrderId, String payerId, Deduction deduction) {
         PaymentChannel paymentChannel = deduction.getPaymentChannel();
 
-        TransactionPayOrder payOrder = new TransactionPayOrder();
+        TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
         payOrder.setTransactionReceiptOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(null);
@@ -113,25 +112,25 @@ public class TransactionPayOrderService {
         return transactionPayOrderRepository.save(payOrder);
     }
 
-    public TransactionPayOrder saveOrder(TransactionPayOrder transactionPayOrder) {
-        return transactionPayOrderRepository.save(transactionPayOrder);
+    public TransactionPaymentOrder saveOrder(TransactionPaymentOrder transactionPaymentOrder) {
+        return transactionPayOrderRepository.save(transactionPaymentOrder);
     }
 
-    public CompletableFuture<TransactionPayOrder> payOrder(TransactionPayOrder transactionPayOrder) {
+    public CompletableFuture<TransactionPaymentOrder> payOrder(TransactionPaymentOrder transactionPaymentOrder) {
         return CompletableFuture.supplyAsync(() -> {
-            ResponseBody<PaymentResult> response = paymentPayRpc.pay(transactionPayOrder);
+            ResponseBody<PaymentResult> response = paymentPayRpc.pay(transactionPaymentOrder);
             PaymentResult result = response.getData();
             if (response.success()) {
-                transactionPayOrder.setState(result.getState());
-                transactionPayOrder.setSign(result.getSign());
+                transactionPaymentOrder.setState(result.getState());
+                transactionPaymentOrder.setSign(result.getSign());
             } else {
-                transactionPayOrder.setState(PaymentState.PAYMENT_FAIL);
+                transactionPaymentOrder.setState(PaymentState.PAYMENT_FAIL);
             }
-            return transactionPayOrder;
+            return transactionPaymentOrder;
         });
     }
 
-    public boolean verifyAllSuccess(List<TransactionPayOrder> list) {
+    public boolean verifyAllSuccess(List<TransactionPaymentOrder> list) {
         return list.stream().filter(transactionPayOrder -> transactionPayOrder.getState() == PaymentState.PAYMENT_SUCCESS).count() == list.size();
     }
 }
