@@ -22,7 +22,6 @@ public class TransactionService implements ApplicationContextAware, ITransaction
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         transactionServiceMap = new HashMap<>();
         Map<String, ITransactionService> map = applicationContext.getBeansOfType(ITransactionService.class);
-
         map.forEach((key, value) -> {
             if (value.type() != null)
                 transactionServiceMap.put(value.type(), value);

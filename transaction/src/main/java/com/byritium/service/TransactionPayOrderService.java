@@ -33,7 +33,7 @@ public class TransactionPayOrderService {
 
     public TransactionPayOrder saveOrder(String transactionOrderId, PaymentChannel paymentChannel, BigDecimal amount, String payerId, String mediumId) {
         TransactionPayOrder payOrder = new TransactionPayOrder();
-        payOrder.setTransactionOrderId(transactionOrderId);
+        payOrder.setTransactionReceiptOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(null);
         if (StringUtils.hasText(payerId)) {
@@ -53,7 +53,7 @@ public class TransactionPayOrderService {
 
     public TransactionPayOrder saveCoreOrder(String transactionOrderId, PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
         TransactionPayOrder payOrder = new TransactionPayOrder();
-        payOrder.setTransactionOrderId(transactionOrderId);
+        payOrder.setTransactionReceiptOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(null);
         if (StringUtils.hasText(payerId)) {
@@ -77,7 +77,7 @@ public class TransactionPayOrderService {
         BigDecimal amount = couponInfo.getAmount();
 
         TransactionPayOrder payOrder = new TransactionPayOrder();
-        payOrder.setTransactionOrderId(transactionOrderId);
+        payOrder.setTransactionReceiptOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(null);
         if (StringUtils.hasText(payerId)) {
@@ -98,7 +98,7 @@ public class TransactionPayOrderService {
         PaymentChannel paymentChannel = deduction.getPaymentChannel();
 
         TransactionPayOrder payOrder = new TransactionPayOrder();
-        payOrder.setTransactionOrderId(transactionOrderId);
+        payOrder.setTransactionReceiptOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(null);
         if (StringUtils.hasText(payerId)) {
