@@ -5,6 +5,9 @@ import lombok.Getter;
 @Getter
 public enum PaymentChannel {//支付渠道
     PLATFORM_PAY("PLATFORM_PAY", "平台支付"),
+    DIRECT_REDUCTION_PAY("DIRECT_REDUCTION_PAY", "立减优惠"),
+    REACH_REDUCTION_PAY("REACH_REDUCTION_PAY", "满减优惠"),
+    DISCOUNT_REDUCTION_PAY("DISCOUNT_REDUCTION_PAY", "折扣优惠"),
 
     COUPON_PAY("COUPON_PAY", "优惠券支付"),
 
