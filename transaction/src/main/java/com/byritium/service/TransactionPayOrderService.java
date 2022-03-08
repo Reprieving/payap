@@ -32,7 +32,7 @@ public class TransactionPayOrderService {
 
     public TransactionPaymentOrder saveOrder(String transactionOrderId, PaymentChannel paymentChannel, BigDecimal amount, String payerId, String mediumId) {
         TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
-        payOrder.setTransactionReceiptOrderId(transactionOrderId);
+        payOrder.setTransactionOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(null);
         if (StringUtils.hasText(payerId)) {
@@ -52,9 +52,8 @@ public class TransactionPayOrderService {
 
     public TransactionPaymentOrder saveCoreOrder(String transactionOrderId, PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
         TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
-        payOrder.setTransactionReceiptOrderId(transactionOrderId);
+        payOrder.setTransactionOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
-        payOrder.setPayerId(null);
         if (StringUtils.hasText(payerId)) {
             payOrder.setPayerId(payerId);
         }
@@ -76,7 +75,7 @@ public class TransactionPayOrderService {
         BigDecimal amount = couponInfo.getAmount();
 
         TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
-        payOrder.setTransactionReceiptOrderId(transactionOrderId);
+        payOrder.setTransactionOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(null);
         if (StringUtils.hasText(payerId)) {
@@ -97,7 +96,7 @@ public class TransactionPayOrderService {
         PaymentChannel paymentChannel = deduction.getPaymentChannel();
 
         TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
-        payOrder.setTransactionReceiptOrderId(transactionOrderId);
+        payOrder.setTransactionOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(null);
         if (StringUtils.hasText(payerId)) {
