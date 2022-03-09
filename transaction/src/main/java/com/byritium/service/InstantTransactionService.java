@@ -8,8 +8,8 @@ import com.byritium.dto.AccountJournal;
 import com.byritium.dto.LiquidationParam;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
+import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.entity.TransactionReceiptOrder;
-import com.byritium.entity.TransactionPayOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.LiquidationRpc;
@@ -45,9 +45,10 @@ public class InstantTransactionService implements ITransactionService {
         TransactionResult transactionResult = new TransactionResult();
 
         PaymentChannel paymentChannel = param.getPaymentChannel();
+
         TransactionReceiptOrder transactionReceiptOrder = new TransactionReceiptOrder(clientId, param);
 
-        TransactionPayOrder transactionPayOrder = transactionTemplate.execute(transactionStatus -> {
+        TransactionPaymentOrder transactionPayOrder = transactionTemplate.execute(transactionStatus -> {
             transactionReceiptOrderRepository.save(transactionReceiptOrder);
 
             String userId = param.getUserId();

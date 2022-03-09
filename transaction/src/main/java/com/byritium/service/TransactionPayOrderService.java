@@ -63,7 +63,7 @@ public class TransactionPayOrderService {
 
         transactionPayOrderRepository.save(payOrder);
 
-        return null;
+        return payOrder;
     }
 
     public TransactionPaymentOrder saveCouponOrder(String transactionOrderId, String couponId) {

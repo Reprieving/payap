@@ -13,7 +13,7 @@ public class TransactionParam {
     private String businessOrderId;
     private String userId;
     private String payerId;
-    private String sellerId;
+    private String payeeId;
     private BigDecimal orderAmount;
     private BigDecimal payAmount;
     private String title;

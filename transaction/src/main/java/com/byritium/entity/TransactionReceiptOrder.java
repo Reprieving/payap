@@ -14,7 +14,7 @@ public class TransactionReceiptOrder extends CommonEntity {
     private String businessOrderId;
     private String userId;
     private String payerId;
-    private String sellerId;
+    private String payeeId;
     private String title;
     private BigDecimal orderAmount;
     private BigDecimal payAmount;
@@ -34,8 +34,8 @@ public class TransactionReceiptOrder extends CommonEntity {
         transactionReceiptOrder.setBusinessOrderId(param.getBusinessOrderId());
         transactionReceiptOrder.setTitle(param.getTitle());
         transactionReceiptOrder.setUserId(param.getUserId());
-        transactionReceiptOrder.setSellerId(param.getSellerId());
-        transactionReceiptOrder.setPaymentChannel(paymentChannel);
+        transactionReceiptOrder.setPayeeId(param.getPayeeId());
+        transactionReceiptOrder.setPaymentChannel(param.getPaymentChannel());
         transactionReceiptOrder.setOrderAmount(param.getOrderAmount());
         transactionReceiptOrder.setTransactionType(param.getTransactionType());
         transactionReceiptOrder.setTransactionState(TransactionState.TRANSACTION_PENDING);
