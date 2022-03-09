@@ -50,9 +50,8 @@ public class TransactionPayOrderService {
         return payOrder;
     }
 
-    public TransactionPaymentOrder saveCoreOrder(String transactionOrderId, PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
+    public TransactionPaymentOrder buildCoreOrder(PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
         TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
-        payOrder.setTransactionOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         if (StringUtils.hasText(payerId)) {
             payOrder.setPayerId(payerId);
@@ -66,16 +65,14 @@ public class TransactionPayOrderService {
         return payOrder;
     }
 
-    public TransactionPaymentOrder saveCouponOrder(String transactionOrderId, String couponId) {
+    public TransactionPaymentOrder buildCouponOrder(String couponId) {
         PaymentChannel paymentChannel = PaymentChannel.COUPON_PAY;
-
         ResponseBody<CouponInfo> responseBody = couponRpc.get(couponId);
         CouponInfo couponInfo = responseBody.getData();
         String payerId = couponInfo.getPayerId();
         BigDecimal amount = couponInfo.getAmount();
 
         TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
-        payOrder.setTransactionOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(null);
         if (StringUtils.hasText(payerId)) {
@@ -92,11 +89,9 @@ public class TransactionPayOrderService {
         return transactionPayOrderRepository.save(payOrder);
     }
 
-    public TransactionPaymentOrder saveDeductionOrder(String transactionOrderId, String payerId, Deduction deduction) {
+    public TransactionPaymentOrder buildDeductionOrder(String payerId, Deduction deduction) {
         PaymentChannel paymentChannel = deduction.getPaymentChannel();
-
         TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
-        payOrder.setTransactionOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(null);
         if (StringUtils.hasText(payerId)) {

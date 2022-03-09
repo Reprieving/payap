@@ -1,23 +1,23 @@
 package com.byritium.controller;
 
 import com.byritium.dto.*;
-import com.byritium.service.TransactionService;
+import com.byritium.service.TransactionManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class TransactionController {
     @Autowired
-    private TransactionService transactionService;
+    private TransactionManagerService transactionManagerService;
 
     @RequestMapping("call")
     public TransactionResult call(@RequestHeader String clientId, @RequestBody TransactionParam request) {
-        return transactionService.call(clientId, request);
+        return transactionManagerService.call(clientId, request);
     }
 
     @RequestMapping("pay")
     public TransactionResult pay(@RequestHeader String clientId,@RequestBody TransactionParam request) {
-        return transactionService.pay(clientId,request);
+        return transactionManagerService.pay(clientId,request);
     }
 
     @RequestMapping("query")

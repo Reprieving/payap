@@ -14,7 +14,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class TransactionService implements ApplicationContextAware, ITransactionService {
+public class TransactionManagerService implements ApplicationContextAware, ITransactionService {
 
     private static Map<TransactionType, ITransactionService> transactionServiceMap;
 
