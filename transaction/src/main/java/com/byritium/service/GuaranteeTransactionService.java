@@ -54,19 +54,28 @@ public class GuaranteeTransactionService implements ITransactionService {
         Map<PaymentChannel, TransactionPaymentOrder> map = new HashMap<>();
         String userId = param.getUserId();
 
-        if (paymentChannel != null) {
-            map.put(paymentChannel, transactionPayOrderService.buildCoreOrder(paymentChannel, userId, BigDecimal.ZERO));
-        }
+        BigDecimal reductionAmount = BigDecimal.ZERO;
 
         String couponId = param.getCouponId();
         if (StringUtils.hasText(couponId)) {
-            map.put(PaymentChannel.COUPON_PAY, transactionPayOrderService.buildCouponOrder(couponId));
+            TransactionPaymentOrder payOrder = transactionPayOrderService.buildCouponOrder(couponId);
+            map.put(PaymentChannel.COUPON_PAY, payOrder);
+            reductionAmount = reductionAmount.add(payOrder.getOrderAmount());
         }
 
         Deduction deduction = param.getDeduction();
         if (deduction != null) {
-            map.put(deduction.getPaymentChannel(), transactionPayOrderService.buildDeductionOrder(userId, deduction));
+            TransactionPaymentOrder payOrder = transactionPayOrderService.buildDeductionOrder(userId, deduction);
+            map.put(deduction.getPaymentChannel(), payOrder);
+            reductionAmount = reductionAmount.add(payOrder.getPaymentAmount());
         }
+
+
+        BigDecimal corePaymentOrderAmount = param.getOrderAmount().subtract(reductionAmount);
+        corePaymentOrderAmount = corePaymentOrderAmount.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : corePaymentOrderAmount;
+
+        map.put(paymentChannel, transactionPayOrderService.buildCoreOrder(paymentChannel, userId, corePaymentOrderAmount));
+
 
         TransactionReceiptOrder transactionReceiptOrder = new TransactionReceiptOrder(clientId, param);
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {

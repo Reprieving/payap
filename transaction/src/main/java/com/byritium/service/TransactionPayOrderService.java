@@ -74,9 +74,8 @@ public class TransactionPayOrderService {
         }
         payOrder.setPaymentTitle(paymentChannel.getMessage());
         payOrder.setOrderAmount(amount);
+        payOrder.setPaymentAmount(amount);
         payOrder.setState(PaymentState.PAYMENT_WAITING);
-
-        transactionPayOrderRepository.save(payOrder);
 
         return payOrder;
     }
@@ -99,10 +98,11 @@ public class TransactionPayOrderService {
         }
         payOrder.setPaymentTitle(paymentChannel.getMessage());
         payOrder.setOrderAmount(amount);
+        payOrder.setPaymentAmount(amount);
         payOrder.setState(PaymentState.PAYMENT_WAITING);
 
 
-        return transactionPayOrderRepository.save(payOrder);
+        return payOrder;
     }
 
     public TransactionPaymentOrder buildDeductionOrder(String payerId, Deduction deduction) {
@@ -116,10 +116,11 @@ public class TransactionPayOrderService {
         payOrder.setPaymentTitle(paymentChannel.getMessage());
         //TODO calculate deduction amount
         payOrder.setOrderAmount(BigDecimal.ZERO);
+        payOrder.setOrderAmount(BigDecimal.ZERO);
         payOrder.setState(PaymentState.PAYMENT_WAITING);
 
 
-        return transactionPayOrderRepository.save(payOrder);
+        return payOrder;
     }
 
     public TransactionPaymentOrder saveOrder(TransactionPaymentOrder transactionPaymentOrder) {

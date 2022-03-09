@@ -17,6 +17,7 @@ public class TransactionPaymentOrder extends CommonEntity {
     private String payMediumId;
     private String paymentTitle;
     private BigDecimal orderAmount;
+    private BigDecimal paymentAmount;
     private PaymentState state;
     private String sign;
 }
