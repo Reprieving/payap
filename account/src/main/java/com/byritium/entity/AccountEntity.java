@@ -25,6 +25,6 @@ public class AccountEntity extends CommonEntity{
         this.accountTypeId = accountEntityType.getId();
         this.accountName = accountEntityType.getTypeName();
         this.state = AccountState.NORMAL;
-        this.crateTime = LocalDateTime.now();
+        this.createTime = LocalDateTime.now();
     }
 }

@@ -65,6 +65,22 @@ public class TransactionPayOrderService {
         return payOrder;
     }
 
+    public TransactionPaymentOrder buildCoreOrder(String transactionOrderId, PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
+        TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
+        payOrder.setTransactionOrderId(transactionOrderId);
+        payOrder.setPaymentChannel(paymentChannel);
+        if (StringUtils.hasText(payerId)) {
+            payOrder.setPayerId(payerId);
+        }
+        payOrder.setPaymentTitle(paymentChannel.getMessage());
+        payOrder.setOrderAmount(amount);
+        payOrder.setState(PaymentState.PAYMENT_WAITING);
+
+        transactionPayOrderRepository.save(payOrder);
+
+        return payOrder;
+    }
+
     public TransactionPaymentOrder buildCouponOrder(String couponId) {
         PaymentChannel paymentChannel = PaymentChannel.COUPON_PAY;
         ResponseBody<CouponInfo> responseBody = couponRpc.get(couponId);
