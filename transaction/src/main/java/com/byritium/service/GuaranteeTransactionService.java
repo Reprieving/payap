@@ -60,14 +60,14 @@ public class GuaranteeTransactionService implements ITransactionService {
 
         String couponId = param.getCouponId();
         if (StringUtils.hasText(couponId) && reductionAmountQuota.compareTo(BigDecimal.ZERO) > 0) {
-            TransactionPaymentOrder payOrder = transactionPayOrderService.buildCouponOrder(couponId,reductionAmountQuota);
+            TransactionPaymentOrder payOrder = transactionPayOrderService.buildCouponOrder(couponId);
             map.put(PaymentChannel.COUPON_PAY, payOrder);
-            reductionAmount = reductionAmount.add(payOrder.getOrderAmount());
+            reductionAmount = reductionAmount.add(payOrder.getPaymentAmount());
         }
 
         Deduction deduction = param.getDeduction();
         if (deduction != null && reductionAmountQuota.compareTo(BigDecimal.ZERO) > 0) {
-            TransactionPaymentOrder payOrder = transactionPayOrderService.buildDeductionOrder(userId, deduction,reductionAmountQuota);
+            TransactionPaymentOrder payOrder = transactionPayOrderService.buildDeductionOrder(userId, deduction, reductionAmountQuota);
             map.put(deduction.getPaymentChannel(), payOrder);
             reductionAmount = reductionAmount.add(payOrder.getPaymentAmount());
         }

@@ -82,15 +82,12 @@ public class TransactionPayOrderService {
         return payOrder;
     }
 
-    public TransactionPaymentOrder buildCouponOrder(String couponId, BigDecimal reductionAmountQuota) {
+    public TransactionPaymentOrder buildCouponOrder(String couponId) {
         PaymentChannel paymentChannel = PaymentChannel.COUPON_PAY;
         ResponseBody<CouponInfo> responseBody = couponRpc.get(couponId);
         CouponInfo couponInfo = responseBody.getData();
         String payerId = couponInfo.getPayerId();
         BigDecimal amount = couponInfo.getAmount();
-        if (amount.compareTo(reductionAmountQuota) < 0) {
-            reductionAmountQuota = reductionAmountQuota.subtract(amount);
-        }
         TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(couponInfo.getPayerId());
