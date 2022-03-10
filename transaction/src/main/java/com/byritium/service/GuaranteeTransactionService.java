@@ -1,6 +1,7 @@
 package com.byritium.service;
 
 import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.TransactionConst;
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionPayOrderRepository;
 import com.byritium.dao.TransactionReceiptOrderRepository;
@@ -55,26 +56,28 @@ public class GuaranteeTransactionService implements ITransactionService {
         String userId = param.getUserId();
 
         BigDecimal reductionAmount = BigDecimal.ZERO;
+        BigDecimal reductionAmountQuota = param.getOrderAmount().multiply(TransactionConst.TX_AMOUNT_MAX_REDUCTION_COEFFICIENT);
 
         String couponId = param.getCouponId();
-        if (StringUtils.hasText(couponId)) {
-            TransactionPaymentOrder payOrder = transactionPayOrderService.buildCouponOrder(couponId);
+        if (StringUtils.hasText(couponId) && reductionAmountQuota.compareTo(BigDecimal.ZERO) > 0) {
+            TransactionPaymentOrder payOrder = transactionPayOrderService.buildCouponOrder(couponId,reductionAmountQuota);
             map.put(PaymentChannel.COUPON_PAY, payOrder);
             reductionAmount = reductionAmount.add(payOrder.getOrderAmount());
         }
 
         Deduction deduction = param.getDeduction();
-        if (deduction != null) {
-            TransactionPaymentOrder payOrder = transactionPayOrderService.buildDeductionOrder(userId, deduction);
+        if (deduction != null && reductionAmountQuota.compareTo(BigDecimal.ZERO) > 0) {
+            TransactionPaymentOrder payOrder = transactionPayOrderService.buildDeductionOrder(userId, deduction,reductionAmountQuota);
             map.put(deduction.getPaymentChannel(), payOrder);
             reductionAmount = reductionAmount.add(payOrder.getPaymentAmount());
         }
 
+        {
+            BigDecimal corePaymentOrderAmount = param.getOrderAmount().subtract(reductionAmount);
+            corePaymentOrderAmount = corePaymentOrderAmount.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : corePaymentOrderAmount;
 
-        BigDecimal corePaymentOrderAmount = param.getOrderAmount().subtract(reductionAmount);
-        corePaymentOrderAmount = corePaymentOrderAmount.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : corePaymentOrderAmount;
-
-        map.put(paymentChannel, transactionPayOrderService.buildCoreOrder(paymentChannel, userId, corePaymentOrderAmount));
+            map.put(paymentChannel, transactionPayOrderService.buildCoreOrder(paymentChannel, userId, corePaymentOrderAmount));
+        }
 
 
         TransactionReceiptOrder transactionReceiptOrder = new TransactionReceiptOrder(clientId, param);
@@ -93,7 +96,7 @@ public class GuaranteeTransactionService implements ITransactionService {
         });
 
 
-//        List<CompletableFuture<TransactionPaymentOrder>> transactionFutureList = transactionOrderList.stream().map(transactionPayOrderService::payOrder).collect(Collectors.toList());
+//        L7plo0-8ist<CompletableFuture<TransactionPaymentOrder>> transactionFutureList = transactionOrderList.stream().map(transactionPayOrderService::payOrder).collect(Collectors.toList());
 //
 //        CompletableFuture<Void> allFutures = CompletableFuture.allOf(transactionFutureList.toArray(new CompletableFuture[0]));
 //

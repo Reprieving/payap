@@ -3,11 +3,9 @@ package com.byritium.service;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.dao.TransactionPayOrderRepository;
-import com.byritium.dto.CouponInfo;
-import com.byritium.dto.Deduction;
-import com.byritium.dto.PaymentResult;
-import com.byritium.dto.ResponseBody;
+import com.byritium.dto.*;
 import com.byritium.entity.TransactionPaymentOrder;
+import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.CouponRpc;
 import com.byritium.rpc.PaymentPayRpc;
 import org.springframework.stereotype.Service;
@@ -15,6 +13,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -23,6 +22,9 @@ public class TransactionPayOrderService {
 
     @Resource
     private PaymentPayRpc paymentPayRpc;
+
+    @Resource
+    private AccountRpc accountRpc;
 
     @Resource
     private CouponRpc couponRpc;
@@ -80,16 +82,18 @@ public class TransactionPayOrderService {
         return payOrder;
     }
 
-    public TransactionPaymentOrder buildCouponOrder(String couponId) {
+    public TransactionPaymentOrder buildCouponOrder(String couponId, BigDecimal reductionAmountQuota) {
         PaymentChannel paymentChannel = PaymentChannel.COUPON_PAY;
         ResponseBody<CouponInfo> responseBody = couponRpc.get(couponId);
         CouponInfo couponInfo = responseBody.getData();
         String payerId = couponInfo.getPayerId();
         BigDecimal amount = couponInfo.getAmount();
-
+        if (amount.compareTo(reductionAmountQuota) < 0) {
+            reductionAmountQuota = reductionAmountQuota.subtract(amount);
+        }
         TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
         payOrder.setPaymentChannel(paymentChannel);
-        payOrder.setPayerId(null);
+        payOrder.setPayerId(couponInfo.getPayerId());
         if (StringUtils.hasText(payerId)) {
             payOrder.setPayerId(payerId);
         }
@@ -105,7 +109,7 @@ public class TransactionPayOrderService {
         return payOrder;
     }
 
-    public TransactionPaymentOrder buildDeductionOrder(String payerId, Deduction deduction) {
+    public TransactionPaymentOrder buildDeductionOrder(String payerId, Deduction deduction, BigDecimal reductionAmountQuota) {
         PaymentChannel paymentChannel = deduction.getPaymentChannel();
         TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
         payOrder.setPaymentChannel(paymentChannel);
@@ -114,9 +118,23 @@ public class TransactionPayOrderService {
             payOrder.setPayerId(payerId);
         }
         payOrder.setPaymentTitle(paymentChannel.getMessage());
-        //TODO calculate deduction amount
-        payOrder.setOrderAmount(BigDecimal.ZERO);
-        payOrder.setOrderAmount(BigDecimal.ZERO);
+
+        AccountQuery accountQuery = new AccountQuery();
+        ResponseBody<AccountBalance> responseBody = accountRpc.query(accountQuery);
+
+        AccountBalance accountBalance = responseBody.getData();
+        BigDecimal balanceAmount = accountBalance.getAmount();
+        BigDecimal balanceValue = accountBalance.getValue();
+        BigDecimal rate = balanceValue.divide(balanceAmount, MathContext.DECIMAL32);
+
+        if (reductionAmountQuota.compareTo(balanceValue) >= 0) {
+            payOrder.setOrderAmount(balanceAmount);
+            payOrder.setPaymentAmount(balanceValue);
+        } else {
+            payOrder.setOrderAmount(reductionAmountQuota);
+            payOrder.setPaymentAmount(reductionAmountQuota.multiply(rate));
+        }
+
         payOrder.setState(PaymentState.PAYMENT_WAITING);
 
 
