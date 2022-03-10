@@ -1,10 +1,12 @@
 package com.byritium.service;
 
 import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionConst;
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionPayOrderRepository;
 import com.byritium.dao.TransactionReceiptOrderRepository;
+import com.byritium.dto.AccountJournal;
 import com.byritium.dto.Deduction;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
@@ -21,8 +23,13 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -72,7 +79,7 @@ public class GuaranteeTransactionService implements ITransactionService {
             reductionAmount = reductionAmount.add(payOrder.getPaymentAmount());
         }
 
-        {
+        if (paymentChannel != null) {
             BigDecimal corePaymentOrderAmount = param.getOrderAmount().subtract(reductionAmount);
             corePaymentOrderAmount = corePaymentOrderAmount.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : corePaymentOrderAmount;
 
@@ -96,32 +103,30 @@ public class GuaranteeTransactionService implements ITransactionService {
         });
 
 
-//        L7plo0-8ist<CompletableFuture<TransactionPaymentOrder>> transactionFutureList = transactionOrderList.stream().map(transactionPayOrderService::payOrder).collect(Collectors.toList());
-//
-//        CompletableFuture<Void> allFutures = CompletableFuture.allOf(transactionFutureList.toArray(new CompletableFuture[0]));
-//
-//        CompletableFuture<List<TransactionPaymentOrder>> futureResult = allFutures.thenApply(v -> transactionFutureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
-//
-//        try {
-//            List<TransactionPaymentOrder> transactionPaymentOrders = futureResult.get();
-//            transactionPaymentOrders.forEach(transactionPayOrderService::saveOrder);
-//
-//            transactionResult.setResult(transactionPaymentOrders.stream().collect(Collectors.toMap(TransactionPaymentOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
-//
-//            if (paymentChannel != null && transactionPayOrderService.verifyAllSuccess(transactionPaymentOrders)) {
-//                transactionResult.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-//                transactionReceiptOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-//                transactionReceiptOrderRepository.save(transactionReceiptOrder);
-//
-//                //支付入账
-//                AccountJournal accountJournal = new AccountJournal();
-//                accountRpc.record(accountJournal);
-//            }
-//
-//
-//        } catch (InterruptedException | ExecutionException e) {
-//            log.error("get payment order exception", e);
-//        }
+        List<CompletableFuture<TransactionPaymentOrder>> transactionFutureList = map.values().stream().map(transactionPayOrderService::payOrder).collect(Collectors.toList());
+        CompletableFuture<Void> allFutures = CompletableFuture.allOf(transactionFutureList.toArray(new CompletableFuture[0]));
+        CompletableFuture<List<TransactionPaymentOrder>> futureResult = allFutures.thenApply(v -> transactionFutureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+
+        try {
+            List<TransactionPaymentOrder> transactionPaymentOrders = futureResult.get();
+            transactionPaymentOrders.forEach(transactionPayOrderService::saveOrder);
+
+            transactionResult.setResult(transactionPaymentOrders.stream().collect(Collectors.toMap(TransactionPaymentOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
+
+            if (paymentChannel != null && transactionPayOrderService.verifyAllSuccess(transactionPaymentOrders)) {
+                transactionResult.setPaymentState(PaymentState.PAYMENT_SUCCESS);
+                transactionReceiptOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
+                transactionReceiptOrderRepository.save(transactionReceiptOrder);
+
+                //支付入账
+                AccountJournal accountJournal = new AccountJournal();
+                accountRpc.record(accountJournal);
+            }
+
+
+        } catch (InterruptedException | ExecutionException e) {
+            log.error("get payment order exception", e);
+        }
 
         return transactionResult;
     }
