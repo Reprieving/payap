@@ -7,6 +7,7 @@ import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionPayOrderRepository;
 import com.byritium.dao.TransactionReceiptOrderRepository;
 import com.byritium.dto.Deduction;
+import com.byritium.dto.LiquidationParam;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactionReceiptOrder;
@@ -125,7 +126,8 @@ public class GuaranteeTransactionService implements ITransactionService {
         });
 
         if (PaymentState.PAYMENT_SUCCESS == transactionResult.getPaymentState()) {
-
+            LiquidationParam liquidationParam = new LiquidationParam();
+            liquidationRpc.call(liquidationParam);
         }
 
         return transactionResult;
