@@ -1,6 +1,5 @@
 package com.byritium.rpc;
 
-import com.byritium.dto.AccountJournal;
 import com.byritium.dto.LiquidationParam;
 import com.byritium.dto.ResponseBody;
 import org.springframework.cloud.openfeign.FeignClient;
