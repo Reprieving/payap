@@ -102,7 +102,6 @@ public class GuaranteeTransactionService implements ITransactionService {
             }
         });
 
-
         List<CompletableFuture<TransactionPaymentOrder>> transactionFutureList = map.values().stream().map(transactionPayOrderService::payOrder).collect(Collectors.toList());
         CompletableFuture<Void> allFutures = CompletableFuture.allOf(transactionFutureList.toArray(new CompletableFuture[0]));
         CompletableFuture<List<TransactionPaymentOrder>> futureResult = allFutures.thenApply(v -> transactionFutureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
@@ -118,7 +117,7 @@ public class GuaranteeTransactionService implements ITransactionService {
                 transactionReceiptOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
                 transactionReceiptOrderRepository.save(transactionReceiptOrder);
 
-                //支付入账
+                //入账
                 AccountJournal accountJournal = new AccountJournal();
                 accountRpc.record(accountJournal);
             }
