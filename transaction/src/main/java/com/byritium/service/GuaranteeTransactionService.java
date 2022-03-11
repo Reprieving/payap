@@ -12,6 +12,7 @@ import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactionReceiptOrder;
 import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.rpc.AccountRpc;
+import com.byritium.rpc.LiquidationRpc;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class GuaranteeTransactionService implements ITransactionService {
     private TransactionTemplate transactionTemplate;
 
     @Resource
-    private AccountRpc accountRpc;
+    private LiquidationRpc liquidationRpc;
 
     @Override
     public TransactionType type() {
