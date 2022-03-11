@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 @Service
 public class InstantTransactionService implements ITransactionService {
     @Resource
-    private TransactionPayOrderService transactionPayOrderService;
+    private TransactionPaymentOrderService transactionPaymentOrderService;
 
     @Resource
     private TransactionReceiptOrderRepository transactionReceiptOrderRepository;
@@ -55,16 +55,16 @@ public class InstantTransactionService implements ITransactionService {
             String transactionOrderId = transactionReceiptOrder.getId();
 
             if (paymentChannel != null) {
-                return transactionPayOrderService.buildCoreOrder(transactionOrderId, paymentChannel, userId, transactionReceiptOrder.getOrderAmount());
+                return transactionPaymentOrderService.buildCoreOrder(transactionOrderId, paymentChannel, userId, transactionReceiptOrder.getOrderAmount());
             }
             throw new BusinessException("order exception");
         });
 
-        transactionPayOrderService.payOrder(transactionPayOrder);
+        transactionPaymentOrderService.payOrder(transactionPayOrder);
 
         PaymentState state = transactionPayOrder.getState();
         transactionResult.setPaymentState(state);
-        transactionPayOrderService.saveOrder(transactionPayOrder);
+        transactionPaymentOrderService.saveOrder(transactionPayOrder);
         if (state == PaymentState.PAYMENT_SUCCESS) {
             //支付入账
             AccountJournal accountJournal = new AccountJournal();

@@ -6,7 +6,6 @@ import com.byritium.constance.TransactionConst;
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionPayOrderRepository;
 import com.byritium.dao.TransactionReceiptOrderRepository;
-import com.byritium.dto.AccountJournal;
 import com.byritium.dto.Deduction;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
@@ -23,7 +22,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +34,7 @@ import java.util.stream.Collectors;
 public class GuaranteeTransactionService implements ITransactionService {
 
     @Autowired
-    private TransactionPayOrderService transactionPayOrderService;
+    private TransactionPaymentOrderService transactionPaymentOrderService;
 
     @Resource
     private TransactionReceiptOrderRepository transactionReceiptOrderRepository;
@@ -67,14 +65,14 @@ public class GuaranteeTransactionService implements ITransactionService {
 
         String couponId = param.getCouponId();
         if (StringUtils.hasText(couponId) && reductionAmountQuota.compareTo(BigDecimal.ZERO) > 0) {
-            TransactionPaymentOrder payOrder = transactionPayOrderService.buildCouponOrder(couponId);
+            TransactionPaymentOrder payOrder = transactionPaymentOrderService.buildCouponOrder(couponId);
             map.put(PaymentChannel.COUPON_PAY, payOrder);
             reductionAmount = reductionAmount.add(payOrder.getPaymentAmount());
         }
 
         Deduction deduction = param.getDeduction();
         if (deduction != null && reductionAmountQuota.compareTo(BigDecimal.ZERO) > 0) {
-            TransactionPaymentOrder payOrder = transactionPayOrderService.buildDeductionOrder(userId, deduction, reductionAmountQuota);
+            TransactionPaymentOrder payOrder = transactionPaymentOrderService.buildDeductionOrder(userId, deduction, reductionAmountQuota);
             map.put(deduction.getPaymentChannel(), payOrder);
             reductionAmount = reductionAmount.add(payOrder.getPaymentAmount());
         }
@@ -83,7 +81,7 @@ public class GuaranteeTransactionService implements ITransactionService {
             BigDecimal corePaymentOrderAmount = param.getOrderAmount().subtract(reductionAmount);
             corePaymentOrderAmount = corePaymentOrderAmount.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : corePaymentOrderAmount;
 
-            map.put(paymentChannel, transactionPayOrderService.buildCoreOrder(paymentChannel, userId, corePaymentOrderAmount));
+            map.put(paymentChannel, transactionPaymentOrderService.buildCoreOrder(paymentChannel, userId, corePaymentOrderAmount));
         }
 
 
@@ -102,29 +100,31 @@ public class GuaranteeTransactionService implements ITransactionService {
             }
         });
 
-        List<CompletableFuture<TransactionPaymentOrder>> transactionFutureList = map.values().stream().map(transactionPayOrderService::payOrder).collect(Collectors.toList());
+        List<CompletableFuture<TransactionPaymentOrder>> transactionFutureList = map.values().stream().map(transactionPaymentOrderService::payOrder).collect(Collectors.toList());
         CompletableFuture<Void> allFutures = CompletableFuture.allOf(transactionFutureList.toArray(new CompletableFuture[0]));
         CompletableFuture<List<TransactionPaymentOrder>> futureResult = allFutures.thenApply(v -> transactionFutureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
 
-        try {
-            List<TransactionPaymentOrder> transactionPaymentOrders = futureResult.get();
-            transactionPaymentOrders.forEach(transactionPayOrderService::saveOrder);
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+                try {
+                    List<TransactionPaymentOrder> transactionPaymentOrders = futureResult.get();
+                    transactionPaymentOrders.forEach(transactionPaymentOrderService::saveOrder);
+                    transactionResult.setResult(transactionPaymentOrders.stream().collect(Collectors.toMap(TransactionPaymentOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
 
-            transactionResult.setResult(transactionPaymentOrders.stream().collect(Collectors.toMap(TransactionPaymentOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
-
-            if (paymentChannel != null && transactionPayOrderService.verifyAllSuccess(transactionPaymentOrders)) {
-                transactionResult.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-                transactionReceiptOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-                transactionReceiptOrderRepository.save(transactionReceiptOrder);
-
-                //入账
-                AccountJournal accountJournal = new AccountJournal();
-                accountRpc.record(accountJournal);
+                    if (paymentChannel != null && transactionPaymentOrderService.verifyAllSuccess(transactionPaymentOrders)) {
+                        transactionResult.setPaymentState(PaymentState.PAYMENT_SUCCESS);
+                        transactionReceiptOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
+                        transactionReceiptOrderRepository.save(transactionReceiptOrder);
+                    }
+                } catch (InterruptedException | ExecutionException e) {
+                    log.error("get payment order exception", e);
+                }
             }
+        });
 
+        if (PaymentState.PAYMENT_SUCCESS == transactionResult.getPaymentState()) {
 
-        } catch (InterruptedException | ExecutionException e) {
-            log.error("get payment order exception", e);
         }
 
         return transactionResult;

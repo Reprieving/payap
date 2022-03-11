@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class TransactionPayOrderService {
+public class TransactionPaymentOrderService {
 
     @Resource
     private PaymentPayRpc paymentPayRpc;
