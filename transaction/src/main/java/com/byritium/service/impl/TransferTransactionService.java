@@ -1,30 +1,29 @@
-package com.byritium.service;
+package com.byritium.service.impl;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.TransactionType;
-import com.byritium.dao.TransactionFreezeOrderRepository;
-import com.byritium.dao.TransactionUnFreezeOrderRepository;
+import com.byritium.dao.TransactionTransferOrderRepository;
 import com.byritium.dto.AccountJournal;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.entity.TransactionFreezeOrder;
 import com.byritium.entity.TransactionTransferOrder;
-import com.byritium.entity.TransactionUnFreezeOrder;
 import com.byritium.rpc.AccountRpc;
+import com.byritium.rpc.PaymentPayRpc;
+import com.byritium.service.ITransactionService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 
 @Service
-public class UnFreezeTransactionService implements ITransactionService {
+public class TransferTransactionService implements ITransactionService {
     @Override
     public TransactionType type() {
-        return TransactionType.UNFREEZE;
+        return TransactionType.TRANSFER;
     }
 
     @Resource
-    private TransactionUnFreezeOrderRepository transactionUnFreezeOrderRepository;
+    private TransactionTransferOrderRepository transactionTransferOrderRepository;
 
     @Resource
     private AccountRpc accountRpc;
@@ -34,11 +33,13 @@ public class UnFreezeTransactionService implements ITransactionService {
         TransactionResult transactionResult = new TransactionResult();
 
         String businessOrderId = param.getBusinessOrderId();
-        String userId = param.getUserId();
+        String senderId = param.getSenderId();
+        String receiverId = param.getReceiverId();
         BigDecimal orderAmount = param.getOrderAmount();
-        TransactionUnFreezeOrder transactionUnFreezeOrder = new TransactionUnFreezeOrder(
-                clientId, businessOrderId, userId, orderAmount);
-        transactionUnFreezeOrderRepository.save(transactionUnFreezeOrder);
+        PaymentChannel paymentChannel = param.getPaymentChannel();
+        TransactionTransferOrder transactionTransferOrder = new TransactionTransferOrder(
+                clientId, businessOrderId, senderId, receiverId, orderAmount, paymentChannel);
+        transactionTransferOrderRepository.save(transactionTransferOrder);
 
         AccountJournal accountJournal = new AccountJournal();
         accountRpc.record(accountJournal);

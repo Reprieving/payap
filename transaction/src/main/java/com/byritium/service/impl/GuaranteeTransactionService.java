@@ -1,4 +1,4 @@
-package com.byritium.service;
+package com.byritium.service.impl;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
@@ -13,6 +13,7 @@ import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactiontOrder;
 import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.rpc.LiquidationRpc;
+import com.byritium.service.ITransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

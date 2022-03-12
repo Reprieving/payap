@@ -1,4 +1,4 @@
-package com.byritium.service;
+package com.byritium.service.impl;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.TransactionType;
@@ -9,6 +9,7 @@ import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactionFreezeOrder;
 import com.byritium.rpc.AccountRpc;
+import com.byritium.service.ITransactionService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
