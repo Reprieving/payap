@@ -9,7 +9,7 @@ import com.byritium.dto.LiquidationParam;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactionPaymentOrder;
-import com.byritium.entity.TransactionReceiptOrder;
+import com.byritium.entity.TransactiontOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.LiquidationRpc;
@@ -46,16 +46,16 @@ public class InstantTransactionService implements ITransactionService {
 
         PaymentChannel paymentChannel = param.getPaymentChannel();
 
-        TransactionReceiptOrder transactionReceiptOrder = new TransactionReceiptOrder(clientId, param);
+        TransactiontOrder transactiontOrder = new TransactiontOrder(clientId, param);
 
         TransactionPaymentOrder transactionPayOrder = transactionTemplate.execute(transactionStatus -> {
-            transactionReceiptOrderRepository.save(transactionReceiptOrder);
+            transactionReceiptOrderRepository.save(transactiontOrder);
 
             String userId = param.getUserId();
-            String transactionOrderId = transactionReceiptOrder.getId();
+            String transactionOrderId = transactiontOrder.getId();
 
             if (paymentChannel != null) {
-                return transactionPaymentOrderService.buildCoreOrder(transactionOrderId, paymentChannel, userId, transactionReceiptOrder.getOrderAmount());
+                return transactionPaymentOrderService.buildCoreOrder(transactionOrderId, paymentChannel, userId, transactiontOrder.getOrderAmount());
             }
             throw new BusinessException("order exception");
         });
@@ -72,7 +72,7 @@ public class InstantTransactionService implements ITransactionService {
 
             //清算
             LiquidationParam liquidationParam = new LiquidationParam();
-            liquidationRpc.call(liquidationParam);
+            liquidationRpc.payment(liquidationParam);
         }
 
 

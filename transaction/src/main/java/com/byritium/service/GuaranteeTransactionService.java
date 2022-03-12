@@ -10,9 +10,8 @@ import com.byritium.dto.Deduction;
 import com.byritium.dto.LiquidationParam;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.entity.TransactionReceiptOrder;
+import com.byritium.entity.TransactiontOrder;
 import com.byritium.entity.TransactionPaymentOrder;
-import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.LiquidationRpc;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,12 +86,12 @@ public class GuaranteeTransactionService implements ITransactionService {
         }
 
 
-        TransactionReceiptOrder transactionReceiptOrder = new TransactionReceiptOrder(clientId, param);
+        TransactiontOrder transactiontOrder = new TransactiontOrder(clientId, param);
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                transactionReceiptOrderRepository.save(transactionReceiptOrder);
-                String transactionOrderId = transactionReceiptOrder.getId();
+                transactionReceiptOrderRepository.save(transactiontOrder);
+                String transactionOrderId = transactiontOrder.getId();
 
                 for (Map.Entry<PaymentChannel, TransactionPaymentOrder> entry : map.entrySet()) {
                     TransactionPaymentOrder transactionPaymentOrder = entry.getValue();
@@ -112,12 +111,12 @@ public class GuaranteeTransactionService implements ITransactionService {
                 try {
                     List<TransactionPaymentOrder> transactionPaymentOrders = futureResult.get();
                     transactionPaymentOrders.forEach(transactionPaymentOrderService::saveOrder);
-                    transactionResult.setResult(transactionPaymentOrders.stream().collect(Collectors.toMap(TransactionPaymentOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
+                    transactionResult.setPaymentOrders(transactionPaymentOrders.stream().collect(Collectors.toMap(TransactionPaymentOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
 
                     if (paymentChannel != null && transactionPaymentOrderService.verifyAllSuccess(transactionPaymentOrders)) {
                         transactionResult.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-                        transactionReceiptOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-                        transactionReceiptOrderRepository.save(transactionReceiptOrder);
+                        transactiontOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
+                        transactionReceiptOrderRepository.save(transactiontOrder);
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     log.error("get payment order exception", e);
@@ -125,9 +124,10 @@ public class GuaranteeTransactionService implements ITransactionService {
             }
         });
 
+
         if (PaymentState.PAYMENT_SUCCESS == transactionResult.getPaymentState()) {
             LiquidationParam liquidationParam = new LiquidationParam();
-            liquidationRpc.call(liquidationParam);
+            liquidationRpc.payment(liquidationParam);
         }
 
         return transactionResult;
