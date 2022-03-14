@@ -10,6 +10,7 @@ import com.byritium.dto.*;
 import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.entity.TransactiontOrder;
 import com.byritium.entity.TransactionRefundOrder;
+import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.PaymentPayRpc;
 import com.byritium.service.ITransactionService;
@@ -49,6 +50,14 @@ public class RefundTransactionService implements ITransactionService {
         TransactionResult transactionResult = new TransactionResult();
 
         TransactiontOrder transactionOrder = transactionReceiptOrderRepository.findByBusinessOrderId(param.getBusinessOrderId());
+        if (transactionOrder == null) {
+            throw new BusinessException("未找到订单");
+        }
+
+        if (param.getOrderAmount().compareTo(transactionOrder.getPayAmount()) > 0 || param.getOrderAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BusinessException("退款金额异常");
+        }
+
         String transactionOrderId = transactionOrder.getId();
         PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
         TransactionPaymentOrder transactionPaymentOrder = transactionPayOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
@@ -65,7 +74,7 @@ public class RefundTransactionService implements ITransactionService {
 
         PaymentState state = paymentResult.getState();
 
-        if(PaymentState.PAYMENT_SUCCESS== state){
+        if (PaymentState.PAYMENT_SUCCESS == state) {
             //退款入账
             AccountJournal accountJournal = new AccountJournal();
             accountRpc.record(accountJournal);
