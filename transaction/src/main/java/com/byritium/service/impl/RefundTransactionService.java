@@ -5,7 +5,7 @@ import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionState;
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionReceiptOrderRepository;
-import com.byritium.dao.TransactionPayOrderRepository;
+import com.byritium.dao.TransactionPaymentOrderRepository;
 import com.byritium.dao.TransactionRefundOrderRepository;
 import com.byritium.dto.*;
 import com.byritium.entity.TransactionPaymentOrder;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class RefundTransactionService implements ITransactionService {
@@ -32,7 +33,7 @@ public class RefundTransactionService implements ITransactionService {
     private TransactionReceiptOrderRepository transactionReceiptOrderRepository;
 
     @Resource
-    private TransactionPayOrderRepository transactionPayOrderRepository;
+    private TransactionPaymentOrderRepository transactionPaymentOrderRepository;
 
     @Resource
     private TransactionRefundOrderRepository transactionRefundOrderRepository;
@@ -60,16 +61,15 @@ public class RefundTransactionService implements ITransactionService {
         }
 
         TransactionState transactionState = transactionOrder.getTransactionState();
-        if (transactionState == TransactionState.TRANSACTION_SUCCESS) { //refund all
-
-        } else {// refund pament
-
-        }
-
         String transactionOrderId = transactionOrder.getId();
         PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
-        TransactionPaymentOrder transactionPaymentOrder = transactionPayOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
+        if (transactionState == TransactionState.TRANSACTION_SUCCESS) {
+            TransactionPaymentOrder transactionPaymentOrder = transactionPaymentOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
+        } else {
+            List<TransactionPaymentOrder> paymentOrderList = transactionPaymentOrderRepository.findByTransactionOrderId(transactionOrderId);
+        }
 
+        TransactionPaymentOrder transactionPaymentOrder = transactionPaymentOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
 
         String transactionPayOrderId = transactionPaymentOrder.getId();
         String userId = param.getUserId();

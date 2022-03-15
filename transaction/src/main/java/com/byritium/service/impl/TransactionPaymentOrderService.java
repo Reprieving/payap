@@ -2,7 +2,7 @@ package com.byritium.service.impl;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
-import com.byritium.dao.TransactionPayOrderRepository;
+import com.byritium.dao.TransactionPaymentOrderRepository;
 import com.byritium.dto.*;
 import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.rpc.AccountRpc;
@@ -30,7 +30,7 @@ public class TransactionPaymentOrderService {
     private CouponRpc couponRpc;
 
     @Resource
-    private TransactionPayOrderRepository transactionPayOrderRepository;
+    private TransactionPaymentOrderRepository transactionPaymentOrderRepository;
 
     public TransactionPaymentOrder saveOrder(String transactionOrderId, PaymentChannel paymentChannel, BigDecimal amount, String payerId, String mediumId) {
         TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
@@ -47,7 +47,7 @@ public class TransactionPaymentOrderService {
         payOrder.setOrderAmount(amount);
         payOrder.setState(PaymentState.PAYMENT_WAITING);
 
-        transactionPayOrderRepository.save(payOrder);
+        transactionPaymentOrderRepository.save(payOrder);
 
         return payOrder;
     }
@@ -62,7 +62,7 @@ public class TransactionPaymentOrderService {
         payOrder.setOrderAmount(amount);
         payOrder.setState(PaymentState.PAYMENT_WAITING);
 
-        transactionPayOrderRepository.save(payOrder);
+        transactionPaymentOrderRepository.save(payOrder);
 
         return payOrder;
     }
@@ -139,7 +139,7 @@ public class TransactionPaymentOrderService {
     }
 
     public TransactionPaymentOrder saveOrder(TransactionPaymentOrder transactionPaymentOrder) {
-        return transactionPayOrderRepository.save(transactionPaymentOrder);
+        return transactionPaymentOrderRepository.save(transactionPaymentOrder);
     }
 
     public CompletableFuture<TransactionPaymentOrder> payOrder(TransactionPaymentOrder transactionPaymentOrder) {

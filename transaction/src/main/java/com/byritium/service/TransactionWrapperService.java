@@ -3,7 +3,7 @@ package com.byritium.service;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionConst;
-import com.byritium.dao.TransactionPayOrderRepository;
+import com.byritium.dao.TransactionPaymentOrderRepository;
 import com.byritium.dao.TransactionReceiptOrderRepository;
 import com.byritium.dto.Deduction;
 import com.byritium.dto.TransactionParam;
@@ -38,7 +38,7 @@ public class TransactionWrapperService {
     private TransactionReceiptOrderRepository transactionReceiptOrderRepository;
 
     @Resource
-    private TransactionPayOrderRepository transactionPayOrderRepository;
+    private TransactionPaymentOrderRepository transactionPaymentOrderRepository;
 
     @Resource
     private TransactionTemplate transactionTemplate;
@@ -86,7 +86,7 @@ public class TransactionWrapperService {
                 for (Map.Entry<PaymentChannel, TransactionPaymentOrder> entry : map.entrySet()) {
                     TransactionPaymentOrder transactionPaymentOrder = entry.getValue();
                     transactionPaymentOrder.setTransactionOrderId(transactionOrderId);
-                    transactionPayOrderRepository.save(transactionPaymentOrder);
+                    transactionPaymentOrderRepository.save(transactionPaymentOrder);
                 }
             }
         });
