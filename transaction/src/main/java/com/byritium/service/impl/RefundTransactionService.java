@@ -65,30 +65,31 @@ public class RefundTransactionService implements ITransactionService {
         PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
         if (transactionState == TransactionState.TRANSACTION_SUCCESS) {
             TransactionPaymentOrder transactionPaymentOrder = transactionPaymentOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
+
         } else {
             List<TransactionPaymentOrder> paymentOrderList = transactionPaymentOrderRepository.findByTransactionOrderId(transactionOrderId);
         }
 
         TransactionPaymentOrder transactionPaymentOrder = transactionPaymentOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
 
-        String transactionPayOrderId = transactionPaymentOrder.getId();
-        String userId = param.getUserId();
-        BigDecimal refundAmount = param.getOrderAmount();
-        TransactionRefundOrder transactionRefundOrder = new TransactionRefundOrder(userId, transactionPayOrderId, paymentChannel, refundAmount);
-        transactionRefundOrderRepository.save(transactionRefundOrder);
+//        String transactionPayOrderId = transactionPaymentOrder.getId();
+//        String userId = param.getUserId();
+//        BigDecimal refundAmount = param.getOrderAmount();
+//        TransactionRefundOrder transactionRefundOrder = new TransactionRefundOrder(userId, transactionPayOrderId, paymentChannel, refundAmount);
+//        transactionRefundOrderRepository.save(transactionRefundOrder);
 
-        ResponseBody<PaymentResult> responseBody = paymentPayRpc.refund(transactionRefundOrder);
-        PaymentResult paymentResult = responseBodyService.get(responseBody);
-
-        PaymentState state = paymentResult.getState();
-
-        if (PaymentState.PAYMENT_SUCCESS == state) {
-            //退款入账
-            AccountJournal accountJournal = new AccountJournal();
-            accountRpc.record(accountJournal);
-        }
-        transactionResult.setTransactionOrderId(transactionRefundOrder.getId());
-        transactionResult.setPaymentState(paymentResult.getState());
+//        ResponseBody<PaymentResult> responseBody = paymentPayRpc.refund(transactionRefundOrder);
+//        PaymentResult paymentResult = responseBodyService.get(responseBody);
+//
+//        PaymentState state = paymentResult.getState();
+//
+//        if (PaymentState.PAYMENT_SUCCESS == state) {
+//            //退款入账
+//            AccountJournal accountJournal = new AccountJournal();
+//            accountRpc.record(accountJournal);
+//        }
+//        transactionResult.setTransactionOrderId(transactionRefundOrder.getId());
+//        transactionResult.setPaymentState(paymentResult.getState());
 
         return transactionResult;
     }
