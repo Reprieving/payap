@@ -9,7 +9,7 @@ import com.byritium.dto.Deduction;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactionPaymentOrder;
-import com.byritium.entity.TransactiontOrder;
+import com.byritium.entity.TransactionOrder;
 import com.byritium.service.impl.TransactionPaymentOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,12 +76,12 @@ public class TransactionWrapperService {
         }
 
 
-        TransactiontOrder transactiontOrder = new TransactiontOrder(clientId, param);
+        TransactionOrder transactionOrder = new TransactionOrder(clientId, param);
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                transactionReceiptOrderRepository.save(transactiontOrder);
-                String transactionOrderId = transactiontOrder.getId();
+                transactionReceiptOrderRepository.save(transactionOrder);
+                String transactionOrderId = transactionOrder.getId();
 
                 for (Map.Entry<PaymentChannel, TransactionPaymentOrder> entry : map.entrySet()) {
                     TransactionPaymentOrder transactionPaymentOrder = entry.getValue();
@@ -105,8 +105,8 @@ public class TransactionWrapperService {
 
                     if (paymentChannel != null && transactionPaymentOrderService.verifyAllSuccess(transactionPaymentOrders)) {
                         transactionResult.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-                        transactiontOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-                        transactionReceiptOrderRepository.save(transactiontOrder);
+                        transactionOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
+                        transactionReceiptOrderRepository.save(transactionOrder);
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     log.error("get payment order exception", e);

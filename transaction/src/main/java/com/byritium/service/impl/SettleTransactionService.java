@@ -5,7 +5,7 @@ import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionReceiptOrderRepository;
 import com.byritium.dao.TransactionSettleOrderRepository;
 import com.byritium.dto.*;
-import com.byritium.entity.TransactiontOrder;
+import com.byritium.entity.TransactionOrder;
 import com.byritium.entity.TransactionSettleOrder;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.PaymentPayRpc;
@@ -41,7 +41,7 @@ public class SettleTransactionService implements ITransactionService {
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
         TransactionResult transactionResult = new TransactionResult();
-        TransactiontOrder transactionOrder = transactionReceiptOrderRepository.findByBusinessOrderId(param.getBusinessOrderId());
+        TransactionOrder transactionOrder = transactionReceiptOrderRepository.findByBusinessOrderId(param.getBusinessOrderId());
 
         Assert.notNull(transactionOrder, () -> "未找到交易订单");
 

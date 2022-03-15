@@ -2,13 +2,14 @@ package com.byritium.service.impl;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
+import com.byritium.constance.TransactionState;
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionReceiptOrderRepository;
 import com.byritium.dao.TransactionPayOrderRepository;
 import com.byritium.dao.TransactionRefundOrderRepository;
 import com.byritium.dto.*;
 import com.byritium.entity.TransactionPaymentOrder;
-import com.byritium.entity.TransactiontOrder;
+import com.byritium.entity.TransactionOrder;
 import com.byritium.entity.TransactionRefundOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
@@ -49,13 +50,20 @@ public class RefundTransactionService implements ITransactionService {
     public TransactionResult call(String clientId, TransactionParam param) {
         TransactionResult transactionResult = new TransactionResult();
 
-        TransactiontOrder transactionOrder = transactionReceiptOrderRepository.findByBusinessOrderId(param.getBusinessOrderId());
+        TransactionOrder transactionOrder = transactionReceiptOrderRepository.findByBusinessOrderId(param.getBusinessOrderId());
         if (transactionOrder == null) {
             throw new BusinessException("未找到订单");
         }
 
         if (param.getOrderAmount().compareTo(transactionOrder.getPayAmount()) > 0 || param.getOrderAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BusinessException("退款金额异常");
+        }
+
+        TransactionState transactionState = transactionOrder.getTransactionState();
+        if (transactionState == TransactionState.TRANSACTION_SUCCESS) { //refund all
+
+        } else {// refund pament
+
         }
 
         String transactionOrderId = transactionOrder.getId();
