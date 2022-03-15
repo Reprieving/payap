@@ -70,7 +70,7 @@ public class RefundTransactionService implements ITransactionService {
             List<TransactionPaymentOrder> paymentOrderList = transactionPaymentOrderRepository.findByTransactionOrderId(transactionOrderId);
         }
 
-        TransactionPaymentOrder transactionPaymentOrder = transactionPaymentOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
+//        TransactionPaymentOrder transactionPaymentOrder = transactionPaymentOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
 
 //        String transactionPayOrderId = transactionPaymentOrder.getId();
 //        String userId = param.getUserId();
