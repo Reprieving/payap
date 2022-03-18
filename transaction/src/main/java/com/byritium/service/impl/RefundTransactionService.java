@@ -16,6 +16,7 @@ import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.PaymentPayRpc;
 import com.byritium.service.ITransactionService;
 import com.byritium.service.common.ResponseBodyService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -70,6 +71,11 @@ public class RefundTransactionService implements ITransactionService {
             List<TransactionPaymentOrder> paymentOrderList = transactionPaymentOrderRepository.findByTransactionOrderId(transactionOrderId);
         }
 
+        TransactionOrder transactionRefundOrder = new TransactionOrder();
+        BeanUtils.copyProperties(transactionOrder, transactionRefundOrder);
+        transactionRefundOrder.setTransactionType(type());
+        transactionRefundOrder.setTransactionState(TransactionState.TRANSACTION_PENDING);
+        transactionRefundOrder.setPaymentState(PaymentState.PAYMENT_PENDING);
 //        TransactionPaymentOrder transactionPaymentOrder = transactionPaymentOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
 
 //        String transactionPayOrderId = transactionPaymentOrder.getId();
