@@ -32,7 +32,7 @@ public class TransactionPaymentOrderService {
     @Resource
     private TransactionPaymentOrderRepository transactionPaymentOrderRepository;
 
-    public TransactionPaymentOrder saveOrder(String transactionOrderId, PaymentChannel paymentChannel, BigDecimal amount, String payerId, String mediumId) {
+    public TransactionPaymentOrder save(String transactionOrderId, PaymentChannel paymentChannel, BigDecimal amount, String payerId, String mediumId) {
         TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
         payOrder.setTransactionOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
@@ -138,7 +138,7 @@ public class TransactionPaymentOrderService {
         return payOrder;
     }
 
-    public TransactionPaymentOrder saveOrder(TransactionPaymentOrder transactionPaymentOrder) {
+    public TransactionPaymentOrder save(TransactionPaymentOrder transactionPaymentOrder) {
         return transactionPaymentOrderRepository.save(transactionPaymentOrder);
     }
 

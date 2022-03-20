@@ -3,13 +3,12 @@ package com.byritium.service;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionConst;
-import com.byritium.dao.TransactionPaymentOrderRepository;
-import com.byritium.dao.TransactionReceiptOrderRepository;
 import com.byritium.dto.Deduction;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.entity.TransactionOrder;
+import com.byritium.service.common.TransactionOrderService;
 import com.byritium.service.impl.TransactionPaymentOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +34,7 @@ public class TransactionWrapperService {
     private TransactionPaymentOrderService transactionPaymentOrderService;
 
     @Resource
-    private TransactionReceiptOrderRepository transactionReceiptOrderRepository;
-
-    @Resource
-    private TransactionPaymentOrderRepository transactionPaymentOrderRepository;
+    private TransactionOrderService transactionOrderService;
 
     @Resource
     private TransactionTemplate transactionTemplate;
@@ -80,13 +76,13 @@ public class TransactionWrapperService {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                transactionReceiptOrderRepository.save(transactionOrder);
+                transactionOrderService.save(transactionOrder);
                 String transactionOrderId = transactionOrder.getId();
 
                 for (Map.Entry<PaymentChannel, TransactionPaymentOrder> entry : map.entrySet()) {
                     TransactionPaymentOrder transactionPaymentOrder = entry.getValue();
                     transactionPaymentOrder.setTransactionOrderId(transactionOrderId);
-                    transactionPaymentOrderRepository.save(transactionPaymentOrder);
+                    transactionPaymentOrderService.save(transactionPaymentOrder);
                 }
             }
         });
@@ -100,13 +96,13 @@ public class TransactionWrapperService {
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
                 try {
                     List<TransactionPaymentOrder> transactionPaymentOrders = futureResult.get();
-                    transactionPaymentOrders.forEach(transactionPaymentOrderService::saveOrder);
+                    transactionPaymentOrders.forEach(transactionPaymentOrderService::save);
                     transactionResult.setPaymentOrders(transactionPaymentOrders.stream().collect(Collectors.toMap(TransactionPaymentOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
 
                     if (paymentChannel != null && transactionPaymentOrderService.verifyAllSuccess(transactionPaymentOrders)) {
                         transactionResult.setPaymentState(PaymentState.PAYMENT_SUCCESS);
                         transactionOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-                        transactionReceiptOrderRepository.save(transactionOrder);
+                        transactionOrderService.save(transactionOrder);
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     log.error("get payment order exception", e);
