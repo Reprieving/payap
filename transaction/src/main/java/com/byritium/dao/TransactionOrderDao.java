@@ -5,6 +5,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TransactionOrderRepository extends PagingAndSortingRepository<TransactionOrder, String> {
+public interface TransactionOrderDao extends PagingAndSortingRepository<TransactionOrder, String> {
     TransactionOrder findByBusinessOrderId(String businessOrderId);
 }

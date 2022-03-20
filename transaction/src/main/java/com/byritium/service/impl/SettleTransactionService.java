@@ -2,8 +2,8 @@ package com.byritium.service.impl;
 
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionType;
-import com.byritium.dao.TransactionReceiptOrderRepository;
-import com.byritium.dao.TransactionSettleOrderRepository;
+import com.byritium.dao.TransactionReceiptOrderDao;
+import com.byritium.dao.TransactionSettleOrderDao;
 import com.byritium.dto.*;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.entity.TransactionSettleOrder;
@@ -24,10 +24,10 @@ public class SettleTransactionService implements ITransactionService {
     }
 
     @Resource
-    private TransactionReceiptOrderRepository transactionReceiptOrderRepository;
+    private TransactionReceiptOrderDao transactionReceiptOrderDao;
 
     @Resource
-    private TransactionSettleOrderRepository transactionSettleOrderRepository;
+    private TransactionSettleOrderDao transactionSettleOrderDao;
 
     @Resource
     private PaymentPayRpc paymentPayRpc;
@@ -41,7 +41,7 @@ public class SettleTransactionService implements ITransactionService {
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
         TransactionResult transactionResult = new TransactionResult();
-        TransactionOrder transactionOrder = transactionReceiptOrderRepository.findByBusinessOrderId(param.getBusinessOrderId());
+        TransactionOrder transactionOrder = transactionReceiptOrderDao.findByBusinessOrderId(param.getBusinessOrderId());
 
         Assert.notNull(transactionOrder, () -> "未找到交易订单");
 
@@ -52,7 +52,7 @@ public class SettleTransactionService implements ITransactionService {
                 clientId, transactionOrder.getId(), param.getReceiverIds(), param.getOrderAmount(), transactionOrder.getPaymentChannel()
         );
 
-        transactionSettleOrderRepository.save(transactionSettleOrder);
+        transactionSettleOrderDao.save(transactionSettleOrder);
 
         ResponseBody<PaymentResult> responseBody = paymentPayRpc.settle(transactionSettleOrder);
         PaymentResult paymentResult = responseBodyService.get(responseBody);

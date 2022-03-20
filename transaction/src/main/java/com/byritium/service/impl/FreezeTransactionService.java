@@ -1,9 +1,7 @@
 package com.byritium.service.impl;
 
-import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.TransactionType;
-import com.byritium.dao.TransactionFreezeOrderRepository;
-import com.byritium.dao.TransactionTransferOrderRepository;
+import com.byritium.dao.TransactionFreezeOrderDao;
 import com.byritium.dto.AccountJournal;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
@@ -23,7 +21,7 @@ public class FreezeTransactionService implements ITransactionService {
     }
 
     @Resource
-    private TransactionFreezeOrderRepository transactionFreezeOrderRepository;
+    private TransactionFreezeOrderDao transactionFreezeOrderDao;
 
     @Resource
     private AccountRpc accountRpc;
@@ -37,7 +35,7 @@ public class FreezeTransactionService implements ITransactionService {
         BigDecimal orderAmount = param.getOrderAmount();
         TransactionFreezeOrder transactionFreezeOrder = new TransactionFreezeOrder(
                 clientId, businessOrderId, userId, orderAmount);
-        transactionFreezeOrderRepository.save(transactionFreezeOrder);
+        transactionFreezeOrderDao.save(transactionFreezeOrder);
 
         AccountJournal accountJournal = new AccountJournal();
         accountRpc.record(accountJournal);

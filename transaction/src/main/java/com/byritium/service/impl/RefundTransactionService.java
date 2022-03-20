@@ -4,13 +4,10 @@ import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionState;
 import com.byritium.constance.TransactionType;
-import com.byritium.dao.TransactionReceiptOrderRepository;
-import com.byritium.dao.TransactionPaymentOrderRepository;
-import com.byritium.dao.TransactionRefundOrderRepository;
+import com.byritium.dao.TransactionPaymentOrderDao;
 import com.byritium.dto.*;
 import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.entity.TransactionOrder;
-import com.byritium.entity.TransactionRefundOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.PaymentPayRpc;
@@ -42,7 +39,7 @@ public class RefundTransactionService implements ITransactionService {
     private TransactionOrderService transactionOrderService;
 
     @Resource
-    private TransactionPaymentOrderRepository transactionPaymentOrderRepository;
+    private TransactionPaymentOrderDao transactionPaymentOrderDao;
 
     @Resource
     private PaymentPayRpc paymentPayRpc;
@@ -71,10 +68,10 @@ public class RefundTransactionService implements ITransactionService {
         PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
         List<TransactionPaymentOrder> transactionPaymentOrderList = new ArrayList<>(10);
         if (transactionState == TransactionState.TRANSACTION_SUCCESS) {
-            TransactionPaymentOrder transactionPaymentOrder = transactionPaymentOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
+            TransactionPaymentOrder transactionPaymentOrder = transactionPaymentOrderDao.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
             transactionPaymentOrderList.add(transactionPaymentOrder);
         } else {
-            List<TransactionPaymentOrder> paymentOrderList = transactionPaymentOrderRepository.findByTransactionOrderId(transactionOrderId);
+            List<TransactionPaymentOrder> paymentOrderList = transactionPaymentOrderDao.findByTransactionOrderId(transactionOrderId);
             transactionPaymentOrderList.addAll(paymentOrderList);
         }
 
@@ -88,7 +85,7 @@ public class RefundTransactionService implements ITransactionService {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
                 transactionOrderService.save(transactionRefundOrder);
-                transactionPaymentOrderRepository.saveAll(transactionPaymentOrderList);
+                transactionPaymentOrderDao.saveAll(transactionPaymentOrderList);
             }
         });
 

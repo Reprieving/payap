@@ -1,14 +1,10 @@
 package com.byritium.service.impl;
 
-import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.TransactionType;
-import com.byritium.dao.TransactionFreezeOrderRepository;
-import com.byritium.dao.TransactionUnFreezeOrderRepository;
+import com.byritium.dao.TransactionUnFreezeOrderDao;
 import com.byritium.dto.AccountJournal;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.entity.TransactionFreezeOrder;
-import com.byritium.entity.TransactionTransferOrder;
 import com.byritium.entity.TransactionUnFreezeOrder;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.service.ITransactionService;
@@ -25,7 +21,7 @@ public class UnFreezeTransactionService implements ITransactionService {
     }
 
     @Resource
-    private TransactionUnFreezeOrderRepository transactionUnFreezeOrderRepository;
+    private TransactionUnFreezeOrderDao transactionUnFreezeOrderDao;
 
     @Resource
     private AccountRpc accountRpc;
@@ -39,7 +35,7 @@ public class UnFreezeTransactionService implements ITransactionService {
         BigDecimal orderAmount = param.getOrderAmount();
         TransactionUnFreezeOrder transactionUnFreezeOrder = new TransactionUnFreezeOrder(
                 clientId, businessOrderId, userId, orderAmount);
-        transactionUnFreezeOrderRepository.save(transactionUnFreezeOrder);
+        transactionUnFreezeOrderDao.save(transactionUnFreezeOrder);
 
         AccountJournal accountJournal = new AccountJournal();
         accountRpc.record(accountJournal);

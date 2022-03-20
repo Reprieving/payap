@@ -1,8 +1,7 @@
 package com.byritium.service.common;
 
-import com.byritium.dao.TransactionOrderRepository;
+import com.byritium.dao.TransactionOrderDao;
 import com.byritium.entity.TransactionOrder;
-import com.byritium.entity.TransactionPaymentOrder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -11,13 +10,13 @@ import javax.annotation.Resource;
 public class TransactionOrderService {
 
     @Resource
-    private TransactionOrderRepository transactionOrderRepository;
+    private TransactionOrderDao transactionOrderDao;
 
     public TransactionOrder save(TransactionOrder transactionOrder) {
-        return transactionOrderRepository.save(transactionOrder);
+        return transactionOrderDao.save(transactionOrder);
     }
 
     public TransactionOrder findByBusinessOrderId(String orderId) {
-        return transactionOrderRepository.findByBusinessOrderId(orderId);
+        return transactionOrderDao.findByBusinessOrderId(orderId);
     }
 }

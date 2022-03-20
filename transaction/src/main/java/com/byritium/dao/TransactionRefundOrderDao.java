@@ -5,6 +5,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TransactionRefundOrderRepository extends PagingAndSortingRepository<TransactionRefundOrder, String> {
+public interface TransactionRefundOrderDao extends PagingAndSortingRepository<TransactionRefundOrder, String> {
 
 }
