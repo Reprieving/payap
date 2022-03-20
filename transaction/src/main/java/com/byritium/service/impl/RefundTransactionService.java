@@ -16,11 +16,16 @@ import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.PaymentPayRpc;
 import com.byritium.service.ITransactionService;
 import com.byritium.service.common.ResponseBodyService;
+import com.byritium.service.common.TransactionOrderService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,13 +36,13 @@ public class RefundTransactionService implements ITransactionService {
     }
 
     @Resource
-    private TransactionReceiptOrderRepository transactionReceiptOrderRepository;
+    private TransactionTemplate transactionTemplate;
+
+    @Resource
+    private TransactionOrderService transactionOrderService;
 
     @Resource
     private TransactionPaymentOrderRepository transactionPaymentOrderRepository;
-
-    @Resource
-    private TransactionRefundOrderRepository transactionRefundOrderRepository;
 
     @Resource
     private PaymentPayRpc paymentPayRpc;
@@ -52,7 +57,7 @@ public class RefundTransactionService implements ITransactionService {
     public TransactionResult call(String clientId, TransactionParam param) {
         TransactionResult transactionResult = new TransactionResult();
 
-        TransactionOrder transactionOrder = transactionReceiptOrderRepository.findByBusinessOrderId(param.getBusinessOrderId());
+        TransactionOrder transactionOrder = transactionOrderService.findByBusinessOrderId(param.getBusinessOrderId());
         if (transactionOrder == null) {
             throw new BusinessException("未找到订单");
         }
@@ -64,11 +69,13 @@ public class RefundTransactionService implements ITransactionService {
         TransactionState transactionState = transactionOrder.getTransactionState();
         String transactionOrderId = transactionOrder.getId();
         PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
+        List<TransactionPaymentOrder> transactionPaymentOrderList = new ArrayList<>(10);
         if (transactionState == TransactionState.TRANSACTION_SUCCESS) {
             TransactionPaymentOrder transactionPaymentOrder = transactionPaymentOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
-
+            transactionPaymentOrderList.add(transactionPaymentOrder);
         } else {
             List<TransactionPaymentOrder> paymentOrderList = transactionPaymentOrderRepository.findByTransactionOrderId(transactionOrderId);
+            transactionPaymentOrderList.addAll(paymentOrderList);
         }
 
         TransactionOrder transactionRefundOrder = new TransactionOrder();
@@ -76,6 +83,16 @@ public class RefundTransactionService implements ITransactionService {
         transactionRefundOrder.setTransactionType(type());
         transactionRefundOrder.setTransactionState(TransactionState.TRANSACTION_PENDING);
         transactionRefundOrder.setPaymentState(PaymentState.PAYMENT_PENDING);
+
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+                transactionOrderService.save(transactionRefundOrder);
+                transactionPaymentOrderRepository.saveAll(transactionPaymentOrderList);
+            }
+        });
+
+
 //        TransactionPaymentOrder transactionPaymentOrder = transactionPaymentOrderRepository.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
 
 //        String transactionPayOrderId = transactionPaymentOrder.getId();
