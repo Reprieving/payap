@@ -1,4 +1,4 @@
-package com.byritium.service.impl;
+package com.byritium.service.common;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;

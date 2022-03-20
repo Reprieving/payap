@@ -9,7 +9,7 @@ import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.service.common.TransactionOrderService;
-import com.byritium.service.impl.TransactionPaymentOrderService;
+import com.byritium.service.common.TransactionPaymentOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
