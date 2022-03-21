@@ -16,10 +16,10 @@ public interface PaymentPayRpc {
     ResponseBody<PaymentResult> pay(@RequestBody TransactionPaymentOrder transactionPaymentOrder);
 
     @RequestMapping("settle")
-    ResponseBody<PaymentResult> settle(@RequestBody TransactionOrder transactionSettleOrder);
+    ResponseBody<PaymentResult> settle(@RequestBody TransactionPaymentOrder transactionSettleOrder);
 
     @RequestMapping("refund")
-    ResponseBody<PaymentResult> refund(@RequestBody TransactionOrder transactionRefundOrder);
+    ResponseBody<PaymentResult> refund(@RequestBody TransactionPaymentOrder transactionRefundOrder);
 
 
 }

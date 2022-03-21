@@ -24,6 +24,8 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Service
 public class RefundTransactionService implements ITransactionService {
@@ -89,7 +91,12 @@ public class RefundTransactionService implements ITransactionService {
             }
         });
 
-        ResponseBody<PaymentResult> responseBody = paymentPayRpc.refund(transactionRefundOrder);
+
+        //TODO
+//        List<CompletableFuture<TransactionPaymentOrder>> transactionFutureList = transactionPaymentOrderList.stream(paymentPayRpc.refund(tran)).collect(Collectors.toList());
+        TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder();
+        ResponseBody<PaymentResult> responseBody = paymentPayRpc.refund(transactionPaymentOrder);
+
         if (responseBody.success()) {
             //入账
             AccountJournal accountJournal = new AccountJournal();
