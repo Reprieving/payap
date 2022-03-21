@@ -1,6 +1,7 @@
 package com.byritium.service.impl;
 
 import com.byritium.constance.PaymentState;
+import com.byritium.constance.TransactionState;
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionReceiptOrderDao;
 import com.byritium.dao.TransactionSettleOrderDao;
@@ -11,6 +12,8 @@ import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.PaymentPayRpc;
 import com.byritium.service.ITransactionService;
 import com.byritium.service.common.ResponseBodyService;
+import com.byritium.service.common.TransactionOrderService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -24,7 +27,7 @@ public class SettleTransactionService implements ITransactionService {
     }
 
     @Resource
-    private TransactionReceiptOrderDao transactionReceiptOrderDao;
+    private TransactionOrderService transactionOrderService;
 
     @Resource
     private TransactionSettleOrderDao transactionSettleOrderDao;
@@ -41,18 +44,20 @@ public class SettleTransactionService implements ITransactionService {
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
         TransactionResult transactionResult = new TransactionResult();
-        TransactionOrder transactionOrder = transactionReceiptOrderDao.findByBusinessOrderId(param.getBusinessOrderId());
+        TransactionOrder transactionOrder = transactionOrderService.findByBusinessOrderId(param.getBusinessOrderId());
 
         Assert.notNull(transactionOrder, () -> "未找到交易订单");
 
         TransactionType transactionType = transactionOrder.getTransactionType();
         Assert.isTrue(transactionType != TransactionType.GUARANTEE && transactionType != TransactionType.INSTANT, () -> "交易订单不可结算");
 
-        TransactionSettleOrder transactionSettleOrder = new TransactionSettleOrder(
-                clientId, transactionOrder.getId(), param.getReceiverIds(), param.getOrderAmount(), transactionOrder.getPaymentChannel()
-        );
+        TransactionOrder transactionSettleOrder = new TransactionOrder();
+        BeanUtils.copyProperties(transactionOrder, transactionSettleOrder);
+        transactionSettleOrder.setTransactionType(type());
+        transactionSettleOrder.setTransactionState(TransactionState.TRANSACTION_PENDING);
+        transactionSettleOrder.setPaymentState(PaymentState.PAYMENT_PENDING);
 
-        transactionSettleOrderDao.save(transactionSettleOrder);
+        transactionOrderService.save(transactionSettleOrder);
 
         ResponseBody<PaymentResult> responseBody = paymentPayRpc.settle(transactionSettleOrder);
         PaymentResult paymentResult = responseBodyService.get(responseBody);
@@ -60,7 +65,7 @@ public class SettleTransactionService implements ITransactionService {
         PaymentState state = paymentResult.getState();
 
         if (PaymentState.PAYMENT_SUCCESS == state) {
-            //退款入账
+            //入账
             AccountJournal accountJournal = new AccountJournal();
             accountRpc.record(accountJournal);
         }

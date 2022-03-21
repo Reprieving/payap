@@ -2,6 +2,7 @@ package com.byritium.rpc;
 
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.ResponseBody;
+import com.byritium.entity.TransactionOrder;
 import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.entity.TransactionRefundOrder;
 import com.byritium.entity.TransactionSettleOrder;
@@ -15,10 +16,10 @@ public interface PaymentPayRpc {
     ResponseBody<PaymentResult> pay(@RequestBody TransactionPaymentOrder transactionPaymentOrder);
 
     @RequestMapping("settle")
-    ResponseBody<PaymentResult> settle(@RequestBody TransactionSettleOrder transactionSettleOrder);
+    ResponseBody<PaymentResult> settle(@RequestBody TransactionOrder transactionSettleOrder);
 
     @RequestMapping("refund")
-    ResponseBody<PaymentResult> refund(@RequestBody TransactionRefundOrder transactionRefundOrder);
+    ResponseBody<PaymentResult> refund(@RequestBody TransactionOrder transactionRefundOrder);
 
 
 }
