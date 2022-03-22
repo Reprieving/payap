@@ -4,11 +4,18 @@ import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.dao.TransactionPaymentOrderDao;
 import com.byritium.dto.*;
+import com.byritium.entity.TransactionOrder;
 import com.byritium.entity.TransactionPaymentOrder;
+import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.CouponRpc;
 import com.byritium.rpc.PaymentPayRpc;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -16,8 +23,11 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class TransactionPaymentOrderService {
 
     @Resource
@@ -30,7 +40,13 @@ public class TransactionPaymentOrderService {
     private CouponRpc couponRpc;
 
     @Resource
+    private TransactionOrderService transactionOrderService;
+
+    @Resource
     private TransactionPaymentOrderDao transactionPaymentOrderDao;
+
+    @Resource
+    private TransactionTemplate transactionTemplate;
 
     public TransactionPaymentOrder save(String transactionOrderId, PaymentChannel paymentChannel, BigDecimal amount, String payerId, String mediumId) {
         TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
@@ -142,7 +158,7 @@ public class TransactionPaymentOrderService {
         return transactionPaymentOrderDao.save(transactionPaymentOrder);
     }
 
-    public CompletableFuture<TransactionPaymentOrder> payOrder(TransactionPaymentOrder transactionPaymentOrder) {
+    public CompletableFuture<TransactionPaymentOrder> slotPayment(TransactionPaymentOrder transactionPaymentOrder) {
         return CompletableFuture.supplyAsync(() -> {
             ResponseBody<PaymentResult> response = paymentPayRpc.pay(transactionPaymentOrder);
             PaymentResult result = response.getData();
@@ -158,5 +174,32 @@ public class TransactionPaymentOrderService {
 
     public boolean verifyAllSuccess(List<TransactionPaymentOrder> list) {
         return list.stream().filter(transactionPayOrder -> transactionPayOrder.getState() == PaymentState.PAYMENT_SUCCESS).count() == list.size();
+    }
+
+
+    public TransactionResult executePayment(TransactionOrder transactionOrder, List<CompletableFuture<TransactionPaymentOrder>> futureList) {
+        CompletableFuture<Void> allFutures = CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
+        CompletableFuture<List<TransactionPaymentOrder>> futureResult = allFutures.thenApply(v -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+
+        PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
+        return transactionTemplate.execute(transactionStatus -> {
+            TransactionResult transactionResult = new TransactionResult();
+            List<TransactionPaymentOrder> transactionPaymentOrders = null;
+            try {
+                transactionPaymentOrders = futureResult.get();
+            } catch (InterruptedException | ExecutionException e) {
+                log.error("get payment order exception", e);
+                throw new BusinessException("get payment order exception");
+            }
+            transactionPaymentOrderDao.saveAll(transactionPaymentOrders);
+            transactionResult.setPaymentOrders(transactionPaymentOrders.stream().collect(Collectors.toMap(TransactionPaymentOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
+
+            if (paymentChannel != null && verifyAllSuccess(transactionPaymentOrders)) {
+                transactionResult.setPaymentState(PaymentState.PAYMENT_SUCCESS);
+                transactionOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
+                transactionOrderService.save(transactionOrder);
+            }
+            return transactionResult;
+        });
     }
 }
