@@ -10,10 +10,10 @@ import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
-import com.byritium.rpc.PaymentPayRpc;
 import com.byritium.service.ITransactionService;
 import com.byritium.service.common.ResponseBodyService;
 import com.byritium.service.common.TransactionOrderService;
+import com.byritium.service.common.TransactionPaymentOrderService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
@@ -41,10 +41,10 @@ public class RefundTransactionService implements ITransactionService {
     private TransactionOrderService transactionOrderService;
 
     @Resource
-    private TransactionPaymentOrderDao transactionPaymentOrderDao;
+    private TransactionPaymentOrderService transactionPaymentOrderService;
 
     @Resource
-    private PaymentPayRpc paymentPayRpc;
+    private TransactionPaymentOrderDao transactionPaymentOrderDao;
 
     @Resource
     private AccountRpc accountRpc;
@@ -92,19 +92,8 @@ public class RefundTransactionService implements ITransactionService {
         });
 
 
-        //TODO
-//        List<CompletableFuture<TransactionPaymentOrder>> transactionFutureList = transactionPaymentOrderList.stream(paymentPayRpc.refund(tran)).collect(Collectors.toList());
-        TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder();
-        ResponseBody<PaymentResult> responseBody = paymentPayRpc.refund(transactionPaymentOrder);
-
-        if (responseBody.success()) {
-            //入账
-            AccountJournal accountJournal = new AccountJournal();
-            accountRpc.record(accountJournal);
-        }
-        PaymentResult paymentResult = responseBodyService.get(responseBody);
-        transactionResult.setTransactionOrderId(transactionRefundOrder.getId());
-        transactionResult.setPaymentState(paymentResult.getState());
+        List<CompletableFuture<TransactionPaymentOrder>> futureList = transactionPaymentOrderList.stream().map(transactionPaymentOrderService::slotPayment).collect(Collectors.toList());
+        transactionResult = transactionPaymentOrderService.executePayment(transactionOrder, futureList);
 
         return transactionResult;
     }

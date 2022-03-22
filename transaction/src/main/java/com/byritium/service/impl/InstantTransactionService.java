@@ -9,7 +9,7 @@ import com.byritium.dto.TransactionResult;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.LiquidationRpc;
 import com.byritium.service.ITransactionService;
-import com.byritium.service.TransactionWrapperService;
+import com.byritium.service.common.TransactionOrderService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,7 +22,7 @@ public class InstantTransactionService implements ITransactionService {
     }
 
     @Resource
-    private TransactionWrapperService transactionWrapperService;
+    private TransactionOrderService transactionOrderService;
 
     @Resource
     private AccountRpc accountRpc;
@@ -32,7 +32,7 @@ public class InstantTransactionService implements ITransactionService {
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
-        TransactionResult transactionResult = transactionWrapperService.trade(clientId, param);
+        TransactionResult transactionResult = transactionOrderService.trade(clientId, param);
 
         if (PaymentState.PAYMENT_SUCCESS == transactionResult.getPaymentState()) {
             //支付入账
