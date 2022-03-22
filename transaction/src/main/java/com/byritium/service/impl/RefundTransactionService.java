@@ -1,9 +1,6 @@
 package com.byritium.service.impl;
 
-import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentState;
-import com.byritium.constance.TransactionState;
-import com.byritium.constance.TransactionType;
+import com.byritium.constance.*;
 import com.byritium.dao.TransactionPaymentOrderDao;
 import com.byritium.dto.*;
 import com.byritium.entity.TransactionPaymentOrder;
@@ -91,8 +88,9 @@ public class RefundTransactionService implements ITransactionService {
             }
         });
 
-
-        List<CompletableFuture<TransactionPaymentOrder>> futureList = transactionPaymentOrderList.stream().map(transactionPaymentOrderService::slotPayment).collect(Collectors.toList());
+        List<CompletableFuture<TransactionPaymentOrder>> futureList = transactionPaymentOrderList.stream().map(
+                (TransactionPaymentOrder order) -> transactionPaymentOrderService.slotPayment(PaymentType.REFUND, order))
+                .collect(Collectors.toList());
         transactionResult = transactionPaymentOrderService.executePayment(transactionOrder, futureList);
 
         return transactionResult;

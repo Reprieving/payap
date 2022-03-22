@@ -2,6 +2,7 @@ package com.byritium.service.common;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
+import com.byritium.constance.PaymentType;
 import com.byritium.constance.TransactionConst;
 import com.byritium.dao.TransactionOrderDao;
 import com.byritium.dto.Deduction;
@@ -49,9 +50,7 @@ public class TransactionOrderService {
     @Resource
     private TransactionTemplate transactionTemplate;
 
-
     public TransactionResult trade(String clientId, TransactionParam param) {
-
         PaymentChannel paymentChannel = param.getPaymentChannel();
         Map<PaymentChannel, TransactionPaymentOrder> map = new HashMap<>();
         String userId = param.getUserId();
@@ -95,7 +94,9 @@ public class TransactionOrderService {
             }
         });
 
-        List<CompletableFuture<TransactionPaymentOrder>> futureList = map.values().stream().map(transactionPaymentOrderService::slotPayment).collect(Collectors.toList());
+        List<CompletableFuture<TransactionPaymentOrder>> futureList = map.values().stream().map(
+                (TransactionPaymentOrder order) -> transactionPaymentOrderService.slotPayment(PaymentType.PAY,order))
+                .collect(Collectors.toList());
         return transactionPaymentOrderService.executePayment(transactionOrder, futureList);
 
     }

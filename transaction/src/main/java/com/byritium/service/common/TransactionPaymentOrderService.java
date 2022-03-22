@@ -2,6 +2,7 @@ package com.byritium.service.common;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
+import com.byritium.constance.PaymentType;
 import com.byritium.dao.TransactionPaymentOrderDao;
 import com.byritium.dto.*;
 import com.byritium.entity.TransactionOrder;
@@ -12,9 +13,6 @@ import com.byritium.rpc.CouponRpc;
 import com.byritium.rpc.PaymentPayRpc;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.StringUtils;
 
@@ -158,8 +156,9 @@ public class TransactionPaymentOrderService {
         return transactionPaymentOrderDao.save(transactionPaymentOrder);
     }
 
-    public CompletableFuture<TransactionPaymentOrder> slotPayment(TransactionPaymentOrder transactionPaymentOrder) {
+    public CompletableFuture<TransactionPaymentOrder> slotPayment(PaymentType paymentType, TransactionPaymentOrder transactionPaymentOrder) {
         return CompletableFuture.supplyAsync(() -> {
+            //TODO
             ResponseBody<PaymentResult> response = paymentPayRpc.pay(transactionPaymentOrder);
             PaymentResult result = response.getData();
             if (response.success()) {
@@ -184,7 +183,7 @@ public class TransactionPaymentOrderService {
         PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
         return transactionTemplate.execute(transactionStatus -> {
             TransactionResult transactionResult = new TransactionResult();
-            List<TransactionPaymentOrder> transactionPaymentOrders = null;
+            List<TransactionPaymentOrder> transactionPaymentOrders;
             try {
                 transactionPaymentOrders = futureResult.get();
             } catch (InterruptedException | ExecutionException e) {
