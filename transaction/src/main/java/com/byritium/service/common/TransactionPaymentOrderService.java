@@ -3,6 +3,7 @@ package com.byritium.service.common;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.PaymentType;
+import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionPaymentOrderDao;
 import com.byritium.dto.*;
 import com.byritium.entity.TransactionOrder;
@@ -11,22 +12,31 @@ import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.CouponRpc;
 import com.byritium.rpc.PaymentPayRpc;
+import com.byritium.service.IPaymentService;
+import com.byritium.service.ITransactionService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class TransactionPaymentOrderService {
+public class TransactionPaymentOrderService implements ApplicationContextAware {
+    private static Map<PaymentType, IPaymentService> paymentServiceMap;
 
     @Resource
     private PaymentPayRpc paymentPayRpc;
@@ -45,6 +55,20 @@ public class TransactionPaymentOrderService {
 
     @Resource
     private TransactionTemplate transactionTemplate;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        paymentServiceMap = new HashMap<>();
+        Map<String, IPaymentService> map = applicationContext.getBeansOfType(IPaymentService.class);
+        map.forEach((key, value) -> {
+            if (value.type() != null)
+                paymentServiceMap.put(value.type(), value);
+        });
+    }
+
+    public TransactionResult execute(PaymentType paymentType, TransactionPaymentOrder transactionPaymentOrder) {
+        return paymentServiceMap.get(paymentType).call(transactionPaymentOrder);
+    }
 
     public TransactionPaymentOrder save(String transactionOrderId, PaymentChannel paymentChannel, BigDecimal amount, String payerId, String mediumId) {
         TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
@@ -201,4 +225,6 @@ public class TransactionPaymentOrderService {
             return transactionResult;
         });
     }
+
+
 }
