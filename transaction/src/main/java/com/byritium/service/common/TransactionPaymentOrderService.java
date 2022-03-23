@@ -66,7 +66,7 @@ public class TransactionPaymentOrderService implements ApplicationContextAware {
         });
     }
 
-    public TransactionResult execute(PaymentType paymentType, TransactionPaymentOrder transactionPaymentOrder) {
+    public PaymentResult executePayment(PaymentType paymentType, TransactionPaymentOrder transactionPaymentOrder) {
         return paymentServiceMap.get(paymentType).call(transactionPaymentOrder);
     }
 
@@ -182,15 +182,7 @@ public class TransactionPaymentOrderService implements ApplicationContextAware {
 
     public CompletableFuture<TransactionPaymentOrder> slotPayment(PaymentType paymentType, TransactionPaymentOrder transactionPaymentOrder) {
         return CompletableFuture.supplyAsync(() -> {
-            //TODO
-            ResponseBody<PaymentResult> response = paymentPayRpc.pay(transactionPaymentOrder);
-            PaymentResult result = response.getData();
-            if (response.success()) {
-                transactionPaymentOrder.setState(result.getState());
-                transactionPaymentOrder.setSign(result.getSign());
-            } else {
-                transactionPaymentOrder.setState(PaymentState.PAYMENT_FAIL);
-            }
+            PaymentResult paymentResult = executePayment(paymentType, transactionPaymentOrder);
             return transactionPaymentOrder;
         });
     }
