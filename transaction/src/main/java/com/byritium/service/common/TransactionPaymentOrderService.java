@@ -3,7 +3,6 @@ package com.byritium.service.common;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.PaymentType;
-import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionPaymentOrderDao;
 import com.byritium.dto.*;
 import com.byritium.entity.TransactionOrder;
@@ -13,7 +12,6 @@ import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.CouponRpc;
 import com.byritium.rpc.PaymentPayRpc;
 import com.byritium.service.IPaymentService;
-import com.byritium.service.ITransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -22,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -66,7 +63,7 @@ public class TransactionPaymentOrderService implements ApplicationContextAware {
         });
     }
 
-    public PaymentResult executePayment(PaymentType paymentType, TransactionPaymentOrder transactionPaymentOrder) {
+    public PaymentResult callPayment(PaymentType paymentType, TransactionPaymentOrder transactionPaymentOrder) {
         return paymentServiceMap.get(paymentType).call(transactionPaymentOrder);
     }
 
@@ -182,7 +179,7 @@ public class TransactionPaymentOrderService implements ApplicationContextAware {
 
     public CompletableFuture<TransactionPaymentOrder> slotPayment(PaymentType paymentType, TransactionPaymentOrder transactionPaymentOrder) {
         return CompletableFuture.supplyAsync(() -> {
-            PaymentResult paymentResult = executePayment(paymentType, transactionPaymentOrder);
+            PaymentResult paymentResult = callPayment(paymentType, transactionPaymentOrder);
             transactionPaymentOrder.setState(paymentResult.getState());
             transactionPaymentOrder.setSign(paymentResult.getSign());
             return transactionPaymentOrder;

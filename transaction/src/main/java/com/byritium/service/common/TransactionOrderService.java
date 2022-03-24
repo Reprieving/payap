@@ -1,7 +1,6 @@
 package com.byritium.service.common;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentState;
 import com.byritium.constance.PaymentType;
 import com.byritium.constance.TransactionConst;
 import com.byritium.dao.TransactionOrderDao;
@@ -23,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Service
