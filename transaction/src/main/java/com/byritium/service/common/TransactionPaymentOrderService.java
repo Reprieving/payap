@@ -183,6 +183,8 @@ public class TransactionPaymentOrderService implements ApplicationContextAware {
     public CompletableFuture<TransactionPaymentOrder> slotPayment(PaymentType paymentType, TransactionPaymentOrder transactionPaymentOrder) {
         return CompletableFuture.supplyAsync(() -> {
             PaymentResult paymentResult = executePayment(paymentType, transactionPaymentOrder);
+            transactionPaymentOrder.setState(paymentResult.getState());
+            transactionPaymentOrder.setSign(paymentResult.getSign());
             return transactionPaymentOrder;
         });
     }

@@ -15,8 +15,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class TransactionManagerService implements ApplicationContextAware, ITransactionService {
-
+public class TransactionManagerService implements ApplicationContextAware{
     private static Map<TransactionType, ITransactionService> transactionServiceMap;
 
     @Override
@@ -29,12 +28,6 @@ public class TransactionManagerService implements ApplicationContextAware, ITran
         });
     }
 
-    @Override
-    public TransactionType type() {
-        return null;
-    }
-
-    @Override
     public TransactionResult call(String clientId, TransactionParam param) {
         return transactionServiceMap.get(param.getTransactionType()).call(clientId, param);
     }
