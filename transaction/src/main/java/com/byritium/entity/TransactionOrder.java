@@ -3,10 +3,12 @@ package com.byritium.entity;
 import com.byritium.constance.*;
 import com.byritium.dto.TransactionParam;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class TransactionOrder extends CommonEntity {
     private String id;

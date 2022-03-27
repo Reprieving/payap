@@ -1,7 +1,7 @@
 package com.byritium.controller;
 
 import com.byritium.dto.*;
-import com.byritium.service.TransactionManagerService;
+import com.byritium.service.transaction.TransactionManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

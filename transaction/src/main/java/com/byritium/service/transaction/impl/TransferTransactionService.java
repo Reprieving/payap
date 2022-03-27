@@ -1,27 +1,28 @@
-package com.byritium.service.impl;
+package com.byritium.service.transaction.impl;
 
+import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.TransactionType;
-import com.byritium.dao.TransactionUnFreezeOrderDao;
+import com.byritium.dao.TransactionTransferOrderDao;
 import com.byritium.dto.AccountJournal;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.entity.TransactionUnFreezeOrder;
+import com.byritium.entity.TransactionTransferOrder;
 import com.byritium.rpc.AccountRpc;
-import com.byritium.service.ITransactionService;
+import com.byritium.service.transaction.ITransactionService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 
 @Service
-public class UnFreezeTransactionService implements ITransactionService {
+public class TransferTransactionService implements ITransactionService {
     @Override
     public TransactionType type() {
-        return TransactionType.UNFREEZE;
+        return TransactionType.TRANSFER;
     }
 
     @Resource
-    private TransactionUnFreezeOrderDao transactionUnFreezeOrderDao;
+    private TransactionTransferOrderDao transactionTransferOrderDao;
 
     @Resource
     private AccountRpc accountRpc;
@@ -31,11 +32,13 @@ public class UnFreezeTransactionService implements ITransactionService {
         TransactionResult transactionResult = new TransactionResult();
 
         String businessOrderId = param.getBusinessOrderId();
-        String userId = param.getUserId();
+        String senderId = param.getSenderId();
+        String receiverId = param.getReceiverId();
         BigDecimal orderAmount = param.getOrderAmount();
-        TransactionUnFreezeOrder transactionUnFreezeOrder = new TransactionUnFreezeOrder(
-                clientId, businessOrderId, userId, orderAmount);
-        transactionUnFreezeOrderDao.save(transactionUnFreezeOrder);
+        PaymentChannel paymentChannel = param.getPaymentChannel();
+        TransactionTransferOrder transactionTransferOrder = new TransactionTransferOrder(
+                clientId, businessOrderId, senderId, receiverId, orderAmount, paymentChannel);
+        transactionTransferOrderDao.save(transactionTransferOrder);
 
         AccountJournal accountJournal = new AccountJournal();
         accountRpc.record(accountJournal);
