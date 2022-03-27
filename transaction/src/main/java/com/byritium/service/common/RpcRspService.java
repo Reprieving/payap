@@ -5,7 +5,7 @@ import com.byritium.exception.BusinessException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ResponseBodyService<T> {
+public class RpcRspService<T> {
 
     public T get(ResponseBody<T> responseBody) {
         if (!responseBody.success()) {

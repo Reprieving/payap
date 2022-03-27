@@ -32,11 +32,8 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class TransactionPaymentOrderService implements ApplicationContextAware {
+public class PaymentOrderService implements ApplicationContextAware {
     private static Map<PaymentType, IPaymentService> paymentServiceMap;
-
-    @Resource
-    private PaymentPayRpc paymentPayRpc;
 
     @Resource
     private AccountRpc accountRpc;

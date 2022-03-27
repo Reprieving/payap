@@ -10,7 +10,7 @@ import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.PaymentPayRpc;
 import com.byritium.service.transaction.ITransactionService;
-import com.byritium.service.common.ResponseBodyService;
+import com.byritium.service.common.RpcRspService;
 import com.byritium.service.transaction.TransactionOrderService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -38,7 +38,7 @@ public class SettleTransactionService implements ITransactionService {
     private AccountRpc accountRpc;
 
     @Resource
-    private ResponseBodyService<PaymentResult> responseBodyService;
+    private RpcRspService<PaymentResult> rpcRspService;
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
@@ -62,7 +62,7 @@ public class SettleTransactionService implements ITransactionService {
         TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder();
 
         ResponseBody<PaymentResult> responseBody = paymentPayRpc.settle(transactionPaymentOrder);
-        PaymentResult paymentResult = responseBodyService.get(responseBody);
+        PaymentResult paymentResult = rpcRspService.get(responseBody);
 
         PaymentState state = paymentResult.getState();
 

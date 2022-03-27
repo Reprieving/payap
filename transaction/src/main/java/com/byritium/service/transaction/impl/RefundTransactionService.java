@@ -8,9 +8,9 @@ import com.byritium.entity.TransactionOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.service.transaction.ITransactionService;
-import com.byritium.service.common.ResponseBodyService;
+import com.byritium.service.common.RpcRspService;
 import com.byritium.service.transaction.TransactionOrderService;
-import com.byritium.service.payment.TransactionPaymentOrderService;
+import com.byritium.service.payment.PaymentOrderService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
@@ -38,7 +38,7 @@ public class RefundTransactionService implements ITransactionService {
     private TransactionOrderService transactionOrderService;
 
     @Resource
-    private TransactionPaymentOrderService transactionPaymentOrderService;
+    private PaymentOrderService paymentOrderService;
 
     @Resource
     private TransactionPaymentOrderDao transactionPaymentOrderDao;
@@ -47,7 +47,7 @@ public class RefundTransactionService implements ITransactionService {
     private AccountRpc accountRpc;
 
     @Resource
-    private ResponseBodyService<PaymentResult> responseBodyService;
+    private RpcRspService<PaymentResult> rpcRspService;
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
@@ -89,9 +89,9 @@ public class RefundTransactionService implements ITransactionService {
         });
 
         List<CompletableFuture<TransactionPaymentOrder>> futureList = transactionPaymentOrderList.stream().map(
-                (TransactionPaymentOrder order) -> transactionPaymentOrderService.slotPayment(PaymentType.REFUND, order))
+                (TransactionPaymentOrder order) -> paymentOrderService.slotPayment(PaymentType.REFUND, order))
                 .collect(Collectors.toList());
-        transactionResult = transactionPaymentOrderService.executePayment(transactionOrder, futureList);
+        transactionResult = paymentOrderService.executePayment(transactionOrder, futureList);
 
         return transactionResult;
     }
