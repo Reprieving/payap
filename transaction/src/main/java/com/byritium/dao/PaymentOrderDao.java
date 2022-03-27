@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TransactionPaymentOrderDao extends PagingAndSortingRepository<TransactionPaymentOrder, String> {
+public interface PaymentOrderDao extends PagingAndSortingRepository<TransactionPaymentOrder, String> {
     List<TransactionPaymentOrder> findByTransactionOrderId(String orderId);
 
     TransactionPaymentOrder findByTransactionOrderIdAndPaymentChannel(String orderId, PaymentChannel paymentChannel);

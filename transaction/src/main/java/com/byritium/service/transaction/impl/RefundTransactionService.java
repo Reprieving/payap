@@ -1,17 +1,16 @@
 package com.byritium.service.transaction.impl;
 
 import com.byritium.constance.*;
-import com.byritium.dao.TransactionPaymentOrderDao;
+import com.byritium.dao.PaymentOrderDao;
 import com.byritium.dto.*;
 import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.exception.BusinessException;
-import com.byritium.rpc.AccountRpc;
 import com.byritium.service.transaction.ITransactionService;
-import com.byritium.service.common.RpcRspService;
 import com.byritium.service.transaction.TransactionOrderService;
 import com.byritium.service.payment.PaymentOrderService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -26,32 +25,24 @@ import java.util.stream.Collectors;
 
 @Service
 public class RefundTransactionService implements ITransactionService {
+    public RefundTransactionService(TransactionTemplate transactionTemplate, TransactionOrderService transactionOrderService, PaymentOrderService paymentOrderService) {
+        this.transactionTemplate = transactionTemplate;
+        this.transactionOrderService = transactionOrderService;
+        this.paymentOrderService = paymentOrderService;
+    }
+
     @Override
     public TransactionType type() {
         return TransactionType.REFUND;
     }
 
-    @Resource
-    private TransactionTemplate transactionTemplate;
-
-    @Resource
-    private TransactionOrderService transactionOrderService;
-
-    @Resource
-    private PaymentOrderService paymentOrderService;
-
-    @Resource
-    private TransactionPaymentOrderDao transactionPaymentOrderDao;
-
-    @Resource
-    private AccountRpc accountRpc;
-
-    @Resource
-    private RpcRspService<PaymentResult> rpcRspService;
+    private final TransactionTemplate transactionTemplate;
+    private final TransactionOrderService transactionOrderService;
+    private final PaymentOrderService paymentOrderService;
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
-        TransactionResult transactionResult = new TransactionResult();
+        TransactionResult transactionResult;
 
         TransactionOrder transactionOrder = transactionOrderService.findByBusinessOrderId(param.getBusinessOrderId());
         if (transactionOrder == null) {
@@ -67,10 +58,10 @@ public class RefundTransactionService implements ITransactionService {
         PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
         List<TransactionPaymentOrder> transactionPaymentOrderList = new ArrayList<>(10);
         if (transactionState == TransactionState.TRANSACTION_SUCCESS) {
-            TransactionPaymentOrder transactionPaymentOrder = transactionPaymentOrderDao.findByTransactionOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
+            TransactionPaymentOrder transactionPaymentOrder = paymentOrderService.getByTxOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
             transactionPaymentOrderList.add(transactionPaymentOrder);
         } else {
-            List<TransactionPaymentOrder> paymentOrderList = transactionPaymentOrderDao.findByTransactionOrderId(transactionOrderId);
+            List<TransactionPaymentOrder> paymentOrderList = paymentOrderService.listByTxOrderId(transactionOrderId);
             transactionPaymentOrderList.addAll(paymentOrderList);
         }
 
@@ -84,12 +75,12 @@ public class RefundTransactionService implements ITransactionService {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
                 transactionOrderService.save(transactionRefundOrder);
-                transactionPaymentOrderDao.saveAll(transactionPaymentOrderList);
+                paymentOrderService.saveAll(transactionPaymentOrderList);
             }
         });
 
         List<CompletableFuture<TransactionPaymentOrder>> futureList = transactionPaymentOrderList.stream().map(
-                (TransactionPaymentOrder order) -> paymentOrderService.slotPayment(PaymentType.REFUND, order))
+                        (TransactionPaymentOrder order) -> paymentOrderService.slotPayment(PaymentType.REFUND, order))
                 .collect(Collectors.toList());
         transactionResult = paymentOrderService.executePayment(transactionOrder, futureList);
 

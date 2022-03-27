@@ -3,14 +3,13 @@ package com.byritium.service.payment;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.PaymentType;
-import com.byritium.dao.TransactionPaymentOrderDao;
+import com.byritium.dao.PaymentOrderDao;
 import com.byritium.dto.*;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.CouponRpc;
-import com.byritium.rpc.PaymentPayRpc;
 import com.byritium.service.transaction.TransactionOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -45,7 +44,7 @@ public class PaymentOrderService implements ApplicationContextAware {
     private TransactionOrderService transactionOrderService;
 
     @Resource
-    private TransactionPaymentOrderDao transactionPaymentOrderDao;
+    private PaymentOrderDao paymentOrderDao;
 
     @Resource
     private TransactionTemplate transactionTemplate;
@@ -79,7 +78,7 @@ public class PaymentOrderService implements ApplicationContextAware {
         payOrder.setOrderAmount(amount);
         payOrder.setState(PaymentState.PAYMENT_WAITING);
 
-        transactionPaymentOrderDao.save(payOrder);
+        paymentOrderDao.save(payOrder);
 
         return payOrder;
     }
@@ -94,7 +93,7 @@ public class PaymentOrderService implements ApplicationContextAware {
         payOrder.setOrderAmount(amount);
         payOrder.setState(PaymentState.PAYMENT_WAITING);
 
-        transactionPaymentOrderDao.save(payOrder);
+        paymentOrderDao.save(payOrder);
 
         return payOrder;
     }
@@ -171,7 +170,19 @@ public class PaymentOrderService implements ApplicationContextAware {
     }
 
     public TransactionPaymentOrder save(TransactionPaymentOrder transactionPaymentOrder) {
-        return transactionPaymentOrderDao.save(transactionPaymentOrder);
+        return paymentOrderDao.save(transactionPaymentOrder);
+    }
+
+    public TransactionPaymentOrder getByTxOrderIdAndPaymentChannel(String orderId, PaymentChannel paymentChannel) {
+        return paymentOrderDao.findByTransactionOrderIdAndPaymentChannel(orderId, paymentChannel);
+    }
+
+    public List<TransactionPaymentOrder> listByTxOrderId(String orderId) {
+        return paymentOrderDao.findByTransactionOrderId(orderId);
+    }
+
+    public Iterable<TransactionPaymentOrder> saveAll(Iterable<TransactionPaymentOrder> iterable) {
+        return paymentOrderDao.saveAll(iterable);
     }
 
     public CompletableFuture<TransactionPaymentOrder> slotPayment(PaymentType paymentType, TransactionPaymentOrder transactionPaymentOrder) {
@@ -202,7 +213,7 @@ public class PaymentOrderService implements ApplicationContextAware {
                 log.error("get payment order exception", e);
                 throw new BusinessException("get payment order exception");
             }
-            transactionPaymentOrderDao.saveAll(transactionPaymentOrders);
+            paymentOrderDao.saveAll(transactionPaymentOrders);
             transactionResult.setPaymentOrders(transactionPaymentOrders.stream().collect(Collectors.toMap(TransactionPaymentOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
 
             if (paymentChannel != null && verifyAllSuccess(transactionPaymentOrders)) {
