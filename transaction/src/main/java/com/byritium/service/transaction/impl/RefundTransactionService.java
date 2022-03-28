@@ -10,13 +10,10 @@ import com.byritium.service.transaction.ITransactionService;
 import com.byritium.service.transaction.TransactionOrderService;
 import com.byritium.service.payment.PaymentOrderService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
-
-import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,14 +28,14 @@ public class RefundTransactionService implements ITransactionService {
         this.paymentOrderService = paymentOrderService;
     }
 
+    private final TransactionTemplate transactionTemplate;
+    private final TransactionOrderService transactionOrderService;
+    private final PaymentOrderService paymentOrderService;
+
     @Override
     public TransactionType type() {
         return TransactionType.REFUND;
     }
-
-    private final TransactionTemplate transactionTemplate;
-    private final TransactionOrderService transactionOrderService;
-    private final PaymentOrderService paymentOrderService;
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {

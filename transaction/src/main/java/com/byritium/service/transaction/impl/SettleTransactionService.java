@@ -29,9 +29,6 @@ public class SettleTransactionService implements ITransactionService {
     private TransactionOrderService transactionOrderService;
 
     @Resource
-    private TransactionSettleOrderDao transactionSettleOrderDao;
-
-    @Resource
     private PaymentPayRpc paymentPayRpc;
 
     @Resource

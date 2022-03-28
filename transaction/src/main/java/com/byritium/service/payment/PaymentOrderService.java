@@ -94,7 +94,6 @@ public class PaymentOrderService implements ApplicationContextAware {
         payOrder.setState(PaymentState.PAYMENT_WAITING);
 
         paymentOrderDao.save(payOrder);
-
         return payOrder;
     }
 
