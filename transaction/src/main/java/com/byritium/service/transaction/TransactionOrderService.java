@@ -1,7 +1,6 @@
 package com.byritium.service.transaction;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentType;
 import com.byritium.constance.TransactionConst;
 import com.byritium.dao.TransactionOrderDao;
 import com.byritium.dto.Deduction;
@@ -38,8 +37,8 @@ public class TransactionOrderService {
         return transactionOrderDao.save(transactionOrder);
     }
 
-    public TransactionOrder findByBusinessOrderId(String orderId) {
-        return transactionOrderDao.findByBusinessOrderId(orderId);
+    public TransactionOrder findByBizOrderId(String orderId) {
+        return transactionOrderDao.findByBizOrderId(orderId);
     }
 
     @Resource

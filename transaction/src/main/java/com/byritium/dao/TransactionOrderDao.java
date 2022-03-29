@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TransactionOrderDao extends PagingAndSortingRepository<TransactionOrder, String> {
-    TransactionOrder findByBusinessOrderId(String businessOrderId);
+    TransactionOrder findByBizOrderId(String businessOrderId);
 }

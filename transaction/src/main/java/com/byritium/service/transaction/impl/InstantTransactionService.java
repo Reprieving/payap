@@ -27,9 +27,6 @@ public class InstantTransactionService implements ITransactionService {
     @Resource
     private AccountRpc accountRpc;
 
-    @Resource
-    private LiquidationRpc liquidationRpc;
-
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
         TransactionResult transactionResult = transactionOrderService.trade(clientId, param);

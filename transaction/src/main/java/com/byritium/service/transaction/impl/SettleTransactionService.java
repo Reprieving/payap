@@ -3,7 +3,6 @@ package com.byritium.service.transaction.impl;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionState;
 import com.byritium.constance.TransactionType;
-import com.byritium.dao.TransactionSettleOrderDao;
 import com.byritium.dto.*;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.entity.TransactionPaymentOrder;
@@ -40,7 +39,7 @@ public class SettleTransactionService implements ITransactionService {
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
         TransactionResult transactionResult = new TransactionResult();
-        TransactionOrder transactionOrder = transactionOrderService.findByBusinessOrderId(param.getBusinessOrderId());
+        TransactionOrder transactionOrder = transactionOrderService.findByBizOrderId(param.getBusinessOrderId());
 
         Assert.notNull(transactionOrder, () -> "未找到交易订单");
 
@@ -50,12 +49,12 @@ public class SettleTransactionService implements ITransactionService {
         TransactionOrder transactionSettleOrder = new TransactionOrder();
         BeanUtils.copyProperties(transactionOrder, transactionSettleOrder);
         transactionSettleOrder.setTransactionType(type());
+        transactionSettleOrder.setPreTxOrderId(transactionOrder.getId());
         transactionSettleOrder.setTransactionState(TransactionState.TRANSACTION_PENDING);
         transactionSettleOrder.setPaymentState(PaymentState.PAYMENT_PENDING);
 
         transactionOrderService.save(transactionSettleOrder);
 
-        //TODO
         TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder();
 
         ResponseBody<PaymentResult> responseBody = paymentPayRpc.settle(transactionPaymentOrder);
