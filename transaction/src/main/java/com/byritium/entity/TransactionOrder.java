@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 public class TransactionOrder extends CommonEntity {
     private String id;
     private String clientId;
-    private String businessOrderId;
+    private String preTxOrderId;
+    private String bizOrderId;
     private String userId;
     private String payerId;
     private String payeeId;
@@ -33,7 +34,7 @@ public class TransactionOrder extends CommonEntity {
     public TransactionOrder(String clientId, TransactionParam param) {
         TransactionOrder transactionOrder = new TransactionOrder();
         transactionOrder.setClientId(clientId);
-        transactionOrder.setBusinessOrderId(param.getBusinessOrderId());
+        transactionOrder.setBizOrderId(param.getBusinessOrderId());
         transactionOrder.setTitle(param.getTitle());
         transactionOrder.setUserId(param.getUserId());
         transactionOrder.setPayeeId(param.getPayeeId());

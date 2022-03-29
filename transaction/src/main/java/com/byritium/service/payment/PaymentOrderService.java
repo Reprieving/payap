@@ -184,15 +184,6 @@ public class PaymentOrderService implements ApplicationContextAware {
         return paymentOrderDao.saveAll(iterable);
     }
 
-    public CompletableFuture<TransactionPaymentOrder> slotPayment(PaymentType paymentType, TransactionPaymentOrder transactionPaymentOrder) {
-        return CompletableFuture.supplyAsync(() -> {
-            PaymentResult paymentResult = callPayment(paymentType, transactionPaymentOrder);
-            transactionPaymentOrder.setState(paymentResult.getState());
-            transactionPaymentOrder.setSign(paymentResult.getSign());
-            return transactionPaymentOrder;
-        });
-    }
-
     public boolean verifyAllSuccess(List<TransactionPaymentOrder> list) {
         return list.stream().filter(transactionPayOrder -> transactionPayOrder.getState() == PaymentState.PAYMENT_SUCCESS).count() == list.size();
     }

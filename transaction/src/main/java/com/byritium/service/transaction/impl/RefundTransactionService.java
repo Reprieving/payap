@@ -1,11 +1,11 @@
 package com.byritium.service.transaction.impl;
 
 import com.byritium.constance.*;
-import com.byritium.dao.PaymentOrderDao;
 import com.byritium.dto.*;
 import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.exception.BusinessException;
+import com.byritium.service.payment.impl.RefundPaymentService;
 import com.byritium.service.transaction.ITransactionService;
 import com.byritium.service.transaction.TransactionOrderService;
 import com.byritium.service.payment.PaymentOrderService;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +23,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class RefundTransactionService implements ITransactionService {
-    public RefundTransactionService(TransactionTemplate transactionTemplate, TransactionOrderService transactionOrderService, PaymentOrderService paymentOrderService) {
+    public RefundTransactionService(TransactionTemplate transactionTemplate, TransactionOrderService transactionOrderService, PaymentOrderService paymentOrderService, RefundPaymentService refundPaymentService) {
         this.transactionTemplate = transactionTemplate;
         this.transactionOrderService = transactionOrderService;
         this.paymentOrderService = paymentOrderService;
+        this.refundPaymentService = refundPaymentService;
     }
 
     private final TransactionTemplate transactionTemplate;
     private final TransactionOrderService transactionOrderService;
     private final PaymentOrderService paymentOrderService;
+    private final RefundPaymentService refundPaymentService;
 
     @Override
     public TransactionType type() {
@@ -77,7 +80,12 @@ public class RefundTransactionService implements ITransactionService {
         });
 
         List<CompletableFuture<TransactionPaymentOrder>> futureList = transactionPaymentOrderList.stream().map(
-                        (TransactionPaymentOrder order) -> paymentOrderService.slotPayment(PaymentType.REFUND, order))
+                        (TransactionPaymentOrder order) -> CompletableFuture.supplyAsync(() -> {
+                            PaymentResult paymentResult = refundPaymentService.call(order);
+                            order.setState(paymentResult.getState());
+                            order.setSign(paymentResult.getSign());
+                            return order;
+                        }))
                 .collect(Collectors.toList());
         transactionResult = paymentOrderService.executePayment(transactionOrder, futureList);
 

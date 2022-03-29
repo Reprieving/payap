@@ -5,11 +5,13 @@ import com.byritium.constance.PaymentType;
 import com.byritium.constance.TransactionConst;
 import com.byritium.dao.TransactionOrderDao;
 import com.byritium.dto.Deduction;
+import com.byritium.dto.PaymentResult;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.entity.TransactionPaymentOrder;
 import com.byritium.service.payment.PaymentOrderService;
+import com.byritium.service.payment.impl.PayPaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
@@ -42,6 +44,11 @@ public class TransactionOrderService {
 
     @Resource
     private PaymentOrderService paymentOrderService;
+
+
+    @Resource
+    private PayPaymentService paymentService;
+
 
     @Resource
     private TransactionOrderService transactionOrderService;
@@ -94,7 +101,12 @@ public class TransactionOrderService {
         });
 
         List<CompletableFuture<TransactionPaymentOrder>> futureList = map.values().stream().map(
-                (TransactionPaymentOrder order) -> paymentOrderService.slotPayment(PaymentType.PAY,order))
+                        (TransactionPaymentOrder order) -> CompletableFuture.supplyAsync(() -> {
+                            PaymentResult paymentResult = paymentService.call(order);
+                            order.setState(paymentResult.getState());
+                            order.setSign(paymentResult.getSign());
+                            return order;
+                        }))
                 .collect(Collectors.toList());
         return paymentOrderService.executePayment(transactionOrder, futureList);
 

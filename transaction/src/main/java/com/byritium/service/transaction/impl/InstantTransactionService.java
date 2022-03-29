@@ -39,9 +39,6 @@ public class InstantTransactionService implements ITransactionService {
             AccountJournal accountJournal = new AccountJournal();
             accountRpc.record(accountJournal);
 
-            //清算
-            LiquidationParam liquidationParam = new LiquidationParam();
-            liquidationRpc.payment(liquidationParam);
         }
 
 
