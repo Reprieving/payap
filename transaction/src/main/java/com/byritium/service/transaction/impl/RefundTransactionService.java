@@ -44,7 +44,7 @@ public class RefundTransactionService implements ITransactionService {
     public TransactionResult call(String clientId, TransactionParam param) {
         TransactionResult transactionResult;
 
-        TransactionOrder transactionOrder = transactionOrderService.findByBusinessOrderId(param.getBusinessOrderId());
+        TransactionOrder transactionOrder = transactionOrderService.findByBizOrderId(param.getBusinessOrderId());
         if (transactionOrder == null) {
             throw new BusinessException("未找到订单");
         }

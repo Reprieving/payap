@@ -6,7 +6,7 @@ import com.byritium.constance.PaymentType;
 import com.byritium.dao.PaymentOrderDao;
 import com.byritium.dto.*;
 import com.byritium.entity.TransactionOrder;
-import com.byritium.entity.TransactionPaymentOrder;
+import com.byritium.entity.PaymentOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.CouponRpc;
@@ -59,12 +59,12 @@ public class PaymentOrderService implements ApplicationContextAware {
         });
     }
 
-    public PaymentResult callPayment(PaymentType paymentType, TransactionPaymentOrder transactionPaymentOrder) {
-        return paymentServiceMap.get(paymentType).call(transactionPaymentOrder);
+    public PaymentResult callPayment(PaymentType paymentType, PaymentOrder paymentOrder) {
+        return paymentServiceMap.get(paymentType).call(paymentOrder);
     }
 
-    public TransactionPaymentOrder save(String transactionOrderId, PaymentChannel paymentChannel, BigDecimal amount, String payerId, String mediumId) {
-        TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
+    public PaymentOrder save(String transactionOrderId, PaymentChannel paymentChannel, BigDecimal amount, String payerId, String mediumId) {
+        PaymentOrder payOrder = new PaymentOrder();
         payOrder.setTransactionOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(null);
@@ -83,8 +83,8 @@ public class PaymentOrderService implements ApplicationContextAware {
         return payOrder;
     }
 
-    public TransactionPaymentOrder buildCoreOrder(PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
-        TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
+    public PaymentOrder buildCoreOrder(PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
+        PaymentOrder payOrder = new PaymentOrder();
         payOrder.setPaymentChannel(paymentChannel);
         if (StringUtils.hasText(payerId)) {
             payOrder.setPayerId(payerId);
@@ -97,8 +97,8 @@ public class PaymentOrderService implements ApplicationContextAware {
         return payOrder;
     }
 
-    public TransactionPaymentOrder buildCoreOrder(String transactionOrderId, PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
-        TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
+    public PaymentOrder buildCoreOrder(String transactionOrderId, PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
+        PaymentOrder payOrder = new PaymentOrder();
         payOrder.setTransactionOrderId(transactionOrderId);
         payOrder.setPaymentChannel(paymentChannel);
         if (StringUtils.hasText(payerId)) {
@@ -112,13 +112,13 @@ public class PaymentOrderService implements ApplicationContextAware {
         return payOrder;
     }
 
-    public TransactionPaymentOrder buildCouponOrder(String couponId) {
+    public PaymentOrder buildCouponOrder(String couponId) {
         PaymentChannel paymentChannel = PaymentChannel.COUPON_PAY;
         ResponseBody<CouponInfo> responseBody = couponRpc.get(couponId);
         CouponInfo couponInfo = responseBody.getData();
         String payerId = couponInfo.getPayerId();
         BigDecimal amount = couponInfo.getAmount();
-        TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
+        PaymentOrder payOrder = new PaymentOrder();
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(couponInfo.getPayerId());
         if (StringUtils.hasText(payerId)) {
@@ -136,9 +136,9 @@ public class PaymentOrderService implements ApplicationContextAware {
         return payOrder;
     }
 
-    public TransactionPaymentOrder buildDeductionOrder(String payerId, Deduction deduction, BigDecimal reductionAmountQuota) {
+    public PaymentOrder buildDeductionOrder(String payerId, Deduction deduction, BigDecimal reductionAmountQuota) {
         PaymentChannel paymentChannel = deduction.getPaymentChannel();
-        TransactionPaymentOrder payOrder = new TransactionPaymentOrder();
+        PaymentOrder payOrder = new PaymentOrder();
         payOrder.setPaymentChannel(paymentChannel);
         payOrder.setPayerId(null);
         if (StringUtils.hasText(payerId)) {
@@ -168,45 +168,45 @@ public class PaymentOrderService implements ApplicationContextAware {
         return payOrder;
     }
 
-    public TransactionPaymentOrder save(TransactionPaymentOrder transactionPaymentOrder) {
-        return paymentOrderDao.save(transactionPaymentOrder);
+    public PaymentOrder save(PaymentOrder paymentOrder) {
+        return paymentOrderDao.save(paymentOrder);
     }
 
-    public TransactionPaymentOrder getByTxOrderIdAndPaymentChannel(String orderId, PaymentChannel paymentChannel) {
+    public PaymentOrder getByTxOrderIdAndPaymentChannel(String orderId, PaymentChannel paymentChannel) {
         return paymentOrderDao.findByTransactionOrderIdAndPaymentChannel(orderId, paymentChannel);
     }
 
-    public List<TransactionPaymentOrder> listByTxOrderId(String orderId) {
+    public List<PaymentOrder> listByTxOrderId(String orderId) {
         return paymentOrderDao.findByTransactionOrderId(orderId);
     }
 
-    public Iterable<TransactionPaymentOrder> saveAll(Iterable<TransactionPaymentOrder> iterable) {
+    public Iterable<PaymentOrder> saveAll(Iterable<PaymentOrder> iterable) {
         return paymentOrderDao.saveAll(iterable);
     }
 
-    public boolean verifyAllSuccess(List<TransactionPaymentOrder> list) {
+    public boolean verifyAllSuccess(List<PaymentOrder> list) {
         return list.stream().filter(transactionPayOrder -> transactionPayOrder.getState() == PaymentState.PAYMENT_SUCCESS).count() == list.size();
     }
 
 
-    public TransactionResult executePayment(TransactionOrder transactionOrder, List<CompletableFuture<TransactionPaymentOrder>> futureList) {
+    public TransactionResult executePayment(TransactionOrder transactionOrder, List<CompletableFuture<PaymentOrder>> futureList) {
         CompletableFuture<Void> allFutures = CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
-        CompletableFuture<List<TransactionPaymentOrder>> futureResult = allFutures.thenApply(v -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+        CompletableFuture<List<PaymentOrder>> futureResult = allFutures.thenApply(v -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
 
         PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
         return transactionTemplate.execute(transactionStatus -> {
             TransactionResult transactionResult = new TransactionResult();
-            List<TransactionPaymentOrder> transactionPaymentOrders;
+            List<PaymentOrder> paymentOrders;
             try {
-                transactionPaymentOrders = futureResult.get();
+                paymentOrders = futureResult.get();
             } catch (InterruptedException | ExecutionException e) {
                 log.error("get payment order exception", e);
                 throw new BusinessException("get payment order exception");
             }
-            paymentOrderDao.saveAll(transactionPaymentOrders);
-            transactionResult.setPaymentOrders(transactionPaymentOrders.stream().collect(Collectors.toMap(TransactionPaymentOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
+            paymentOrderDao.saveAll(paymentOrders);
+            transactionResult.setPaymentOrders(paymentOrders.stream().collect(Collectors.toMap(PaymentOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
 
-            if (paymentChannel != null && verifyAllSuccess(transactionPaymentOrders)) {
+            if (paymentChannel != null && verifyAllSuccess(paymentOrders)) {
                 transactionResult.setPaymentState(PaymentState.PAYMENT_SUCCESS);
                 transactionOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
                 transactionOrderService.save(transactionOrder);

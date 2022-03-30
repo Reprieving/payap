@@ -3,7 +3,7 @@ package com.byritium.service.payment.impl;
 import com.byritium.constance.PaymentType;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.ResponseBody;
-import com.byritium.entity.TransactionPaymentOrder;
+import com.byritium.entity.PaymentOrder;
 import com.byritium.rpc.PaymentPayRpc;
 import com.byritium.service.common.RpcRspService;
 import com.byritium.service.payment.IPaymentService;
@@ -23,8 +23,8 @@ public class RefundPaymentService extends RpcRspService<PaymentResult> implement
     }
 
     @Override
-    public PaymentResult call(TransactionPaymentOrder transactionPaymentOrder) {
-        ResponseBody<PaymentResult> responseBody = paymentPayRpc.refund(transactionPaymentOrder);
+    public PaymentResult call(PaymentOrder paymentOrder) {
+        ResponseBody<PaymentResult> responseBody = paymentPayRpc.refund(paymentOrder);
         return super.get(responseBody);
     }
 }

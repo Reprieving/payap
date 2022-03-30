@@ -7,7 +7,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class TransactionPaymentOrder extends CommonEntity {
+public class RefundOrder extends CommonEntity {
     private String id;
     private String businessOrderId;
     private String transactionOrderId;
