@@ -2,7 +2,7 @@ package com.byritium.service.transaction.impl;
 
 import com.byritium.constance.*;
 import com.byritium.dto.*;
-import com.byritium.entity.TransactionPaymentOrder;
+import com.byritium.entity.PaymentOrder;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.payment.impl.RefundPaymentService;
@@ -56,12 +56,12 @@ public class RefundTransactionService implements ITransactionService {
         TransactionState transactionState = transactionOrder.getTransactionState();
         String transactionOrderId = transactionOrder.getId();
         PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
-        List<TransactionPaymentOrder> transactionPaymentOrderList = new ArrayList<>(10);
+        List<PaymentOrder> transactionPaymentOrderList = new ArrayList<>(10);
         if (transactionState == TransactionState.TRANSACTION_SUCCESS) {
-            TransactionPaymentOrder transactionPaymentOrder = paymentOrderService.getByTxOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
+            PaymentOrder transactionPaymentOrder = paymentOrderService.getByTxOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
             transactionPaymentOrderList.add(transactionPaymentOrder);
         } else {
-            List<TransactionPaymentOrder> paymentOrderList = paymentOrderService.listByTxOrderId(transactionOrderId);
+            List<PaymentOrder> paymentOrderList = paymentOrderService.listByTxOrderId(transactionOrderId);
             transactionPaymentOrderList.addAll(paymentOrderList);
         }
 
@@ -79,8 +79,8 @@ public class RefundTransactionService implements ITransactionService {
             }
         });
 
-        List<CompletableFuture<TransactionPaymentOrder>> futureList = transactionPaymentOrderList.stream().map(
-                        (TransactionPaymentOrder order) -> CompletableFuture.supplyAsync(() -> {
+        List<CompletableFuture<PaymentOrder>> futureList = transactionPaymentOrderList.stream().map(
+                        (PaymentOrder order) -> CompletableFuture.supplyAsync(() -> {
                             PaymentResult paymentResult = refundPaymentService.call(order);
                             order.setState(paymentResult.getState());
                             order.setSign(paymentResult.getSign());
