@@ -24,21 +24,9 @@ public class InstantTransactionService implements ITransactionService {
     @Resource
     private TransactionOrderService transactionOrderService;
 
-    @Resource
-    private AccountRpc accountRpc;
-
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
         TransactionResult transactionResult = transactionOrderService.trade(clientId, param);
-
-        if (PaymentState.PAYMENT_SUCCESS == transactionResult.getPaymentState()) {
-            //支付入账
-            AccountJournal accountJournal = new AccountJournal();
-            accountRpc.record(accountJournal);
-
-        }
-
-
         return transactionResult;
     }
 }

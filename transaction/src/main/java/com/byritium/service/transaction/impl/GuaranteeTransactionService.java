@@ -23,16 +23,8 @@ public class GuaranteeTransactionService implements ITransactionService {
     @Resource
     private TransactionOrderService transactionOrderService;
 
-    @Resource
-    private LiquidationRpc liquidationRpc;
-
     public TransactionResult call(String clientId, TransactionParam param) {
         TransactionResult transactionResult = transactionOrderService.trade(clientId, param);
-
-        if (PaymentState.PAYMENT_SUCCESS == transactionResult.getPaymentState()) {
-            LiquidationParam liquidationParam = new LiquidationParam();
-            liquidationRpc.payment(liquidationParam);
-        }
 
         return transactionResult;
     }
