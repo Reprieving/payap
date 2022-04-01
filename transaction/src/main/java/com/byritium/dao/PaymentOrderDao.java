@@ -1,15 +1,15 @@
 package com.byritium.dao;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.entity.PaymentOrder;
+import com.byritium.entity.PayOrder;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface PaymentOrderDao extends PagingAndSortingRepository<PaymentOrder, String> {
-    List<PaymentOrder> findByTransactionOrderId(String orderId);
+public interface PaymentOrderDao extends PagingAndSortingRepository<PayOrder, String> {
+    List<PayOrder> findByTransactionOrderId(String orderId);
 
-    PaymentOrder findByTransactionOrderIdAndPaymentChannel(String orderId, PaymentChannel paymentChannel);
+    PayOrder findByTransactionOrderIdAndPaymentChannel(String orderId, PaymentChannel paymentChannel);
 }

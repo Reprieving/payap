@@ -4,8 +4,8 @@ import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionState;
 import com.byritium.constance.TransactionType;
 import com.byritium.dto.*;
+import com.byritium.entity.PayOrder;
 import com.byritium.entity.TransactionOrder;
-import com.byritium.entity.PaymentOrder;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.PaymentPayRpc;
 import com.byritium.service.transaction.ITransactionService;
@@ -55,9 +55,9 @@ public class SettleTransactionService implements ITransactionService {
 
         transactionOrderService.save(transactionSettleOrder);
 
-        PaymentOrder paymentOrder = new PaymentOrder();
+        PayOrder payOrder = new PayOrder();
 
-        ResponseBody<PaymentResult> responseBody = paymentPayRpc.settle(paymentOrder);
+        ResponseBody<PaymentResult> responseBody = paymentPayRpc.settle(payOrder);
         PaymentResult paymentResult = rpcRspService.get(responseBody);
 
         PaymentState state = paymentResult.getState();

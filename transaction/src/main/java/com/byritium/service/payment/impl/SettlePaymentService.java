@@ -3,7 +3,7 @@ package com.byritium.service.payment.impl;
 import com.byritium.constance.PaymentType;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.ResponseBody;
-import com.byritium.entity.PaymentOrder;
+import com.byritium.entity.PayOrder;
 import com.byritium.rpc.PaymentPayRpc;
 import com.byritium.service.common.RpcRspService;
 import com.byritium.service.payment.IPaymentService;
@@ -22,8 +22,8 @@ public class SettlePaymentService extends RpcRspService<PaymentResult> implement
     }
 
     @Override
-    public PaymentResult call(PaymentOrder paymentOrder) {
-        ResponseBody<PaymentResult> responseBody = paymentPayRpc.settle(paymentOrder);
+    public PaymentResult call(PayOrder payOrder) {
+        ResponseBody<PaymentResult> responseBody = paymentPayRpc.settle(payOrder);
         return super.get(responseBody);
     }
 }

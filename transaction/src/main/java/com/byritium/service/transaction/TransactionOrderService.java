@@ -7,8 +7,8 @@ import com.byritium.dto.Deduction;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
+import com.byritium.entity.PayOrder;
 import com.byritium.entity.TransactionOrder;
-import com.byritium.entity.PaymentOrder;
 import com.byritium.service.payment.PaymentOrderService;
 import com.byritium.service.payment.impl.PayPaymentService;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +57,7 @@ public class TransactionOrderService {
 
     public TransactionResult trade(String clientId, TransactionParam param) {
         PaymentChannel paymentChannel = param.getPaymentChannel();
-        Map<PaymentChannel, PaymentOrder> map = new HashMap<>();
+        Map<PaymentChannel, PayOrder> map = new HashMap<>();
         String userId = param.getUserId();
 
         BigDecimal reductionAmount = BigDecimal.ZERO;
@@ -65,14 +65,14 @@ public class TransactionOrderService {
 
         String couponId = param.getCouponId();
         if (StringUtils.hasText(couponId) && reductionAmountQuota.compareTo(BigDecimal.ZERO) > 0) {
-            PaymentOrder payOrder = paymentOrderService.buildCouponOrder(couponId);
+            PayOrder payOrder = paymentOrderService.buildCouponOrder(couponId);
             map.put(PaymentChannel.COUPON_PAY, payOrder);
             reductionAmount = reductionAmount.add(payOrder.getPaymentAmount());
         }
 
         Deduction deduction = param.getDeduction();
         if (deduction != null && reductionAmountQuota.compareTo(BigDecimal.ZERO) > 0) {
-            PaymentOrder payOrder = paymentOrderService.buildDeductionOrder(userId, deduction, reductionAmountQuota);
+            PayOrder payOrder = paymentOrderService.buildDeductionOrder(userId, deduction, reductionAmountQuota);
             map.put(deduction.getPaymentChannel(), payOrder);
             reductionAmount = reductionAmount.add(payOrder.getPaymentAmount());
         }
@@ -91,16 +91,16 @@ public class TransactionOrderService {
                 transactionOrderService.save(transactionOrder);
                 String transactionOrderId = transactionOrder.getId();
 
-                for (Map.Entry<PaymentChannel, PaymentOrder> entry : map.entrySet()) {
-                    PaymentOrder paymentOrder = entry.getValue();
-                    paymentOrder.setTransactionOrderId(transactionOrderId);
-                    paymentOrderService.save(paymentOrder);
+                for (Map.Entry<PaymentChannel, PayOrder> entry : map.entrySet()) {
+                    PayOrder payOrder = entry.getValue();
+                    payOrder.setTransactionOrderId(transactionOrderId);
+                    paymentOrderService.save(payOrder);
                 }
             }
         });
 
-        List<CompletableFuture<PaymentOrder>> futureList = map.values().stream().map(
-                        (PaymentOrder order) -> CompletableFuture.supplyAsync(() -> {
+        List<CompletableFuture<PayOrder>> futureList = map.values().stream().map(
+                        (PayOrder order) -> CompletableFuture.supplyAsync(() -> {
                             PaymentResult paymentResult = paymentService.call(order);
                             order.setState(paymentResult.getState());
                             order.setSign(paymentResult.getSign());

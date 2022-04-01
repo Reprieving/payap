@@ -2,24 +2,17 @@ package com.byritium.service.transaction.impl;
 
 import com.byritium.constance.*;
 import com.byritium.dto.*;
-import com.byritium.entity.PaymentOrder;
+import com.byritium.entity.RefundOrder;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.payment.impl.RefundPaymentService;
 import com.byritium.service.transaction.ITransactionService;
 import com.byritium.service.transaction.TransactionOrderService;
 import com.byritium.service.payment.PaymentOrderService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 @Service
 public class RefundTransactionService implements ITransactionService {
@@ -42,7 +35,7 @@ public class RefundTransactionService implements ITransactionService {
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
-        TransactionResult transactionResult;
+        TransactionResult transactionResult = new TransactionResult();
 
         TransactionOrder transactionOrder = transactionOrderService.findByBizOrderId(param.getBusinessOrderId());
         if (transactionOrder == null) {
@@ -53,41 +46,37 @@ public class RefundTransactionService implements ITransactionService {
             throw new BusinessException("退款金额异常");
         }
 
+        RefundOrder refundOrder = new RefundOrder();
+
         TransactionState transactionState = transactionOrder.getTransactionState();
         String transactionOrderId = transactionOrder.getId();
         PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
-        List<PaymentOrder> transactionPaymentOrderList = new ArrayList<>(10);
-        if (transactionState == TransactionState.TRANSACTION_SUCCESS) {
-            PaymentOrder transactionPaymentOrder = paymentOrderService.getByTxOrderIdAndPaymentChannel(transactionOrderId, paymentChannel);
-            transactionPaymentOrderList.add(transactionPaymentOrder);
-        } else {
-            List<PaymentOrder> paymentOrderList = paymentOrderService.listByTxOrderId(transactionOrderId);
-            transactionPaymentOrderList.addAll(paymentOrderList);
-        }
+//        List<PayOrder> transactionPaymentOrderList = new ArrayList<>(10);
 
-        TransactionOrder transactionRefundOrder = new TransactionOrder();
-        BeanUtils.copyProperties(transactionOrder, transactionRefundOrder);
-        transactionRefundOrder.setTransactionType(type());
-        transactionRefundOrder.setTransactionState(TransactionState.TRANSACTION_PENDING);
-        transactionRefundOrder.setPaymentState(PaymentState.PAYMENT_PENDING);
 
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                transactionOrderService.save(transactionRefundOrder);
-                paymentOrderService.saveAll(transactionPaymentOrderList);
-            }
-        });
+//        TransactionOrder transactionRefundOrder = new TransactionOrder();
+//        BeanUtils.copyProperties(transactionOrder, transactionRefundOrder);
+//        transactionRefundOrder.setTransactionType(type());
+//        transactionRefundOrder.setTransactionState(TransactionState.TRANSACTION_PENDING);
+//        transactionRefundOrder.setPaymentState(PaymentState.PAYMENT_PENDING);
 
-        List<CompletableFuture<PaymentOrder>> futureList = transactionPaymentOrderList.stream().map(
-                        (PaymentOrder order) -> CompletableFuture.supplyAsync(() -> {
-                            PaymentResult paymentResult = refundPaymentService.call(order);
-                            order.setState(paymentResult.getState());
-                            order.setSign(paymentResult.getSign());
-                            return order;
-                        }))
-                .collect(Collectors.toList());
-        transactionResult = paymentOrderService.executePayment(transactionOrder, futureList);
+//        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+//            @Override
+//            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+//                transactionOrderService.save(transactionRefundOrder);
+//                paymentOrderService.saveAll(transactionPaymentOrderList);
+//            }
+//        });
+//
+//        List<CompletableFuture<PayOrder>> futureList = transactionPaymentOrderList.stream().map(
+//                        (PayOrder order) -> CompletableFuture.supplyAsync(() -> {
+//                            PaymentResult paymentResult = refundPaymentService.call(order);
+//                            order.setState(paymentResult.getState());
+//                            order.setSign(paymentResult.getSign());
+//                            return order;
+//                        }))
+//                .collect(Collectors.toList());
+//        transactionResult = paymentOrderService.executePayment(transactionOrder, futureList);
 
         return transactionResult;
     }
