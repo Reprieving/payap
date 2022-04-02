@@ -3,9 +3,11 @@ package com.byritium.entity;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class RefundOrder extends CommonEntity {
     private String id;
