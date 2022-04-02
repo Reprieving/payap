@@ -3,7 +3,7 @@ package com.byritium.service.payment;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.PaymentType;
-import com.byritium.dao.PaymentOrderDao;
+import com.byritium.dao.PayOrderDao;
 import com.byritium.dto.*;
 import com.byritium.entity.PayOrder;
 import com.byritium.entity.TransactionOrder;
@@ -44,7 +44,7 @@ public class PaymentOrderService implements ApplicationContextAware {
     private TransactionOrderService transactionOrderService;
 
     @Resource
-    private PaymentOrderDao paymentOrderDao;
+    private PayOrderDao payOrderDao;
 
     @Resource
     private TransactionTemplate transactionTemplate;
@@ -78,7 +78,7 @@ public class PaymentOrderService implements ApplicationContextAware {
         payOrder.setOrderAmount(amount);
         payOrder.setState(PaymentState.PAYMENT_WAITING);
 
-        paymentOrderDao.save(payOrder);
+        payOrderDao.save(payOrder);
 
         return payOrder;
     }
@@ -93,7 +93,7 @@ public class PaymentOrderService implements ApplicationContextAware {
         payOrder.setOrderAmount(amount);
         payOrder.setState(PaymentState.PAYMENT_WAITING);
 
-        paymentOrderDao.save(payOrder);
+        payOrderDao.save(payOrder);
         return payOrder;
     }
 
@@ -169,19 +169,19 @@ public class PaymentOrderService implements ApplicationContextAware {
     }
 
     public PayOrder save(PayOrder payOrder) {
-        return paymentOrderDao.save(payOrder);
+        return payOrderDao.save(payOrder);
     }
 
     public PayOrder getByTxOrderIdAndPaymentChannel(String orderId, PaymentChannel paymentChannel) {
-        return paymentOrderDao.findByTransactionOrderIdAndPaymentChannel(orderId, paymentChannel);
+        return payOrderDao.findByTransactionOrderIdAndPaymentChannel(orderId, paymentChannel);
     }
 
     public List<PayOrder> listByTxOrderId(String orderId) {
-        return paymentOrderDao.findByTransactionOrderId(orderId);
+        return payOrderDao.findByTransactionOrderId(orderId);
     }
 
     public Iterable<PayOrder> saveAll(Iterable<PayOrder> iterable) {
-        return paymentOrderDao.saveAll(iterable);
+        return payOrderDao.saveAll(iterable);
     }
 
     public boolean verifyAllSuccess(List<PayOrder> list) {
@@ -203,7 +203,7 @@ public class PaymentOrderService implements ApplicationContextAware {
                 log.error("get payment order exception", e);
                 throw new BusinessException("get payment order exception");
             }
-            paymentOrderDao.saveAll(payOrders);
+            payOrderDao.saveAll(payOrders);
             transactionResult.setPaymentOrders(payOrders.stream().collect(Collectors.toMap(PayOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
 
             if (paymentChannel != null && verifyAllSuccess(payOrders)) {

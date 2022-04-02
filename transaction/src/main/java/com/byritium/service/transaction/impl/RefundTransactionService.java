@@ -51,32 +51,6 @@ public class RefundTransactionService implements ITransactionService {
         TransactionState transactionState = transactionOrder.getTransactionState();
         String transactionOrderId = transactionOrder.getId();
         PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
-//        List<PayOrder> transactionPaymentOrderList = new ArrayList<>(10);
-
-
-//        TransactionOrder transactionRefundOrder = new TransactionOrder();
-//        BeanUtils.copyProperties(transactionOrder, transactionRefundOrder);
-//        transactionRefundOrder.setTransactionType(type());
-//        transactionRefundOrder.setTransactionState(TransactionState.TRANSACTION_PENDING);
-//        transactionRefundOrder.setPaymentState(PaymentState.PAYMENT_PENDING);
-
-//        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-//            @Override
-//            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-//                transactionOrderService.save(transactionRefundOrder);
-//                paymentOrderService.saveAll(transactionPaymentOrderList);
-//            }
-//        });
-//
-//        List<CompletableFuture<PayOrder>> futureList = transactionPaymentOrderList.stream().map(
-//                        (PayOrder order) -> CompletableFuture.supplyAsync(() -> {
-//                            PaymentResult paymentResult = refundPaymentService.call(order);
-//                            order.setState(paymentResult.getState());
-//                            order.setSign(paymentResult.getSign());
-//                            return order;
-//                        }))
-//                .collect(Collectors.toList());
-//        transactionResult = paymentOrderService.executePayment(transactionOrder, futureList);
 
         return transactionResult;
     }
