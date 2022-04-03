@@ -12,6 +12,7 @@ import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.CouponRpc;
 import com.byritium.service.transaction.TransactionOrderService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.StringUtils;
@@ -27,40 +28,18 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PayOrderService{
 
-    @Resource
-    private AccountRpc accountRpc;
+    private final AccountRpc accountRpc;
+    private final CouponRpc couponRpc;
+    private final TransactionOrderService transactionOrderService;
+    private final PayOrderDao payOrderDao;
+    private final TransactionTemplate transactionTemplate;
 
-    @Resource
-    private CouponRpc couponRpc;
-
-    @Resource
-    private TransactionOrderService transactionOrderService;
-
-    @Resource
-    private PayOrderDao payOrderDao;
-
-    @Resource
-    private TransactionTemplate transactionTemplate;
-
-
-    public PayOrder save(String transactionOrderId, PaymentChannel paymentChannel, BigDecimal amount, String payerId, String mediumId) {
-        PayOrder payOrder = new PayOrder();
-        payOrder.setTransactionOrderId(transactionOrderId);
-        payOrder.setPaymentChannel(paymentChannel);
-        payOrder.setPayerId(null);
-        if (StringUtils.hasText(payerId)) {
-            payOrder.setPayerId(payerId);
-        }
-        if (StringUtils.hasText(mediumId)) {
-            payOrder.setPayMediumId(mediumId);
-        }
-        payOrder.setPaymentTitle(paymentChannel.getMessage());
-        payOrder.setOrderAmount(amount);
-        payOrder.setState(PaymentState.PAYMENT_WAITING);
-
-        payOrderDao.save(payOrder);
-
-        return payOrder;
+    public PayOrderService(AccountRpc accountRpc, CouponRpc couponRpc, TransactionOrderService transactionOrderService, PayOrderDao payOrderDao, TransactionTemplate transactionTemplate) {
+        this.accountRpc = accountRpc;
+        this.couponRpc = couponRpc;
+        this.transactionOrderService = transactionOrderService;
+        this.payOrderDao = payOrderDao;
+        this.transactionTemplate = transactionTemplate;
     }
 
     public PayOrder buildCoreOrder(PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
@@ -74,21 +53,6 @@ public class PayOrderService{
         payOrder.setState(PaymentState.PAYMENT_WAITING);
 
         payOrderDao.save(payOrder);
-        return payOrder;
-    }
-
-    public PayOrder buildCoreOrder(String transactionOrderId, PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
-        PayOrder payOrder = new PayOrder();
-        payOrder.setTransactionOrderId(transactionOrderId);
-        payOrder.setPaymentChannel(paymentChannel);
-        if (StringUtils.hasText(payerId)) {
-            payOrder.setPayerId(payerId);
-        }
-        payOrder.setPaymentTitle(paymentChannel.getMessage());
-        payOrder.setOrderAmount(amount);
-        payOrder.setPaymentAmount(amount);
-        payOrder.setState(PaymentState.PAYMENT_WAITING);
-
         return payOrder;
     }
 
@@ -154,14 +118,6 @@ public class PayOrderService{
 
     public PayOrder getByTxOrderIdAndPaymentChannel(String orderId, PaymentChannel paymentChannel) {
         return payOrderDao.findByTransactionOrderIdAndPaymentChannel(orderId, paymentChannel);
-    }
-
-    public List<PayOrder> listByTxOrderId(String orderId) {
-        return payOrderDao.findByTransactionOrderId(orderId);
-    }
-
-    public Iterable<PayOrder> saveAll(Iterable<PayOrder> iterable) {
-        return payOrderDao.saveAll(iterable);
     }
 
     public boolean verifyAllSuccess(List<PayOrder> list) {

@@ -1,4 +1,4 @@
-package com.byritium.service.payment.impl;
+package com.byritium.service.payment;
 
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.ResponseBody;
