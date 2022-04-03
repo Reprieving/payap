@@ -11,6 +11,7 @@ import com.byritium.service.payment.impl.RefundPaymentService;
 import com.byritium.service.transaction.ITransactionService;
 import com.byritium.service.transaction.TransactionOrderService;
 import com.byritium.service.payment.PayOrderService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -61,12 +62,16 @@ public class RefundTransactionService implements ITransactionService {
         refundOrderService.verify(payOrder, refundAmount);
 
         RefundOrder refundOrder = new RefundOrder();
-        refundOrder.set
+        refundOrder.setBizId(payOrder.getBizOrderId());
+        refundOrder.setPayerId(payOrder.getId());
+        refundOrder.setPaymentChannel(payOrder.getPaymentChannel());
+        refundOrder.setPayerId(payOrder.getPayeeId());
+        refundOrder.setPayeeId(payOrder.getPayerId());
+        refundOrder.setPayMediumId(payOrder.getPayMediumId());
+        refundOrder.setOrderAmount(param.getOrderAmount());
+        refundOrder.setState(PaymentState.PAYMENT_WAITING);
 
-
-        TransactionState transactionState = transactionOrder.getTransactionState();
-        String transactionOrderId = transactionOrder.getId();
-        PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
+        refundOrderService.save(refundOrder);
 
         return transactionResult;
     }

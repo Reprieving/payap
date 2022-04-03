@@ -18,4 +18,5 @@ public class PayOrder extends CommonEntity {
     private String paymentTitle;
     private BigDecimal orderAmount;
     private PaymentState state;
+    private Boolean refundFlag;
 }

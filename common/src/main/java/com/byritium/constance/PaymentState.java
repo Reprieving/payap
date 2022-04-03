@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum PaymentState {
     PAYMENT_WAITING("PAYMENT_WAITING", "待处理"),
-    PAYMENT_PENDING("PAYMENT_PENDING", "处理"),
+    PAYMENT_PENDING("PAYMENT_PENDING", "处理中"),
     PAYMENT_SUCCESS("PAYMENT_SUCCESS", "成功"),
     PAYMENT_FAIL("PAYMENT_FAIL", "失败"),
 

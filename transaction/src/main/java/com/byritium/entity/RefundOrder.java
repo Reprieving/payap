@@ -20,6 +20,4 @@ public class RefundOrder extends CommonEntity {
     private String paymentTitle;
     private BigDecimal orderAmount;
     private PaymentState state;
-    private Boolean refundFlag;
-    private String sign;
 }
