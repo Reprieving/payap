@@ -9,7 +9,7 @@ import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.PayOrder;
 import com.byritium.entity.TransactionOrder;
-import com.byritium.service.payment.PaymentOrderService;
+import com.byritium.service.payment.PayOrderService;
 import com.byritium.service.payment.impl.PayPaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class TransactionOrderService {
     }
 
     @Resource
-    private PaymentOrderService paymentOrderService;
+    private PayOrderService payOrderService;
 
 
     @Resource
@@ -65,14 +65,14 @@ public class TransactionOrderService {
 
         String couponId = param.getCouponId();
         if (StringUtils.hasText(couponId) && reductionAmountQuota.compareTo(BigDecimal.ZERO) > 0) {
-            PayOrder payOrder = paymentOrderService.buildCouponOrder(couponId);
+            PayOrder payOrder = payOrderService.buildCouponOrder(couponId);
             map.put(PaymentChannel.COUPON_PAY, payOrder);
             reductionAmount = reductionAmount.add(payOrder.getPaymentAmount());
         }
 
         Deduction deduction = param.getDeduction();
         if (deduction != null && reductionAmountQuota.compareTo(BigDecimal.ZERO) > 0) {
-            PayOrder payOrder = paymentOrderService.buildDeductionOrder(userId, deduction, reductionAmountQuota);
+            PayOrder payOrder = payOrderService.buildDeductionOrder(userId, deduction, reductionAmountQuota);
             map.put(deduction.getPaymentChannel(), payOrder);
             reductionAmount = reductionAmount.add(payOrder.getPaymentAmount());
         }
@@ -81,7 +81,7 @@ public class TransactionOrderService {
             BigDecimal corePaymentOrderAmount = param.getOrderAmount().subtract(reductionAmount);
             corePaymentOrderAmount = corePaymentOrderAmount.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : corePaymentOrderAmount;
 
-            map.put(paymentChannel, paymentOrderService.buildCoreOrder(paymentChannel, userId, corePaymentOrderAmount));
+            map.put(paymentChannel, payOrderService.buildCoreOrder(paymentChannel, userId, corePaymentOrderAmount));
         }
 
         TransactionOrder transactionOrder = new TransactionOrder(clientId, param);
@@ -94,7 +94,7 @@ public class TransactionOrderService {
                 for (Map.Entry<PaymentChannel, PayOrder> entry : map.entrySet()) {
                     PayOrder payOrder = entry.getValue();
                     payOrder.setTransactionOrderId(transactionOrderId);
-                    paymentOrderService.save(payOrder);
+                    payOrderService.save(payOrder);
                 }
             }
         });
@@ -107,7 +107,7 @@ public class TransactionOrderService {
                             return order;
                         }))
                 .collect(Collectors.toList());
-        return paymentOrderService.executePayment(transactionOrder, futureList);
+        return payOrderService.executePayment(transactionOrder, futureList);
 
     }
 }

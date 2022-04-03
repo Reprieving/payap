@@ -12,27 +12,20 @@ import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.CouponRpc;
 import com.byritium.service.transaction.TransactionOrderService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.StringUtils;
-
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class PaymentOrderService implements ApplicationContextAware {
-    private static Map<PaymentType, IPaymentService> paymentServiceMap;
+public class PayOrderService{
 
     @Resource
     private AccountRpc accountRpc;
@@ -49,19 +42,6 @@ public class PaymentOrderService implements ApplicationContextAware {
     @Resource
     private TransactionTemplate transactionTemplate;
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        paymentServiceMap = new HashMap<>();
-        Map<String, IPaymentService> map = applicationContext.getBeansOfType(IPaymentService.class);
-        map.forEach((key, value) -> {
-            if (value.type() != null)
-                paymentServiceMap.put(value.type(), value);
-        });
-    }
-
-    public PaymentResult callPayment(PaymentType paymentType, PayOrder payOrder) {
-        return paymentServiceMap.get(paymentType).call(payOrder);
-    }
 
     public PayOrder save(String transactionOrderId, PaymentChannel paymentChannel, BigDecimal amount, String payerId, String mediumId) {
         PayOrder payOrder = new PayOrder();

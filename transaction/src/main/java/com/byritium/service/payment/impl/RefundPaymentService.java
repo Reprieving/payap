@@ -13,7 +13,6 @@ import javax.annotation.Resource;
 
 @Service
 public class RefundPaymentService extends RpcRspService<PaymentResult> implements IPaymentService {
-
     @Resource
     private PaymentPayRpc paymentPayRpc;
 

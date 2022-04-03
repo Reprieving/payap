@@ -2,13 +2,16 @@ package com.byritium.service.transaction.impl;
 
 import com.byritium.constance.*;
 import com.byritium.dto.*;
+import com.byritium.entity.PayOrder;
 import com.byritium.entity.RefundOrder;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.exception.BusinessException;
+import com.byritium.service.payment.RefundOrderService;
 import com.byritium.service.payment.impl.RefundPaymentService;
 import com.byritium.service.transaction.ITransactionService;
 import com.byritium.service.transaction.TransactionOrderService;
-import com.byritium.service.payment.PaymentOrderService;
+import com.byritium.service.payment.PayOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -16,17 +19,19 @@ import java.math.BigDecimal;
 
 @Service
 public class RefundTransactionService implements ITransactionService {
-    public RefundTransactionService(TransactionTemplate transactionTemplate, TransactionOrderService transactionOrderService, PaymentOrderService paymentOrderService, RefundPaymentService refundPaymentService) {
+    public RefundTransactionService(TransactionTemplate transactionTemplate, TransactionOrderService transactionOrderService, PayOrderService payOrderService, RefundPaymentService refundPaymentService, RefundOrderService refundOrderService) {
         this.transactionTemplate = transactionTemplate;
         this.transactionOrderService = transactionOrderService;
-        this.paymentOrderService = paymentOrderService;
+        this.payOrderService = payOrderService;
         this.refundPaymentService = refundPaymentService;
+        this.refundOrderService = refundOrderService;
     }
 
     private final TransactionTemplate transactionTemplate;
     private final TransactionOrderService transactionOrderService;
-    private final PaymentOrderService paymentOrderService;
+    private final PayOrderService payOrderService;
     private final RefundPaymentService refundPaymentService;
+    private final RefundOrderService refundOrderService;
 
     @Override
     public TransactionType type() {
@@ -35,18 +40,29 @@ public class RefundTransactionService implements ITransactionService {
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
+        BigDecimal refundAmount = param.getOrderAmount();
+
         TransactionResult transactionResult = new TransactionResult();
 
         TransactionOrder transactionOrder = transactionOrderService.findByBizOrderId(param.getBusinessOrderId());
         if (transactionOrder == null) {
-            throw new BusinessException("未找到订单");
+            throw new BusinessException("未找到交易订单");
         }
 
         if (param.getOrderAmount().compareTo(transactionOrder.getPayAmount()) > 0 || param.getOrderAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BusinessException("退款金额异常");
         }
 
+        PayOrder payOrder = payOrderService.getByTxOrderIdAndPaymentChannel(transactionOrder.getId(), transactionOrder.getPaymentChannel());
+        if (payOrder == null) {
+            throw new BusinessException("未找到支付订单");
+        }
+
+        refundOrderService.verify(payOrder, refundAmount);
+
         RefundOrder refundOrder = new RefundOrder();
+        refundOrder.set
+
 
         TransactionState transactionState = transactionOrder.getTransactionState();
         String transactionOrderId = transactionOrder.getId();
