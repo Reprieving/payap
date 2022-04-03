@@ -10,7 +10,7 @@ import com.byritium.dto.TransactionResult;
 import com.byritium.entity.PayOrder;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.service.payment.PayOrderService;
-import com.byritium.service.payment.impl.PayPaymentService;
+import com.byritium.service.payment.impl.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
@@ -46,7 +46,7 @@ public class TransactionOrderService {
 
 
     @Resource
-    private PayPaymentService paymentService;
+    private PaymentService paymentService;
 
 
     @Resource
@@ -67,14 +67,14 @@ public class TransactionOrderService {
         if (StringUtils.hasText(couponId) && reductionAmountQuota.compareTo(BigDecimal.ZERO) > 0) {
             PayOrder payOrder = payOrderService.buildCouponOrder(couponId);
             map.put(PaymentChannel.COUPON_PAY, payOrder);
-            reductionAmount = reductionAmount.add(payOrder.getPaymentAmount());
+            reductionAmount = reductionAmount.add(payOrder.getOrderAmount());
         }
 
         Deduction deduction = param.getDeduction();
         if (deduction != null && reductionAmountQuota.compareTo(BigDecimal.ZERO) > 0) {
             PayOrder payOrder = payOrderService.buildDeductionOrder(userId, deduction, reductionAmountQuota);
             map.put(deduction.getPaymentChannel(), payOrder);
-            reductionAmount = reductionAmount.add(payOrder.getPaymentAmount());
+            reductionAmount = reductionAmount.add(payOrder.getOrderAmount());
         }
 
         if (paymentChannel != null) {
@@ -101,7 +101,7 @@ public class TransactionOrderService {
 
         List<CompletableFuture<PayOrder>> futureList = map.values().stream().map(
                         (PayOrder order) -> CompletableFuture.supplyAsync(() -> {
-                            PaymentResult paymentResult = paymentService.call(order);
+                            PaymentResult paymentResult = paymentService.pay(order);
                             order.setState(paymentResult.getState());
                             order.setSign(paymentResult.getSign());
                             return order;

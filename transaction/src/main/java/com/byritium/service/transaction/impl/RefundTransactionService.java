@@ -7,12 +7,10 @@ import com.byritium.entity.RefundOrder;
 import com.byritium.entity.TransactionOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.payment.RefundOrderService;
-import com.byritium.service.payment.impl.RefundPaymentService;
+import com.byritium.service.payment.impl.PaymentService;
 import com.byritium.service.transaction.ITransactionService;
 import com.byritium.service.transaction.TransactionOrderService;
 import com.byritium.service.payment.PayOrderService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -20,18 +18,18 @@ import java.math.BigDecimal;
 
 @Service
 public class RefundTransactionService implements ITransactionService {
-    public RefundTransactionService(TransactionTemplate transactionTemplate, TransactionOrderService transactionOrderService, PayOrderService payOrderService, RefundPaymentService refundPaymentService, RefundOrderService refundOrderService) {
+    public RefundTransactionService(TransactionTemplate transactionTemplate, TransactionOrderService transactionOrderService, PayOrderService payOrderService, PaymentService paymentService, RefundOrderService refundOrderService) {
         this.transactionTemplate = transactionTemplate;
         this.transactionOrderService = transactionOrderService;
         this.payOrderService = payOrderService;
-        this.refundPaymentService = refundPaymentService;
+        this.paymentService = paymentService;
         this.refundOrderService = refundOrderService;
     }
 
     private final TransactionTemplate transactionTemplate;
     private final TransactionOrderService transactionOrderService;
     private final PayOrderService payOrderService;
-    private final RefundPaymentService refundPaymentService;
+    private final PaymentService paymentService;
     private final RefundOrderService refundOrderService;
 
     @Override
