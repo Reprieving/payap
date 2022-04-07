@@ -70,7 +70,7 @@ public class RefundTransactionService implements ITransactionService {
         refundOrder.setState(PaymentState.PAYMENT_WAITING);
 
         refundOrderService.save(refundOrder);
-
+        PaymentResult paymentResult = paymentService.refund(refundOrder);
         return transactionResult;
     }
 }
