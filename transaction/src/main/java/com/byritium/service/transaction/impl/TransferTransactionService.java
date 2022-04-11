@@ -3,10 +3,13 @@ package com.byritium.service.transaction.impl;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionTransferOrderDao;
+import com.byritium.dto.PaymentResult;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransferOrder;
+import com.byritium.service.payment.PaymentService;
 import com.byritium.service.transaction.ITransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -14,14 +17,19 @@ import java.math.BigDecimal;
 
 @Service
 public class TransferTransactionService implements ITransactionService {
+    public TransferTransactionService(TransactionTransferOrderDao transactionTransferOrderDao, PaymentService paymentService) {
+        this.transactionTransferOrderDao = transactionTransferOrderDao;
+        this.paymentService = paymentService;
+    }
+
     @Override
     public TransactionType type() {
         return TransactionType.TRANSFER;
     }
 
-    @Resource
-    private TransactionTransferOrderDao transactionTransferOrderDao;
+    private final TransactionTransferOrderDao transactionTransferOrderDao;
 
+    private final PaymentService paymentService;
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
@@ -36,7 +44,7 @@ public class TransferTransactionService implements ITransactionService {
                 clientId, businessOrderId, senderId, receiverId, orderAmount, paymentChannel);
         transactionTransferOrderDao.save(transferOrder);
 
-
+        PaymentResult paymentResult = paymentService.transfer(transferOrder);
 
         return transactionResult;
     }

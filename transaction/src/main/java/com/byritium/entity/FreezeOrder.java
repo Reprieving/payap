@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public class FreezeOrder extends CommonEntity {
     private String id;
     private String clientId;
-    private String businessOrderId;
+    private String bizOrderId;
     private String userId;
     private BigDecimal orderAmount;
     private TransactionType transactionType;
@@ -20,9 +20,9 @@ public class FreezeOrder extends CommonEntity {
         this.transactionState = TransactionState.TRANSACTION_PENDING;
     }
 
-    public FreezeOrder(String clientId, String businessOrderId, String userId, BigDecimal orderAmount) {
+    public FreezeOrder(String clientId, String bizOrderId, String userId, BigDecimal orderAmount) {
         this.clientId = clientId;
-        this.businessOrderId = businessOrderId;
+        this.bizOrderId = bizOrderId;
         this.userId = userId;
         this.orderAmount = orderAmount;
         this.transactionType = TransactionType.FREEZE;

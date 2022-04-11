@@ -5,9 +5,12 @@ import com.byritium.dao.TransactionUnFreezeOrderDao;
 import com.byritium.dto.AccountJournal;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
+import com.byritium.entity.FreezeOrder;
 import com.byritium.entity.UnFreezeOrder;
 import com.byritium.rpc.AccountRpc;
+import com.byritium.service.payment.PaymentService;
 import com.byritium.service.transaction.ITransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,16 +18,20 @@ import java.math.BigDecimal;
 
 @Service
 public class UnFreezeTransactionService implements ITransactionService {
+    public UnFreezeTransactionService(FreezeTransactionService freezeTransactionService, TransactionUnFreezeOrderDao transactionUnFreezeOrderDao, PaymentService paymentService) {
+        this.freezeTransactionService = freezeTransactionService;
+        this.transactionUnFreezeOrderDao = transactionUnFreezeOrderDao;
+        this.paymentService = paymentService;
+    }
+
     @Override
     public TransactionType type() {
         return TransactionType.UNFREEZE;
     }
 
-    @Resource
-    private TransactionUnFreezeOrderDao transactionUnFreezeOrderDao;
-
-    @Resource
-    private AccountRpc accountRpc;
+    private final FreezeTransactionService freezeTransactionService;
+    private final TransactionUnFreezeOrderDao transactionUnFreezeOrderDao;
+    private final PaymentService paymentService;
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
@@ -33,12 +40,13 @@ public class UnFreezeTransactionService implements ITransactionService {
         String businessOrderId = param.getBusinessOrderId();
         String userId = param.getUserId();
         BigDecimal orderAmount = param.getOrderAmount();
+
+        FreezeOrder freezeOrder = freezeTransactionService.getByBizOrderId(businessOrderId);
+
         UnFreezeOrder unFreezeOrder = new UnFreezeOrder(
                 clientId, businessOrderId, userId, orderAmount);
         transactionUnFreezeOrderDao.save(unFreezeOrder);
 
-        AccountJournal accountJournal = new AccountJournal();
-        accountRpc.record(accountJournal);
 
         return transactionResult;
     }

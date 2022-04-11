@@ -5,6 +5,7 @@ import com.byritium.dto.ResponseBody;
 import com.byritium.entity.PayOrder;
 import com.byritium.entity.RefundOrder;
 import com.byritium.entity.SettleOrder;
+import com.byritium.entity.TransferOrder;
 import com.byritium.rpc.PaymentRpc;
 import com.byritium.service.common.RpcRspService;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,13 @@ public class PaymentService {
 
     public PaymentResult settle(SettleOrder settleOrder) {
         ResponseBody<PaymentResult> responseBody = paymentRpc.settle(settleOrder);
+        PaymentResult paymentResult = rpcRspService.get(responseBody);
+
+        return paymentResult;
+    }
+
+    public PaymentResult transfer(TransferOrder transferOrder) {
+        ResponseBody<PaymentResult> responseBody = paymentRpc.transfer(transferOrder);
         PaymentResult paymentResult = rpcRspService.get(responseBody);
 
         return paymentResult;
