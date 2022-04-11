@@ -4,7 +4,7 @@ import com.byritium.constance.*;
 import com.byritium.dto.*;
 import com.byritium.entity.PayOrder;
 import com.byritium.entity.RefundOrder;
-import com.byritium.entity.TransactionOrder;
+import com.byritium.entity.TradeOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.payment.RefundOrderService;
 import com.byritium.service.payment.PaymentService;
@@ -43,16 +43,16 @@ public class RefundTransactionService implements ITransactionService {
 
         TransactionResult transactionResult = new TransactionResult();
 
-        TransactionOrder transactionOrder = transactionOrderService.findByBizOrderId(param.getBusinessOrderId());
-        if (transactionOrder == null) {
+        TradeOrder tradeOrder = transactionOrderService.findByBizOrderId(param.getBusinessOrderId());
+        if (tradeOrder == null) {
             throw new BusinessException("未找到交易订单");
         }
 
-        if (param.getOrderAmount().compareTo(transactionOrder.getPayAmount()) > 0 || param.getOrderAmount().compareTo(BigDecimal.ZERO) <= 0) {
+        if (param.getOrderAmount().compareTo(tradeOrder.getPayAmount()) > 0 || param.getOrderAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BusinessException("退款金额异常");
         }
 
-        PayOrder payOrder = payOrderService.getByTxOrderIdAndPaymentChannel(transactionOrder.getId(), transactionOrder.getPaymentChannel());
+        PayOrder payOrder = payOrderService.getByTxOrderIdAndPaymentChannel(tradeOrder.getId(), tradeOrder.getPaymentChannel());
         if (payOrder == null) {
             throw new BusinessException("未找到支付订单");
         }

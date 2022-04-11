@@ -2,21 +2,19 @@ package com.byritium.service.payment;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
-import com.byritium.constance.PaymentType;
 import com.byritium.dao.PayOrderDao;
 import com.byritium.dto.*;
 import com.byritium.entity.PayOrder;
-import com.byritium.entity.TransactionOrder;
+import com.byritium.entity.TradeOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.CouponRpc;
 import com.byritium.service.transaction.TransactionOrderService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.StringUtils;
-import javax.annotation.Resource;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.List;
@@ -125,11 +123,11 @@ public class PayOrderService{
     }
 
 
-    public TransactionResult executePayment(TransactionOrder transactionOrder, List<CompletableFuture<PayOrder>> futureList) {
+    public TransactionResult executePayment(TradeOrder tradeOrder, List<CompletableFuture<PayOrder>> futureList) {
         CompletableFuture<Void> allFutures = CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
         CompletableFuture<List<PayOrder>> futureResult = allFutures.thenApply(v -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
 
-        PaymentChannel paymentChannel = transactionOrder.getPaymentChannel();
+        PaymentChannel paymentChannel = tradeOrder.getPaymentChannel();
         return transactionTemplate.execute(transactionStatus -> {
             TransactionResult transactionResult = new TransactionResult();
             List<PayOrder> payOrders;
@@ -144,8 +142,8 @@ public class PayOrderService{
 
             if (paymentChannel != null && verifyAllSuccess(payOrders)) {
                 transactionResult.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-                transactionOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-                transactionOrderService.save(transactionOrder);
+                tradeOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
+                transactionOrderService.save(tradeOrder);
             }
             return transactionResult;
         });

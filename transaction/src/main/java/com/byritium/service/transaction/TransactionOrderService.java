@@ -8,7 +8,7 @@ import com.byritium.dto.PaymentResult;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.PayOrder;
-import com.byritium.entity.TransactionOrder;
+import com.byritium.entity.TradeOrder;
 import com.byritium.service.payment.PayOrderService;
 import com.byritium.service.payment.PaymentService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,11 +33,11 @@ public class TransactionOrderService {
     @Resource
     private TransactionOrderDao transactionOrderDao;
 
-    public TransactionOrder save(TransactionOrder transactionOrder) {
-        return transactionOrderDao.save(transactionOrder);
+    public TradeOrder save(TradeOrder tradeOrder) {
+        return transactionOrderDao.save(tradeOrder);
     }
 
-    public TransactionOrder findByBizOrderId(String orderId) {
+    public TradeOrder findByBizOrderId(String orderId) {
         return transactionOrderDao.findByBizOrderId(orderId);
     }
 
@@ -84,12 +84,12 @@ public class TransactionOrderService {
             map.put(paymentChannel, payOrderService.buildCoreOrder(paymentChannel, userId, corePaymentOrderAmount));
         }
 
-        TransactionOrder transactionOrder = new TransactionOrder(clientId, param);
+        TradeOrder tradeOrder = new TradeOrder(clientId, param);
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                transactionOrderService.save(transactionOrder);
-                String transactionOrderId = transactionOrder.getId();
+                transactionOrderService.save(tradeOrder);
+                String transactionOrderId = tradeOrder.getId();
 
                 for (Map.Entry<PaymentChannel, PayOrder> entry : map.entrySet()) {
                     PayOrder payOrder = entry.getValue();
@@ -107,7 +107,7 @@ public class TransactionOrderService {
                             return order;
                         }))
                 .collect(Collectors.toList());
-        return payOrderService.executePayment(transactionOrder, futureList);
+        return payOrderService.executePayment(tradeOrder, futureList);
 
     }
 }

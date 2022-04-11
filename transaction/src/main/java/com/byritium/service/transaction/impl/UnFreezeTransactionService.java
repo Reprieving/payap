@@ -5,7 +5,7 @@ import com.byritium.dao.TransactionUnFreezeOrderDao;
 import com.byritium.dto.AccountJournal;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.entity.TransactionUnFreezeOrder;
+import com.byritium.entity.UnFreezeOrder;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.service.transaction.ITransactionService;
 import org.springframework.stereotype.Service;
@@ -33,9 +33,9 @@ public class UnFreezeTransactionService implements ITransactionService {
         String businessOrderId = param.getBusinessOrderId();
         String userId = param.getUserId();
         BigDecimal orderAmount = param.getOrderAmount();
-        TransactionUnFreezeOrder transactionUnFreezeOrder = new TransactionUnFreezeOrder(
+        UnFreezeOrder unFreezeOrder = new UnFreezeOrder(
                 clientId, businessOrderId, userId, orderAmount);
-        transactionUnFreezeOrderDao.save(transactionUnFreezeOrder);
+        transactionUnFreezeOrderDao.save(unFreezeOrder);
 
         AccountJournal accountJournal = new AccountJournal();
         accountRpc.record(accountJournal);

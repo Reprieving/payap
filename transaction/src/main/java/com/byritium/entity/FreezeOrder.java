@@ -7,7 +7,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class TransactionUnFreezeOrder extends CommonEntity {
+public class FreezeOrder extends CommonEntity {
     private String id;
     private String clientId;
     private String businessOrderId;
@@ -16,11 +16,11 @@ public class TransactionUnFreezeOrder extends CommonEntity {
     private TransactionType transactionType;
     private TransactionState transactionState;
 
-    public TransactionUnFreezeOrder() {
+    public FreezeOrder() {
         this.transactionState = TransactionState.TRANSACTION_PENDING;
     }
 
-    public TransactionUnFreezeOrder(String clientId, String businessOrderId, String userId, BigDecimal orderAmount) {
+    public FreezeOrder(String clientId, String businessOrderId, String userId, BigDecimal orderAmount) {
         this.clientId = clientId;
         this.businessOrderId = businessOrderId;
         this.userId = userId;

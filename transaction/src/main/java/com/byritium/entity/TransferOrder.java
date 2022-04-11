@@ -8,25 +8,28 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class TransactionFreezeOrder extends CommonEntity {
+public class TransferOrder extends CommonEntity {
     private String id;
     private String clientId;
     private String businessOrderId;
-    private String userId;
+    private String senderId;
+    private String receiverIds;
     private BigDecimal orderAmount;
     private TransactionType transactionType;
     private TransactionState transactionState;
+    private PaymentChannel paymentChannel;
 
-    public TransactionFreezeOrder() {
+    public TransferOrder() {
         this.transactionState = TransactionState.TRANSACTION_PENDING;
     }
 
-    public TransactionFreezeOrder(String clientId, String businessOrderId, String userId, BigDecimal orderAmount) {
+    public TransferOrder(String clientId, String businessOrderId, String senderId, String receiverIds, BigDecimal orderAmount, PaymentChannel paymentChannel) {
         this.clientId = clientId;
         this.businessOrderId = businessOrderId;
-        this.userId = userId;
+        this.receiverIds = receiverIds;
         this.orderAmount = orderAmount;
-        this.transactionType = TransactionType.FREEZE;
+        this.transactionType = TransactionType.SETTLE;
         this.transactionState = TransactionState.TRANSACTION_PENDING;
+        this.paymentChannel = paymentChannel;
     }
 }

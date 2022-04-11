@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class TransactionOrder extends CommonEntity {
+public class TradeOrder extends CommonEntity {
     private String id;
     private String clientId;
     private String preTxOrderId;
@@ -26,22 +26,22 @@ public class TransactionOrder extends CommonEntity {
     private PaymentChannel paymentChannel;
     private PaymentState paymentState;
 
-    public TransactionOrder() {
+    public TradeOrder() {
         this.transactionState = TransactionState.TRANSACTION_PENDING;
         this.paymentState = PaymentState.PAYMENT_PENDING;
     }
 
-    public TransactionOrder(String clientId, TransactionParam param) {
-        TransactionOrder transactionOrder = new TransactionOrder();
-        transactionOrder.setClientId(clientId);
-        transactionOrder.setBizOrderId(param.getBusinessOrderId());
-        transactionOrder.setTitle(param.getTitle());
-        transactionOrder.setUserId(param.getUserId());
-        transactionOrder.setPayeeId(param.getPayeeId());
-        transactionOrder.setPaymentChannel(param.getPaymentChannel());
-        transactionOrder.setOrderAmount(param.getOrderAmount());
-        transactionOrder.setTransactionType(param.getTransactionType());
-        transactionOrder.setTransactionState(TransactionState.TRANSACTION_PENDING);
-        transactionOrder.setCreateTime(LocalDateTime.now());
+    public TradeOrder(String clientId, TransactionParam param) {
+        TradeOrder tradeOrder = new TradeOrder();
+        tradeOrder.setClientId(clientId);
+        tradeOrder.setBizOrderId(param.getBusinessOrderId());
+        tradeOrder.setTitle(param.getTitle());
+        tradeOrder.setUserId(param.getUserId());
+        tradeOrder.setPayeeId(param.getPayeeId());
+        tradeOrder.setPaymentChannel(param.getPaymentChannel());
+        tradeOrder.setOrderAmount(param.getOrderAmount());
+        tradeOrder.setTransactionType(param.getTransactionType());
+        tradeOrder.setTransactionState(TransactionState.TRANSACTION_PENDING);
+        tradeOrder.setCreateTime(LocalDateTime.now());
     }
 }

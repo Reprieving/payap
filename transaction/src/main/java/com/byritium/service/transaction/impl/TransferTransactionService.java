@@ -3,11 +3,9 @@ package com.byritium.service.transaction.impl;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionTransferOrderDao;
-import com.byritium.dto.AccountJournal;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.entity.TransactionTransferOrder;
-import com.byritium.rpc.AccountRpc;
+import com.byritium.entity.TransferOrder;
 import com.byritium.service.transaction.ITransactionService;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +22,6 @@ public class TransferTransactionService implements ITransactionService {
     @Resource
     private TransactionTransferOrderDao transactionTransferOrderDao;
 
-    @Resource
-    private AccountRpc accountRpc;
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {
@@ -36,12 +32,11 @@ public class TransferTransactionService implements ITransactionService {
         String receiverId = param.getReceiverId();
         BigDecimal orderAmount = param.getOrderAmount();
         PaymentChannel paymentChannel = param.getPaymentChannel();
-        TransactionTransferOrder transactionTransferOrder = new TransactionTransferOrder(
+        TransferOrder transferOrder = new TransferOrder(
                 clientId, businessOrderId, senderId, receiverId, orderAmount, paymentChannel);
-        transactionTransferOrderDao.save(transactionTransferOrder);
+        transactionTransferOrderDao.save(transferOrder);
 
-        AccountJournal accountJournal = new AccountJournal();
-        accountRpc.record(accountJournal);
+
 
         return transactionResult;
     }
