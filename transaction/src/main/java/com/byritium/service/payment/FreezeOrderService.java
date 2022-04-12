@@ -1,6 +1,10 @@
 package com.byritium.service.payment;
 
+import com.byritium.dao.FreeOrderDao;
+import com.byritium.dao.FreezeOrderDao;
 import com.byritium.dao.SettleOrderDao;
+import com.byritium.entity.FreeOrder;
+import com.byritium.entity.FreezeOrder;
 import com.byritium.entity.PayOrder;
 import com.byritium.entity.SettleOrder;
 import com.byritium.exception.BusinessException;
@@ -15,9 +19,9 @@ import java.math.BigDecimal;
 public class FreezeOrderService {
 
     @Resource
-    SettleOrderDao settleOrderDao;
+    FreezeOrderDao freezeOrderDao;
 
-    public SettleOrder save(SettleOrder settleOrder) {
-        return settleOrderDao.save(settleOrder);
+    public FreezeOrder save(FreezeOrder freezeOrder) {
+        return freezeOrderDao.save(freezeOrder);
     }
 }

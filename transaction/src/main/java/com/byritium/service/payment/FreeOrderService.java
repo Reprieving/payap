@@ -1,6 +1,8 @@
 package com.byritium.service.payment;
 
+import com.byritium.dao.FreeOrderDao;
 import com.byritium.dao.SettleOrderDao;
+import com.byritium.entity.FreeOrder;
 import com.byritium.entity.PayOrder;
 import com.byritium.entity.SettleOrder;
 import com.byritium.exception.BusinessException;
@@ -15,21 +17,10 @@ import java.math.BigDecimal;
 public class FreeOrderService {
 
     @Resource
-    SettleOrderDao settleOrderDao;
+    FreeOrderDao freeOrderDao;
 
-    public void verify(PayOrder payOrder, BigDecimal refundAmount) {
-        String payOrderId = payOrder.getId();
-        BigDecimal payAmount = payOrder.getOrderAmount();
-        BigDecimal refundedAmount = settleOrderDao.countByPayOrderId(payOrderId);
 
-        BigDecimal surplusRefundAmount = payAmount.subtract(refundedAmount);
-
-        if (surplusRefundAmount.compareTo(refundAmount) < 0) {
-            throw new BusinessException("分账余额不足");
-        }
-    }
-
-    public SettleOrder save(SettleOrder settleOrder) {
-        return settleOrderDao.save(settleOrder);
+    public FreeOrder save(FreeOrder freeOrder) {
+        return freeOrderDao.save(freeOrder);
     }
 }
