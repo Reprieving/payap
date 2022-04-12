@@ -2,23 +2,19 @@ package com.byritium.service.transaction.impl;
 
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransactionUnFreezeOrderDao;
-import com.byritium.dto.AccountJournal;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.FreezeOrder;
 import com.byritium.entity.UnFreezeOrder;
-import com.byritium.rpc.AccountRpc;
 import com.byritium.service.payment.PaymentService;
 import com.byritium.service.transaction.ITransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.math.BigDecimal;
 
 @Service
-public class UnFreezeTransactionService implements ITransactionService {
-    public UnFreezeTransactionService(FreezeTransactionService freezeTransactionService, TransactionUnFreezeOrderDao transactionUnFreezeOrderDao, PaymentService paymentService) {
+public class FreeTransactionService implements ITransactionService {
+    public FreeTransactionService(FreezeTransactionService freezeTransactionService, TransactionUnFreezeOrderDao transactionUnFreezeOrderDao, PaymentService paymentService) {
         this.freezeTransactionService = freezeTransactionService;
         this.transactionUnFreezeOrderDao = transactionUnFreezeOrderDao;
         this.paymentService = paymentService;
