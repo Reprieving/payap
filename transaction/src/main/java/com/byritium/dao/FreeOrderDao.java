@@ -9,5 +9,5 @@ import java.math.BigDecimal;
 
 @Repository
 public interface FreeOrderDao extends PagingAndSortingRepository<FreeOrder, String> {
-    BigDecimal countByPayOrderId(String payOrderId);
+    BigDecimal countByFreezeOrderId(String payOrderId);
 }

@@ -24,4 +24,8 @@ public class FreezeOrderService {
     public FreezeOrder save(FreezeOrder freezeOrder) {
         return freezeOrderDao.save(freezeOrder);
     }
+
+    public FreezeOrder getByBizOrderId(String businessOrderId) {
+        return freezeOrderDao.findByBizOrderId(businessOrderId);
+    }
 }
