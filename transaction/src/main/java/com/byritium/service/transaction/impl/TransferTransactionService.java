@@ -2,23 +2,21 @@ package com.byritium.service.transaction.impl;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.TransactionType;
-import com.byritium.dao.TransactionTransferOrderDao;
+import com.byritium.dao.TransferOrderDao;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.TransferOrder;
 import com.byritium.service.payment.PaymentService;
 import com.byritium.service.transaction.ITransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.math.BigDecimal;
 
 @Service
 public class TransferTransactionService implements ITransactionService {
-    public TransferTransactionService(TransactionTransferOrderDao transactionTransferOrderDao, PaymentService paymentService) {
-        this.transactionTransferOrderDao = transactionTransferOrderDao;
+    public TransferTransactionService(TransferOrderDao transferOrderDao, PaymentService paymentService) {
+        this.transferOrderDao = transferOrderDao;
         this.paymentService = paymentService;
     }
 
@@ -27,7 +25,7 @@ public class TransferTransactionService implements ITransactionService {
         return TransactionType.TRANSFER;
     }
 
-    private final TransactionTransferOrderDao transactionTransferOrderDao;
+    private final TransferOrderDao transferOrderDao;
 
     private final PaymentService paymentService;
 
@@ -42,7 +40,7 @@ public class TransferTransactionService implements ITransactionService {
         PaymentChannel paymentChannel = param.getPaymentChannel();
         TransferOrder transferOrder = new TransferOrder(
                 clientId, businessOrderId, senderId, receiverId, orderAmount, paymentChannel);
-        transactionTransferOrderDao.save(transferOrder);
+        transferOrderDao.save(transferOrder);
 
         PaymentResult paymentResult = paymentService.transfer(transferOrder);
 

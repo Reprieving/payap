@@ -2,7 +2,7 @@ package com.byritium.service.transaction;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.TransactionConst;
-import com.byritium.dao.TransactionOrderDao;
+import com.byritium.dao.TradeOrderDao;
 import com.byritium.dto.Deduction;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.TransactionParam;
@@ -31,14 +31,14 @@ import java.util.stream.Collectors;
 public class TransactionOrderService {
 
     @Resource
-    private TransactionOrderDao transactionOrderDao;
+    private TradeOrderDao tradeOrderDao;
 
     public TradeOrder save(TradeOrder tradeOrder) {
-        return transactionOrderDao.save(tradeOrder);
+        return tradeOrderDao.save(tradeOrder);
     }
 
     public TradeOrder findByBizOrderId(String orderId) {
-        return transactionOrderDao.findByBizOrderId(orderId);
+        return tradeOrderDao.findByBizOrderId(orderId);
     }
 
     @Resource
