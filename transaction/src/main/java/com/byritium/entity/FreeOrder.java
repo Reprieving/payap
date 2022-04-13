@@ -2,6 +2,7 @@ package com.byritium.entity;
 
 import com.byritium.constance.TransactionState;
 import com.byritium.constance.TransactionType;
+import com.byritium.service.payment.type.Transfer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,7 +10,7 @@ import java.math.BigDecimal;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class FreeOrder extends CommonEntity {
+public class FreeOrder extends CommonEntity implements Transfer {
     private String id;
     private String clientId;
     private String bizOrderId;

@@ -2,6 +2,7 @@ package com.byritium.entity;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
+import com.byritium.service.payment.type.Recharge;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,7 +10,7 @@ import java.math.BigDecimal;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PayOrder extends CommonEntity {
+public class PayOrder extends CommonEntity implements Recharge {
     private String id;
     private String bizOrderId;
     private String transactionOrderId;

@@ -8,8 +8,8 @@ import com.byritium.entity.SettleOrder;
 import com.byritium.entity.TransferOrder;
 import com.byritium.rpc.PaymentRpc;
 import com.byritium.service.common.RpcRspService;
+import com.byritium.service.payment.type.Recharge;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -24,6 +24,11 @@ public class PaymentService {
         this.rpcRspService = rpcRspService;
     }
 
+    public PaymentResult recharge(Recharge recharge) {
+
+
+        return null;
+    }
 
     public PaymentResult pay(PayOrder payOrder) {
         ResponseBody<PaymentResult> responseBody = paymentRpc.pay(payOrder);

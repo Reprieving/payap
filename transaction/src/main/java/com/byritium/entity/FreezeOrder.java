@@ -2,12 +2,13 @@ package com.byritium.entity;
 
 import com.byritium.constance.TransactionState;
 import com.byritium.constance.TransactionType;
+import com.byritium.service.payment.type.Transfer;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-public class FreezeOrder extends CommonEntity {
+public class FreezeOrder extends CommonEntity implements Transfer {
     private String id;
     private String clientId;
     private String bizOrderId;
