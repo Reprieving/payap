@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 public class TradeOrder extends CommonEntity {
     private String id;
     private String clientId;
-    private String preTxOrderId;
     private String bizOrderId;
     private String userId;
     private String payerId;
