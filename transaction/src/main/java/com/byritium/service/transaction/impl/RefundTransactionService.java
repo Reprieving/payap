@@ -2,9 +2,9 @@ package com.byritium.service.transaction.impl;
 
 import com.byritium.constance.*;
 import com.byritium.dto.*;
-import com.byritium.entity.transaction.PayOrder;
-import com.byritium.entity.transaction.RefundOrder;
-import com.byritium.entity.transaction.TradeOrder;
+import com.byritium.entity.transaction.TransactionPayOrder;
+import com.byritium.entity.transaction.TransactionRefundOrder;
+import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.transaction.order.RefundOrderService;
 import com.byritium.service.payment.PaymentService;
@@ -43,33 +43,33 @@ public class RefundTransactionService implements ITransactionService {
 
         TransactionResult transactionResult = new TransactionResult();
 
-        TradeOrder tradeOrder = transactionOrderService.findByBizOrderId(param.getBusinessOrderId());
-        if (tradeOrder == null) {
+        TransactionTradeOrder transactionTradeOrder = transactionOrderService.findByBizOrderId(param.getBusinessOrderId());
+        if (transactionTradeOrder == null) {
             throw new BusinessException("未找到交易订单");
         }
 
-        if (param.getOrderAmount().compareTo(tradeOrder.getPayAmount()) > 0 || param.getOrderAmount().compareTo(BigDecimal.ZERO) <= 0) {
+        if (param.getOrderAmount().compareTo(transactionTradeOrder.getPayAmount()) > 0 || param.getOrderAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BusinessException("退款金额异常");
         }
 
-        PayOrder payOrder = payOrderService.getByTxOrderIdAndPaymentChannel(tradeOrder.getId(), tradeOrder.getPaymentChannel());
-        if (payOrder == null) {
+        TransactionPayOrder transactionPayOrder = payOrderService.getByTxOrderIdAndPaymentChannel(transactionTradeOrder.getId(), transactionTradeOrder.getPaymentChannel());
+        if (transactionPayOrder == null) {
             throw new BusinessException("未找到支付订单");
         }
 
-        refundOrderService.verify(payOrder, refundAmount);
+        refundOrderService.verify(transactionPayOrder, refundAmount);
 
-        RefundOrder refundOrder = new RefundOrder();
-        refundOrder.setBizId(payOrder.getBizOrderId());
-        refundOrder.setPayerId(payOrder.getId());
-        refundOrder.setPaymentChannel(payOrder.getPaymentChannel());
-        refundOrder.setPayerId(payOrder.getPayeeId());
-        refundOrder.setPayeeId(payOrder.getPayerId());
-        refundOrder.setPayMediumId(payOrder.getPayMediumId());
-        refundOrder.setOrderAmount(param.getOrderAmount());
-        refundOrder.setState(PaymentState.PAYMENT_WAITING);
+        TransactionRefundOrder transactionRefundOrder = new TransactionRefundOrder();
+        transactionRefundOrder.setBizId(transactionPayOrder.getBizOrderId());
+        transactionRefundOrder.setPayerId(transactionPayOrder.getId());
+        transactionRefundOrder.setPaymentChannel(transactionPayOrder.getPaymentChannel());
+        transactionRefundOrder.setPayerId(transactionPayOrder.getPayeeId());
+        transactionRefundOrder.setPayeeId(transactionPayOrder.getPayerId());
+        transactionRefundOrder.setPayMediumId(transactionPayOrder.getPayMediumId());
+        transactionRefundOrder.setOrderAmount(param.getOrderAmount());
+        transactionRefundOrder.setState(PaymentState.PAYMENT_WAITING);
 
-        refundOrderService.save(refundOrder);
+        refundOrderService.save(transactionRefundOrder);
 
         return transactionResult;
     }

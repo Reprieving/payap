@@ -3,9 +3,9 @@ package com.byritium.service.transaction.impl;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionType;
 import com.byritium.dto.*;
-import com.byritium.entity.transaction.PayOrder;
-import com.byritium.entity.transaction.SettleOrder;
-import com.byritium.entity.transaction.TradeOrder;
+import com.byritium.entity.transaction.TransactionPayOrder;
+import com.byritium.entity.transaction.TransactionSettleOrder;
+import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.transaction.order.PayOrderService;
 import com.byritium.service.payment.PaymentService;
@@ -39,32 +39,32 @@ public class SettleTransactionService implements ITransactionService {
     public TransactionResult call(String clientId, TransactionParam param) {
         BigDecimal settleAmount = param.getOrderAmount();
         TransactionResult transactionResult = new TransactionResult();
-        TradeOrder tradeOrder = transactionOrderService.findByBizOrderId(param.getBusinessOrderId());
-        if (tradeOrder == null) {
+        TransactionTradeOrder transactionTradeOrder = transactionOrderService.findByBizOrderId(param.getBusinessOrderId());
+        if (transactionTradeOrder == null) {
             throw new BusinessException("未找到交易订单");
         }
 
-        if (param.getOrderAmount().compareTo(tradeOrder.getPayAmount()) > 0 || param.getOrderAmount().compareTo(BigDecimal.ZERO) <= 0) {
+        if (param.getOrderAmount().compareTo(transactionTradeOrder.getPayAmount()) > 0 || param.getOrderAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BusinessException("分账金额异常");
         }
 
-        PayOrder payOrder = payOrderService.getByTxOrderIdAndPaymentChannel(tradeOrder.getId(), tradeOrder.getPaymentChannel());
-        if (payOrder == null) {
+        TransactionPayOrder transactionPayOrder = payOrderService.getByTxOrderIdAndPaymentChannel(transactionTradeOrder.getId(), transactionTradeOrder.getPaymentChannel());
+        if (transactionPayOrder == null) {
             throw new BusinessException("未找到支付订单");
         }
-        settleOrderService.verify(payOrder, settleAmount);
+        settleOrderService.verify(transactionPayOrder, settleAmount);
 
-        SettleOrder settleOrder = new SettleOrder();
-        settleOrder.setBizId(payOrder.getBizOrderId());
-        settleOrder.setPayerId(payOrder.getId());
-        settleOrder.setPaymentChannel(payOrder.getPaymentChannel());
-        settleOrder.setPayerId(payOrder.getPayeeId());
-        settleOrder.setPayeeId(payOrder.getPayerId());
-        settleOrder.setPayMediumId(payOrder.getPayMediumId());
-        settleOrder.setOrderAmount(param.getOrderAmount());
-        settleOrder.setState(PaymentState.PAYMENT_WAITING);
+        TransactionSettleOrder transactionSettleOrder = new TransactionSettleOrder();
+        transactionSettleOrder.setBizId(transactionPayOrder.getBizOrderId());
+        transactionSettleOrder.setPayerId(transactionPayOrder.getId());
+        transactionSettleOrder.setPaymentChannel(transactionPayOrder.getPaymentChannel());
+        transactionSettleOrder.setPayerId(transactionPayOrder.getPayeeId());
+        transactionSettleOrder.setPayeeId(transactionPayOrder.getPayerId());
+        transactionSettleOrder.setPayMediumId(transactionPayOrder.getPayMediumId());
+        transactionSettleOrder.setOrderAmount(param.getOrderAmount());
+        transactionSettleOrder.setState(PaymentState.PAYMENT_WAITING);
 
-        settleOrderService.save(settleOrder);
+        settleOrderService.save(transactionSettleOrder);
 
 
         return transactionResult;

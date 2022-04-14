@@ -1,8 +1,8 @@
 package com.byritium.service.transaction.order;
 
 import com.byritium.dao.FreeOrderDao;
-import com.byritium.entity.transaction.FreeOrder;
-import com.byritium.entity.transaction.FreezeOrder;
+import com.byritium.entity.transaction.TransactionFreeOrder;
+import com.byritium.entity.transaction.TransactionFreezeOrder;
 import com.byritium.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,13 +18,13 @@ public class FreeOrderService {
     FreeOrderDao freeOrderDao;
 
 
-    public FreeOrder save(FreeOrder freeOrder) {
-        return freeOrderDao.save(freeOrder);
+    public TransactionFreeOrder save(TransactionFreeOrder transactionFreeOrder) {
+        return freeOrderDao.save(transactionFreeOrder);
     }
 
-    public void verify(FreezeOrder freezeOrder, BigDecimal freeAmount) {
-        String freezeOrderId = freezeOrder.getId();
-        BigDecimal freezeAmount = freezeOrder.getOrderAmount();
+    public void verify(TransactionFreezeOrder transactionFreezeOrder, BigDecimal freeAmount) {
+        String freezeOrderId = transactionFreezeOrder.getId();
+        BigDecimal freezeAmount = transactionFreezeOrder.getOrderAmount();
         BigDecimal frozenAmount = freeOrderDao.countByFreezeOrderId(freezeOrderId);
 
         BigDecimal surplusRefundAmount = freezeAmount.subtract(frozenAmount);

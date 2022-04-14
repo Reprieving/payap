@@ -1,7 +1,7 @@
 package com.byritium.service.transaction.order;
 
 import com.byritium.dao.FreezeOrderDao;
-import com.byritium.entity.transaction.FreezeOrder;
+import com.byritium.entity.transaction.TransactionFreezeOrder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +14,11 @@ public class FreezeOrderService {
     @Resource
     FreezeOrderDao freezeOrderDao;
 
-    public FreezeOrder save(FreezeOrder freezeOrder) {
-        return freezeOrderDao.save(freezeOrder);
+    public TransactionFreezeOrder save(TransactionFreezeOrder transactionFreezeOrder) {
+        return freezeOrderDao.save(transactionFreezeOrder);
     }
 
-    public FreezeOrder getByBizOrderId(String businessOrderId) {
+    public TransactionFreezeOrder getByBizOrderId(String businessOrderId) {
         return freezeOrderDao.findByBizOrderId(businessOrderId);
     }
 }

@@ -3,13 +3,12 @@ package com.byritium.entity.transaction;
 import com.byritium.constance.TransactionState;
 import com.byritium.constance.TransactionType;
 import com.byritium.entity.CommonEntity;
-import com.byritium.entity.payment.PaymentTransferOrder;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-public class FreezeOrder extends CommonEntity  {
+public class TransactionFreezeOrder extends CommonEntity  {
     private String id;
     private String clientId;
     private String bizOrderId;
@@ -18,11 +17,11 @@ public class FreezeOrder extends CommonEntity  {
     private TransactionType transactionType;
     private TransactionState transactionState;
 
-    public FreezeOrder() {
+    public TransactionFreezeOrder() {
         this.transactionState = TransactionState.TRANSACTION_PENDING;
     }
 
-    public FreezeOrder(String clientId, String bizOrderId, String userId, BigDecimal orderAmount) {
+    public TransactionFreezeOrder(String clientId, String bizOrderId, String userId, BigDecimal orderAmount) {
         this.clientId = clientId;
         this.bizOrderId = bizOrderId;
         this.userId = userId;

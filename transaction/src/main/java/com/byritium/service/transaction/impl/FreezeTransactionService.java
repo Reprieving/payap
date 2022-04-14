@@ -2,10 +2,9 @@ package com.byritium.service.transaction.impl;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.TransactionType;
-import com.byritium.dto.PaymentResult;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.entity.transaction.FreezeOrder;
+import com.byritium.entity.transaction.TransactionFreezeOrder;
 import com.byritium.service.transaction.order.FreezeOrderService;
 import com.byritium.service.payment.PaymentService;
 import com.byritium.service.transaction.ITransactionService;
@@ -34,11 +33,11 @@ public class FreezeTransactionService implements ITransactionService {
         String businessOrderId = param.getBusinessOrderId();
         String userId = param.getUserId();
         BigDecimal orderAmount = param.getOrderAmount();
-        FreezeOrder freezeOrder = new FreezeOrder(
+        TransactionFreezeOrder transactionFreezeOrder = new TransactionFreezeOrder(
                 clientId, businessOrderId, userId, orderAmount);
         PaymentChannel paymentChannel = param.getPaymentChannel();
 
-        freezeOrderService.save(freezeOrder);
+        freezeOrderService.save(transactionFreezeOrder);
 
 
         return transactionResult;

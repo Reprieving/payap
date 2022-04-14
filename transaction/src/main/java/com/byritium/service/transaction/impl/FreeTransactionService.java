@@ -4,8 +4,8 @@ import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.TransactionType;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.entity.transaction.FreeOrder;
-import com.byritium.entity.transaction.FreezeOrder;
+import com.byritium.entity.transaction.TransactionFreeOrder;
+import com.byritium.entity.transaction.TransactionFreezeOrder;
 import com.byritium.service.transaction.order.FreeOrderService;
 import com.byritium.service.transaction.order.FreezeOrderService;
 import com.byritium.service.payment.PaymentService;
@@ -40,13 +40,13 @@ public class FreeTransactionService implements ITransactionService {
         BigDecimal orderAmount = param.getOrderAmount();
         PaymentChannel paymentChannel = param.getPaymentChannel();
 
-        FreezeOrder freezeOrder = freezeOrderService.getByBizOrderId(businessOrderId);
+        TransactionFreezeOrder transactionFreezeOrder = freezeOrderService.getByBizOrderId(businessOrderId);
 
-        freeOrderService.verify(freezeOrder, orderAmount);
+        freeOrderService.verify(transactionFreezeOrder, orderAmount);
 
-        FreeOrder freeOrder = new FreeOrder(
+        TransactionFreeOrder transactionFreeOrder = new TransactionFreeOrder(
                 clientId, businessOrderId, userId, orderAmount);
-        freeOrderService.save(freeOrder);
+        freeOrderService.save(transactionFreeOrder);
 
 
 

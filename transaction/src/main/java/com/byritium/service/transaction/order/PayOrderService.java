@@ -4,8 +4,8 @@ import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.dao.PayOrderDao;
 import com.byritium.dto.*;
-import com.byritium.entity.transaction.PayOrder;
-import com.byritium.entity.transaction.TradeOrder;
+import com.byritium.entity.transaction.TransactionPayOrder;
+import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.CouponRpc;
@@ -40,53 +40,53 @@ public class PayOrderService{
         this.transactionTemplate = transactionTemplate;
     }
 
-    public PayOrder buildCoreOrder(PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
-        PayOrder payOrder = new PayOrder();
-        payOrder.setPaymentChannel(paymentChannel);
+    public TransactionPayOrder buildCoreOrder(PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
+        TransactionPayOrder transactionPayOrder = new TransactionPayOrder();
+        transactionPayOrder.setPaymentChannel(paymentChannel);
         if (StringUtils.hasText(payerId)) {
-            payOrder.setPayerId(payerId);
+            transactionPayOrder.setPayerId(payerId);
         }
-        payOrder.setPaymentTitle(paymentChannel.getMessage());
-        payOrder.setOrderAmount(amount);
-        payOrder.setState(PaymentState.PAYMENT_WAITING);
+        transactionPayOrder.setPaymentTitle(paymentChannel.getMessage());
+        transactionPayOrder.setOrderAmount(amount);
+        transactionPayOrder.setState(PaymentState.PAYMENT_WAITING);
 
-        payOrderDao.save(payOrder);
-        return payOrder;
+        payOrderDao.save(transactionPayOrder);
+        return transactionPayOrder;
     }
 
-    public PayOrder buildCouponOrder(String couponId) {
+    public TransactionPayOrder buildCouponOrder(String couponId) {
         PaymentChannel paymentChannel = PaymentChannel.COUPON_PAY;
         ResponseBody<CouponInfo> responseBody = couponRpc.get(couponId);
         CouponInfo couponInfo = responseBody.getData();
         String payerId = couponInfo.getPayerId();
         BigDecimal amount = couponInfo.getAmount();
-        PayOrder payOrder = new PayOrder();
-        payOrder.setPaymentChannel(paymentChannel);
-        payOrder.setPayerId(couponInfo.getPayerId());
+        TransactionPayOrder transactionPayOrder = new TransactionPayOrder();
+        transactionPayOrder.setPaymentChannel(paymentChannel);
+        transactionPayOrder.setPayerId(couponInfo.getPayerId());
         if (StringUtils.hasText(payerId)) {
-            payOrder.setPayerId(payerId);
+            transactionPayOrder.setPayerId(payerId);
         }
         if (StringUtils.hasText(couponId)) {
-            payOrder.setPayMediumId(couponId);
+            transactionPayOrder.setPayMediumId(couponId);
         }
-        payOrder.setPaymentTitle(paymentChannel.getMessage());
-        payOrder.setOrderAmount(amount);
-        payOrder.setPaymentAmount(amount);
-        payOrder.setState(PaymentState.PAYMENT_WAITING);
+        transactionPayOrder.setPaymentTitle(paymentChannel.getMessage());
+        transactionPayOrder.setOrderAmount(amount);
+        transactionPayOrder.setPaymentAmount(amount);
+        transactionPayOrder.setState(PaymentState.PAYMENT_WAITING);
 
 
-        return payOrder;
+        return transactionPayOrder;
     }
 
-    public PayOrder buildDeductionOrder(String payerId, Deduction deduction, BigDecimal reductionAmountQuota) {
+    public TransactionPayOrder buildDeductionOrder(String payerId, Deduction deduction, BigDecimal reductionAmountQuota) {
         PaymentChannel paymentChannel = deduction.getPaymentChannel();
-        PayOrder payOrder = new PayOrder();
-        payOrder.setPaymentChannel(paymentChannel);
-        payOrder.setPayerId(null);
+        TransactionPayOrder transactionPayOrder = new TransactionPayOrder();
+        transactionPayOrder.setPaymentChannel(paymentChannel);
+        transactionPayOrder.setPayerId(null);
         if (StringUtils.hasText(payerId)) {
-            payOrder.setPayerId(payerId);
+            transactionPayOrder.setPayerId(payerId);
         }
-        payOrder.setPaymentTitle(paymentChannel.getMessage());
+        transactionPayOrder.setPaymentTitle(paymentChannel.getMessage());
 
         AccountQuery accountQuery = new AccountQuery();
         ResponseBody<AccountBalance> responseBody = accountRpc.query(accountQuery);
@@ -97,53 +97,53 @@ public class PayOrderService{
         BigDecimal rate = balanceValue.divide(balanceAmount, MathContext.DECIMAL32);
 
         if (reductionAmountQuota.compareTo(balanceValue) >= 0) {
-            payOrder.setOrderAmount(balanceAmount);
-            payOrder.setPaymentAmount(balanceValue);
+            transactionPayOrder.setOrderAmount(balanceAmount);
+            transactionPayOrder.setPaymentAmount(balanceValue);
         } else {
-            payOrder.setOrderAmount(reductionAmountQuota);
-            payOrder.setPaymentAmount(reductionAmountQuota.multiply(rate));
+            transactionPayOrder.setOrderAmount(reductionAmountQuota);
+            transactionPayOrder.setPaymentAmount(reductionAmountQuota.multiply(rate));
         }
 
-        payOrder.setState(PaymentState.PAYMENT_WAITING);
+        transactionPayOrder.setState(PaymentState.PAYMENT_WAITING);
 
 
-        return payOrder;
+        return transactionPayOrder;
     }
 
-    public PayOrder save(PayOrder payOrder) {
-        return payOrderDao.save(payOrder);
+    public TransactionPayOrder save(TransactionPayOrder transactionPayOrder) {
+        return payOrderDao.save(transactionPayOrder);
     }
 
-    public PayOrder getByTxOrderIdAndPaymentChannel(String orderId, PaymentChannel paymentChannel) {
+    public TransactionPayOrder getByTxOrderIdAndPaymentChannel(String orderId, PaymentChannel paymentChannel) {
         return payOrderDao.findByTransactionOrderIdAndPaymentChannel(orderId, paymentChannel);
     }
 
-    public boolean verifyAllSuccess(List<PayOrder> list) {
+    public boolean verifyAllSuccess(List<TransactionPayOrder> list) {
         return list.stream().filter(transactionPayOrder -> transactionPayOrder.getState() == PaymentState.PAYMENT_SUCCESS).count() == list.size();
     }
 
 
-    public TransactionResult executePayment(TradeOrder tradeOrder, List<CompletableFuture<PayOrder>> futureList) {
+    public TransactionResult executePayment(TransactionTradeOrder transactionTradeOrder, List<CompletableFuture<TransactionPayOrder>> futureList) {
         CompletableFuture<Void> allFutures = CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
-        CompletableFuture<List<PayOrder>> futureResult = allFutures.thenApply(v -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+        CompletableFuture<List<TransactionPayOrder>> futureResult = allFutures.thenApply(v -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
 
-        PaymentChannel paymentChannel = tradeOrder.getPaymentChannel();
+        PaymentChannel paymentChannel = transactionTradeOrder.getPaymentChannel();
         return transactionTemplate.execute(transactionStatus -> {
             TransactionResult transactionResult = new TransactionResult();
-            List<PayOrder> payOrders;
+            List<TransactionPayOrder> transactionPayOrders;
             try {
-                payOrders = futureResult.get();
+                transactionPayOrders = futureResult.get();
             } catch (InterruptedException | ExecutionException e) {
                 log.error("get payment order exception", e);
                 throw new BusinessException("get payment order exception");
             }
-            payOrderDao.saveAll(payOrders);
-            transactionResult.setPaymentOrders(payOrders.stream().collect(Collectors.toMap(PayOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
+            payOrderDao.saveAll(transactionPayOrders);
+            transactionResult.setPaymentOrders(transactionPayOrders.stream().collect(Collectors.toMap(TransactionPayOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
 
-            if (paymentChannel != null && verifyAllSuccess(payOrders)) {
+            if (paymentChannel != null && verifyAllSuccess(transactionPayOrders)) {
                 transactionResult.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-                tradeOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-                transactionOrderService.save(tradeOrder);
+                transactionTradeOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
+                transactionOrderService.save(transactionTradeOrder);
             }
             return transactionResult;
         });

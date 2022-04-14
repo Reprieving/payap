@@ -10,15 +10,18 @@ import java.math.BigDecimal;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class RefundOrder extends CommonEntity {
+public class TransactionPayOrder extends CommonEntity {
     private String id;
-    private String bizId;
-    private String payOrderId;
+    private String bizOrderId;
+    private String transactionOrderId;
     private PaymentChannel paymentChannel;
     private String payerId;
     private String payeeId;
     private String payMediumId;
     private String paymentTitle;
     private BigDecimal orderAmount;
+    private BigDecimal paymentAmount;
     private PaymentState state;
+    private Boolean refundFlag;
+    private String sign;
 }

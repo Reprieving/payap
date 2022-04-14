@@ -1,8 +1,8 @@
 package com.byritium.service.transaction.order;
 
 import com.byritium.dao.SettleOrderDao;
-import com.byritium.entity.transaction.PayOrder;
-import com.byritium.entity.transaction.SettleOrder;
+import com.byritium.entity.transaction.TransactionPayOrder;
+import com.byritium.entity.transaction.TransactionSettleOrder;
 import com.byritium.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,9 @@ public class SettleOrderService {
     @Resource
     SettleOrderDao settleOrderDao;
 
-    public void verify(PayOrder payOrder, BigDecimal refundAmount) {
-        String payOrderId = payOrder.getId();
-        BigDecimal payAmount = payOrder.getOrderAmount();
+    public void verify(TransactionPayOrder transactionPayOrder, BigDecimal refundAmount) {
+        String payOrderId = transactionPayOrder.getId();
+        BigDecimal payAmount = transactionPayOrder.getOrderAmount();
         BigDecimal refundedAmount = settleOrderDao.countByPayOrderId(payOrderId);
 
         BigDecimal surplusRefundAmount = payAmount.subtract(refundedAmount);
@@ -29,7 +29,7 @@ public class SettleOrderService {
         }
     }
 
-    public SettleOrder save(SettleOrder settleOrder) {
-        return settleOrderDao.save(settleOrder);
+    public TransactionSettleOrder save(TransactionSettleOrder transactionSettleOrder) {
+        return settleOrderDao.save(transactionSettleOrder);
     }
 }

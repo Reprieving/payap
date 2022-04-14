@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class FreeOrder extends CommonEntity {
+public class TransactionFreeOrder extends CommonEntity {
     private String id;
     private String clientId;
     private String bizOrderId;
@@ -20,11 +20,11 @@ public class FreeOrder extends CommonEntity {
     private TransactionType transactionType;
     private TransactionState transactionState;
 
-    public FreeOrder() {
+    public TransactionFreeOrder() {
         this.transactionState = TransactionState.TRANSACTION_PENDING;
     }
 
-    public FreeOrder(String clientId, String bizOrderId, String userId, BigDecimal orderAmount) {
+    public TransactionFreeOrder(String clientId, String bizOrderId, String userId, BigDecimal orderAmount) {
         this.clientId = clientId;
         this.bizOrderId = bizOrderId;
         this.userId = userId;

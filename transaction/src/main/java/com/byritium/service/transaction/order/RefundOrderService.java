@@ -1,8 +1,8 @@
 package com.byritium.service.transaction.order;
 
 import com.byritium.dao.RefundOrderDao;
-import com.byritium.entity.transaction.PayOrder;
-import com.byritium.entity.transaction.RefundOrder;
+import com.byritium.entity.transaction.TransactionPayOrder;
+import com.byritium.entity.transaction.TransactionRefundOrder;
 import com.byritium.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,9 @@ public class RefundOrderService {
     @Resource
     RefundOrderDao refundOrderDao;
 
-    public void verify(PayOrder payOrder, BigDecimal refundAmount) {
-        String payOrderId = payOrder.getId();
-        BigDecimal payAmount = payOrder.getOrderAmount();
+    public void verify(TransactionPayOrder transactionPayOrder, BigDecimal refundAmount) {
+        String payOrderId = transactionPayOrder.getId();
+        BigDecimal payAmount = transactionPayOrder.getOrderAmount();
         BigDecimal refundedAmount = refundOrderDao.countByPayOrderId(payOrderId);
 
         BigDecimal surplusRefundAmount = payAmount.subtract(refundedAmount);
@@ -29,7 +29,7 @@ public class RefundOrderService {
         }
     }
 
-    public RefundOrder save(RefundOrder refundOrder) {
-        return refundOrderDao.save(refundOrder);
+    public TransactionRefundOrder save(TransactionRefundOrder transactionRefundOrder) {
+        return refundOrderDao.save(transactionRefundOrder);
     }
 }
