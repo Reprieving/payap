@@ -7,9 +7,9 @@ import com.byritium.dto.Deduction;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.entity.PayOrder;
-import com.byritium.entity.TradeOrder;
-import com.byritium.service.payment.PayOrderService;
+import com.byritium.entity.transaction.PayOrder;
+import com.byritium.entity.transaction.TradeOrder;
+import com.byritium.service.transaction.order.PayOrderService;
 import com.byritium.service.payment.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -101,7 +101,7 @@ public class TransactionOrderService {
 
         List<CompletableFuture<PayOrder>> futureList = map.values().stream().map(
                         (PayOrder order) -> CompletableFuture.supplyAsync(() -> {
-                            PaymentResult paymentResult = paymentService.pay(order);
+                            PaymentResult paymentResult = paymentService.recharge(order);
                             order.setState(paymentResult.getState());
                             order.setSign(paymentResult.getSign());
                             return order;

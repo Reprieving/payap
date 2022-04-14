@@ -1,8 +1,8 @@
-package com.byritium.entity;
+package com.byritium.entity.transaction;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
-import com.byritium.service.payment.type.Refund;
+import com.byritium.entity.CommonEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class RefundOrder extends CommonEntity implements Refund {
+public class RefundOrder extends CommonEntity {
     private String id;
     private String bizId;
     private String payOrderId;

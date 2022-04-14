@@ -1,7 +1,7 @@
 package com.byritium.dao;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.entity.PayOrder;
+import com.byritium.entity.transaction.PayOrder;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 

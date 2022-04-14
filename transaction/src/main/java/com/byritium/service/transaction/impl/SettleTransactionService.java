@@ -3,13 +3,13 @@ package com.byritium.service.transaction.impl;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionType;
 import com.byritium.dto.*;
-import com.byritium.entity.PayOrder;
-import com.byritium.entity.SettleOrder;
-import com.byritium.entity.TradeOrder;
+import com.byritium.entity.transaction.PayOrder;
+import com.byritium.entity.transaction.SettleOrder;
+import com.byritium.entity.transaction.TradeOrder;
 import com.byritium.exception.BusinessException;
-import com.byritium.service.payment.PayOrderService;
+import com.byritium.service.transaction.order.PayOrderService;
 import com.byritium.service.payment.PaymentService;
-import com.byritium.service.payment.SettleOrderService;
+import com.byritium.service.transaction.order.SettleOrderService;
 import com.byritium.service.transaction.ITransactionService;
 import com.byritium.service.transaction.TransactionOrderService;
 import org.springframework.stereotype.Service;
@@ -65,7 +65,7 @@ public class SettleTransactionService implements ITransactionService {
         settleOrder.setState(PaymentState.PAYMENT_WAITING);
 
         settleOrderService.save(settleOrder);
-        PaymentResult paymentResult = paymentService.settle(settleOrder);
+
 
         return transactionResult;
     }

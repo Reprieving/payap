@@ -2,15 +2,15 @@ package com.byritium.service.transaction.impl;
 
 import com.byritium.constance.*;
 import com.byritium.dto.*;
-import com.byritium.entity.PayOrder;
-import com.byritium.entity.RefundOrder;
-import com.byritium.entity.TradeOrder;
+import com.byritium.entity.transaction.PayOrder;
+import com.byritium.entity.transaction.RefundOrder;
+import com.byritium.entity.transaction.TradeOrder;
 import com.byritium.exception.BusinessException;
-import com.byritium.service.payment.RefundOrderService;
+import com.byritium.service.transaction.order.RefundOrderService;
 import com.byritium.service.payment.PaymentService;
 import com.byritium.service.transaction.ITransactionService;
 import com.byritium.service.transaction.TransactionOrderService;
-import com.byritium.service.payment.PayOrderService;
+import com.byritium.service.transaction.order.PayOrderService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -70,7 +70,7 @@ public class RefundTransactionService implements ITransactionService {
         refundOrder.setState(PaymentState.PAYMENT_WAITING);
 
         refundOrderService.save(refundOrder);
-        PaymentResult paymentResult = paymentService.refund(refundOrder);
+
         return transactionResult;
     }
 }

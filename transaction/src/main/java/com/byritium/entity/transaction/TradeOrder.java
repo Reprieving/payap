@@ -1,7 +1,8 @@
-package com.byritium.entity;
+package com.byritium.entity.transaction;
 
 import com.byritium.constance.*;
 import com.byritium.dto.TransactionParam;
+import com.byritium.entity.CommonEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

@@ -1,6 +1,6 @@
 package com.byritium.dao;
 
-import com.byritium.entity.RefundOrder;
+import com.byritium.entity.transaction.RefundOrder;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 

@@ -2,13 +2,12 @@ package com.byritium.service.payment;
 
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.ResponseBody;
-import com.byritium.entity.PayOrder;
-import com.byritium.entity.RefundOrder;
-import com.byritium.entity.SettleOrder;
-import com.byritium.entity.TransferOrder;
+import com.byritium.entity.payment.PaymentRefundOrder;
+import com.byritium.entity.payment.PaymentTransferOrder;
+import com.byritium.entity.payment.PaymentWithdrawOrder;
 import com.byritium.rpc.PaymentRpc;
 import com.byritium.service.common.RpcRspService;
-import com.byritium.service.payment.type.Recharge;
+import com.byritium.entity.payment.PaymentRechargeOrder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,34 +23,29 @@ public class PaymentService {
         this.rpcRspService = rpcRspService;
     }
 
-    public PaymentResult recharge(Recharge recharge) {
 
-
-        return null;
-    }
-
-    public PaymentResult pay(PayOrder payOrder) {
-        ResponseBody<PaymentResult> responseBody = paymentRpc.pay(payOrder);
+    public PaymentResult recharge(PaymentRechargeOrder paymentRechargeOrder) {
+        ResponseBody<PaymentResult> responseBody = paymentRpc.recharge(paymentRechargeOrder);
         PaymentResult paymentResult = rpcRspService.get(responseBody);
 
         return paymentResult;
     }
 
-    public PaymentResult refund(RefundOrder refundOrder) {
+    public PaymentResult refund(PaymentRefundOrder refundOrder) {
         ResponseBody<PaymentResult> responseBody = paymentRpc.refund(refundOrder);
         PaymentResult paymentResult = rpcRspService.get(responseBody);
 
         return paymentResult;
     }
 
-    public PaymentResult settle(SettleOrder settleOrder) {
-        ResponseBody<PaymentResult> responseBody = paymentRpc.settle(settleOrder);
+    public PaymentResult withdraw(PaymentWithdrawOrder withdrawOrder) {
+        ResponseBody<PaymentResult> responseBody = paymentRpc.withdraw(withdrawOrder);
         PaymentResult paymentResult = rpcRspService.get(responseBody);
 
         return paymentResult;
     }
 
-    public PaymentResult transfer(TransferOrder transferOrder) {
+    public PaymentResult transfer(PaymentTransferOrder transferOrder) {
         ResponseBody<PaymentResult> responseBody = paymentRpc.transfer(transferOrder);
         PaymentResult paymentResult = rpcRspService.get(responseBody);
 

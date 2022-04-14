@@ -1,7 +1,7 @@
-package com.byritium.service.payment;
+package com.byritium.service.transaction.order;
 
 import com.byritium.dao.FreezeOrderDao;
-import com.byritium.entity.FreezeOrder;
+import com.byritium.entity.transaction.FreezeOrder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

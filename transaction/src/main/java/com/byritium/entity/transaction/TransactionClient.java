@@ -1,4 +1,4 @@
-package com.byritium.entity;
+package com.byritium.entity.transaction;
 
 import com.byritium.constance.ObjectState;
 import lombok.Data;

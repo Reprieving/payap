@@ -6,7 +6,7 @@ import com.byritium.dao.TransferOrderDao;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.entity.TransferOrder;
+import com.byritium.entity.transaction.TransferOrder;
 import com.byritium.service.payment.PaymentService;
 import com.byritium.service.transaction.ITransactionService;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,6 @@ public class TransferTransactionService implements ITransactionService {
                 clientId, businessOrderId, senderId, receiverId, orderAmount, paymentChannel);
         transferOrderDao.save(transferOrder);
 
-        PaymentResult paymentResult = paymentService.transfer(transferOrder);
 
         return transactionResult;
     }

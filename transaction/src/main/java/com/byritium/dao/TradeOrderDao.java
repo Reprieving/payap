@@ -1,6 +1,6 @@
 package com.byritium.dao;
 
-import com.byritium.entity.TradeOrder;
+import com.byritium.entity.transaction.TradeOrder;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 

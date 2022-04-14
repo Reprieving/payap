@@ -4,11 +4,10 @@ import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.TransactionType;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.entity.FreeOrder;
-import com.byritium.entity.FreezeOrder;
-import com.byritium.entity.TransferOrder;
-import com.byritium.service.payment.FreeOrderService;
-import com.byritium.service.payment.FreezeOrderService;
+import com.byritium.entity.transaction.FreeOrder;
+import com.byritium.entity.transaction.FreezeOrder;
+import com.byritium.service.transaction.order.FreeOrderService;
+import com.byritium.service.transaction.order.FreezeOrderService;
 import com.byritium.service.payment.PaymentService;
 import com.byritium.service.transaction.ITransactionService;
 import org.springframework.stereotype.Service;
@@ -49,8 +48,6 @@ public class FreeTransactionService implements ITransactionService {
                 clientId, businessOrderId, userId, orderAmount);
         freeOrderService.save(freeOrder);
 
-        TransferOrder transferOrder = new TransferOrder(
-                clientId, businessOrderId, userId, userId, orderAmount, paymentChannel);
 
 
         return transactionResult;
