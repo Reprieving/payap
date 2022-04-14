@@ -2,18 +2,18 @@ package com.byritium.dto;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
-import com.byritium.entity.PayOrder;
-import com.byritium.entity.RefundOrder;
-import com.byritium.entity.TradeOrder;
+import com.byritium.entity.payment.PaymentRechargeOrder;
+import com.byritium.entity.payment.PaymentRefundOrder;
+import com.byritium.entity.transaction.TransactionTradeOrder;
 import lombok.Data;
 
 import java.util.Map;
 
 @Data
 public class TransactionResult {
-    private Map<PaymentChannel, PayOrder> paymentOrders;
-    private Map<PaymentChannel, RefundOrder> refundOrders;
-    private TradeOrder tradeOrder;
+    private Map<PaymentChannel, PaymentRechargeOrder> paymentOrders;
+    private Map<PaymentChannel, PaymentRefundOrder> refundOrders;
+    private TransactionTradeOrder tradeOrder;
     private PaymentState paymentState;
     private String transactionOrderId;
 }

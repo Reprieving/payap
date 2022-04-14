@@ -138,7 +138,6 @@ public class PayOrderService{
                 throw new BusinessException("get payment order exception");
             }
             payOrderDao.saveAll(transactionPayOrders);
-            transactionResult.setPaymentOrders(transactionPayOrders.stream().collect(Collectors.toMap(TransactionPayOrder::getPaymentChannel, TransactionPayOrder -> TransactionPayOrder)));
 
             if (paymentChannel != null && verifyAllSuccess(transactionPayOrders)) {
                 transactionResult.setPaymentState(PaymentState.PAYMENT_SUCCESS);

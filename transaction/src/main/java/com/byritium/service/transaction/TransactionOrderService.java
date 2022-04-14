@@ -7,6 +7,7 @@ import com.byritium.dto.Deduction;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
+import com.byritium.entity.payment.PaymentRechargeOrder;
 import com.byritium.entity.transaction.TransactionPayOrder;
 import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.service.transaction.order.PayOrderService;
@@ -101,7 +102,10 @@ public class TransactionOrderService {
 
         List<CompletableFuture<TransactionPayOrder>> futureList = map.values().stream().map(
                         (TransactionPayOrder order) -> CompletableFuture.supplyAsync(() -> {
-                            PaymentResult paymentResult = paymentService.recharge(order);
+
+                            //TODO order =>paymentorder
+                            PaymentRechargeOrder paymentRechargeOrder = new PaymentRechargeOrder();
+                            PaymentResult paymentResult = paymentService.recharge(paymentRechargeOrder);
                             order.setState(paymentResult.getState());
                             order.setSign(paymentResult.getSign());
                             return order;
