@@ -4,9 +4,11 @@ import com.byritium.constance.TransactionState;
 import com.byritium.constance.TransactionType;
 import com.byritium.entity.CommonEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class TransactionFreezeOrder extends CommonEntity  {
     private String id;

@@ -6,7 +6,6 @@ import com.byritium.entity.payment.PaymentRechargeOrder;
 import com.byritium.entity.payment.PaymentRefundOrder;
 import com.byritium.entity.payment.PaymentTransferOrder;
 import com.byritium.entity.payment.PaymentWithdrawOrder;
-import com.byritium.entity.transaction.PaymentTransferOrderOrder;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
