@@ -12,6 +12,7 @@
         <module name="recharge" />
         <module name="configuration" />
         <module name="payment" />
+        <module name="paymentRechargeOrder" />
         <module name="secret" />
         <module name="gateway" />
         <module name="account" />
@@ -39,6 +40,7 @@
       <module name="liquidation" options="-parameters" />
       <module name="payap" options="-parameters" />
       <module name="payment" options="-parameters" />
+      <module name="paymentRechargeOrder" options="-parameters" />
       <module name="recharge" options="-parameters" />
       <module name="secret" options="-parameters" />
       <module name="transaction" options="-parameters" />
