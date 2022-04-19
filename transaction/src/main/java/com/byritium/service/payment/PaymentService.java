@@ -1,5 +1,6 @@
 package com.byritium.service.payment;
 
+import com.byritium.dto.PaymentRequest;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.ResponseBody;
 import com.byritium.entity.payment.PaymentRefundOrder;
@@ -23,32 +24,8 @@ public class PaymentService {
         this.rpcRspService = rpcRspService;
     }
 
-
-    public PaymentResult recharge(PaymentRechargeOrder paymentRechargeOrder) {
-        ResponseBody<PaymentResult> responseBody = paymentRpc.recharge(paymentRechargeOrder);
-        PaymentResult paymentResult = rpcRspService.get(responseBody);
-
-        return paymentResult;
-    }
-
-    public PaymentResult refund(PaymentRefundOrder refundOrder) {
-        ResponseBody<PaymentResult> responseBody = paymentRpc.refund(refundOrder);
-        PaymentResult paymentResult = rpcRspService.get(responseBody);
-
-        return paymentResult;
-    }
-
-    public PaymentResult withdraw(PaymentWithdrawOrder withdrawOrder) {
-        ResponseBody<PaymentResult> responseBody = paymentRpc.withdraw(withdrawOrder);
-        PaymentResult paymentResult = rpcRspService.get(responseBody);
-
-        return paymentResult;
-    }
-
-    public PaymentResult transfer(PaymentTransferOrder transferOrder) {
-        ResponseBody<PaymentResult> responseBody = paymentRpc.transfer(transferOrder);
-        PaymentResult paymentResult = rpcRspService.get(responseBody);
-
-        return paymentResult;
+    public PaymentResult call(PaymentRequest paymentRequest) {
+        ResponseBody<PaymentResult> responseBody = paymentRpc.call(paymentRequest);
+        return rpcRspService.get(responseBody);
     }
 }
