@@ -10,10 +10,6 @@ public class TransactionController {
     @Autowired
     private TransactionManagerService transactionManagerService;
 
-    @RequestMapping("call")
-    public TransactionResult call(@RequestHeader String clientId, @RequestBody TransactionParam request) {
-        return transactionManagerService.call(clientId, request);
-    }
 
     @RequestMapping("pay")
     public TransactionResult pay(@RequestHeader String clientId,@RequestBody TransactionParam request) {
