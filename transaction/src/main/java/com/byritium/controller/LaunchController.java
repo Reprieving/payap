@@ -37,7 +37,7 @@ public class LaunchController {
     }
 
     @RequestMapping("refund/guarantee")
-    public TransactionResult refundGurantee(@RequestHeader String clientId, @RequestBody GuaranteeTxReq request) {
+    public TransactionResult refundGuarantee(@RequestHeader String clientId, @RequestBody GuaranteeTxReq request) {
         return null;
     }
 
