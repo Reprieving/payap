@@ -7,6 +7,7 @@ import com.byritium.service.transaction.ITransactionService;
 import com.byritium.service.transaction.TransactionOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 
 @Service
@@ -24,6 +25,10 @@ public class GuaranteeTransactionService implements ITransactionService {
         TransactionResult transactionResult = transactionOrderService.trade(clientId, param);
 
         return transactionResult;
+    }
+
+    public TransactionResult call() {
+        return null;
     }
 
 }

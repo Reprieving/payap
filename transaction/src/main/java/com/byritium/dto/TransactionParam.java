@@ -10,6 +10,7 @@ import java.util.List;
 
 @Data
 public class TransactionParam {
+    private String clientId;
     private String businessOrderId;
     private String userId;
     private String payerId;
