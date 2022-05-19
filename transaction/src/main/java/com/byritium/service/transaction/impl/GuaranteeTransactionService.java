@@ -3,6 +3,7 @@ package com.byritium.service.transaction.impl;
 import com.byritium.constance.TransactionType;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
+import com.byritium.dto.transaction.GuaranteeTxReq;
 import com.byritium.service.transaction.ITransactionService;
 import com.byritium.service.transaction.TransactionOrderService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,9 @@ public class GuaranteeTransactionService implements ITransactionService {
         return transactionResult;
     }
 
-    public TransactionResult call() {
+    public TransactionResult call(GuaranteeTxReq req) {
+
+
         return null;
     }
 

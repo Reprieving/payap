@@ -20,7 +20,7 @@ public class LaunchController {
 
     @RequestMapping("guarantee")
     public TransactionResult guarantee(@RequestHeader String clientId, @RequestBody GuaranteeTxReq request) {
-        guaranteeTransactionService.call();
+        guaranteeTransactionService.call(request);
         return null;
     }
 
