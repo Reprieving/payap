@@ -44,28 +44,5 @@ public class LaunchController {
         return null;
     }
 
-    @RequestMapping("refund/guarantee")
-    public TransactionResult refundGuarantee(@RequestHeader String clientId, @RequestBody GuaranteeTxReq request) {
-        return null;
-    }
 
-    @RequestMapping("refund/instant")
-    public TransactionResult refundInstant(@RequestHeader String clientId, @RequestBody RefundInstantTxReq request) {
-        return null;
-    }
-
-    @RequestMapping("refund/withdraw")
-    public TransactionResult refundWithdraw(@RequestHeader String clientId, @RequestBody RefundWithdrawTxReq request) {
-        return null;
-    }
-
-    @RequestMapping("refund/recharge")
-    public TransactionResult refundRecharge(@RequestHeader String clientId, @RequestBody RefundRechargeTxReq request) {
-        return null;
-    }
-
-    @RequestMapping("refund/exception")
-    public TransactionResult refundException(@RequestHeader String clientId, @RequestBody RefundExceptionTxReq request) {
-        return null;
-    }
 }

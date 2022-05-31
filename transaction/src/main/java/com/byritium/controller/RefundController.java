@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("refund")
 public class RefundController {
-    @RequestMapping("/guarantee")
+    @RequestMapping("guarantee")
     public TransactionResult refundGuarantee(@RequestHeader String clientId, @RequestBody GuaranteeTxReq request) {
         return null;
     }
