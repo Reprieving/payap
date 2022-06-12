@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class PayOrderService{
+public class PayOrderService {
 
     private final AccountRpc accountRpc;
     private final CouponRpc couponRpc;
@@ -78,7 +78,7 @@ public class PayOrderService{
         return transactionPayOrder;
     }
 
-    public TransactionPayOrder buildDeductionOrder(String payerId, Deduction deduction, BigDecimal reductionAmountQuota) {
+    public TransactionPayOrder buildDeductionOrder(String payerId, Deduction deduction) {
         PaymentChannel paymentChannel = deduction.getPaymentChannel();
         TransactionPayOrder transactionPayOrder = new TransactionPayOrder();
         transactionPayOrder.setPaymentChannel(paymentChannel);
@@ -95,14 +95,6 @@ public class PayOrderService{
         BigDecimal balanceAmount = accountBalance.getAmount();
         BigDecimal balanceValue = accountBalance.getValue();
         BigDecimal rate = balanceValue.divide(balanceAmount, MathContext.DECIMAL32);
-
-        if (reductionAmountQuota.compareTo(balanceValue) >= 0) {
-            transactionPayOrder.setOrderAmount(balanceAmount);
-            transactionPayOrder.setPaymentAmount(balanceValue);
-        } else {
-            transactionPayOrder.setOrderAmount(reductionAmountQuota);
-            transactionPayOrder.setPaymentAmount(reductionAmountQuota.multiply(rate));
-        }
 
         transactionPayOrder.setState(PaymentState.PAYMENT_WAITING);
 
