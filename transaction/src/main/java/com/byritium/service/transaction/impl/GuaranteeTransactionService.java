@@ -1,22 +1,20 @@
 package com.byritium.service.transaction.impl;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.TransactionConst;
 import com.byritium.constance.TransactionType;
 import com.byritium.dto.Deduction;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.dto.transaction.GuaranteeTxReq;
 import com.byritium.entity.transaction.TransactionPayOrder;
+import com.byritium.entity.transaction.TransactionTradeOrder;
+import com.byritium.rpc.PaymentRpc;
 import com.byritium.service.transaction.ITransactionService;
-import com.byritium.service.transaction.TransactionOrderService;
+import com.byritium.service.transaction.order.TransactionOrderService;
 import com.byritium.service.transaction.order.PayOrderService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,16 +22,19 @@ import java.util.Map;
 @Service
 @Slf4j
 public class GuaranteeTransactionService implements ITransactionService {
+    public GuaranteeTransactionService(TransactionOrderService transactionOrderService, PayOrderService payOrderService, PaymentRpc paymentRpc) {
+        this.payOrderService = payOrderService;
+        this.paymentRpc = paymentRpc;
+    }
+
     @Override
     public TransactionType type() {
         return TransactionType.GUARANTEE;
     }
 
-    @Autowired
-    private TransactionOrderService transactionOrderService;
+    private final PayOrderService payOrderService;
 
-    @Autowired
-    private PayOrderService payOrderService;
+    private final PaymentRpc paymentRpc;
 
     public TransactionResult call(String clientId, TransactionParam param) {
 //        TransactionResult transactionResult = transactionOrderService.trade(clientId, param);
@@ -63,6 +64,8 @@ public class GuaranteeTransactionService implements ITransactionService {
         if (paymentChannel != null) {
             map.put(paymentChannel, payOrderService.buildCoreOrder(paymentChannel, userId, orderAmount));
         }
+
+        TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder(param);
 
         return null;
     }

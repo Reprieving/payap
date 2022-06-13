@@ -9,7 +9,6 @@ import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.CouponRpc;
-import com.byritium.service.transaction.TransactionOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;

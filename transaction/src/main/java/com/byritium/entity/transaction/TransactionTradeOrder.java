@@ -31,9 +31,9 @@ public class TransactionTradeOrder extends CommonEntity {
         this.paymentState = PaymentState.PAYMENT_PENDING;
     }
 
-    public TransactionTradeOrder(String clientId, TransactionParam param) {
+    public TransactionTradeOrder(TransactionParam param) {
         TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder();
-        transactionTradeOrder.setClientId(clientId);
+        transactionTradeOrder.setClientId(param.getClientId());
         transactionTradeOrder.setBizOrderId(param.getBusinessOrderId());
         transactionTradeOrder.setTitle(param.getTitle());
         transactionTradeOrder.setUserId(param.getUserId());
