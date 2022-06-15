@@ -12,7 +12,11 @@ import com.byritium.service.transaction.ITransactionService;
 import com.byritium.service.transaction.order.TransactionOrderService;
 import com.byritium.service.transaction.order.PayOrderService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -23,6 +27,7 @@ import java.util.Map;
 @Slf4j
 public class GuaranteeTransactionService implements ITransactionService {
     public GuaranteeTransactionService(TransactionOrderService transactionOrderService, PayOrderService payOrderService, PaymentRpc paymentRpc) {
+        this.transactionOrderService = transactionOrderService;
         this.payOrderService = payOrderService;
         this.paymentRpc = paymentRpc;
     }
@@ -32,8 +37,8 @@ public class GuaranteeTransactionService implements ITransactionService {
         return TransactionType.GUARANTEE;
     }
 
+    private final TransactionOrderService transactionOrderService;
     private final PayOrderService payOrderService;
-
     private final PaymentRpc paymentRpc;
 
     public TransactionResult call(String clientId, TransactionParam param) {
@@ -66,7 +71,14 @@ public class GuaranteeTransactionService implements ITransactionService {
         }
 
         TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder(param);
+        transactionOrderService.save(transactionTradeOrder);
+        String transactionOrderId = transactionTradeOrder.getId();
 
+        for (Map.Entry<PaymentChannel, TransactionPayOrder> entry : map.entrySet()) {
+            TransactionPayOrder transactionPayOrder = entry.getValue();
+            transactionPayOrder.setTransactionOrderId(transactionOrderId);
+            payOrderService.save(transactionPayOrder);
+        }
         return null;
     }
 
