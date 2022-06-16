@@ -79,6 +79,9 @@ public class GuaranteeTransactionService implements ITransactionService {
             transactionPayOrder.setTransactionOrderId(transactionOrderId);
             payOrderService.save(transactionPayOrder);
         }
+
+        paymentRpc.pay(map.get(paymentChannel));
+
         return null;
     }
 
