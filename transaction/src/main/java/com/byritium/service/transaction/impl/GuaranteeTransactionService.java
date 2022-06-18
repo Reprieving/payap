@@ -48,6 +48,7 @@ public class GuaranteeTransactionService implements ITransactionService {
     }
 
     public TransactionResult call(TransactionParam param) {
+        TransactionResult transactionResult = new TransactionResult();
         PaymentChannel paymentChannel = param.getPaymentChannel();
         Map<PaymentChannel, TransactionPayOrder> map = new HashMap<>();
         String userId = param.getUserId();
@@ -82,7 +83,9 @@ public class GuaranteeTransactionService implements ITransactionService {
 
         paymentRpc.pay(map.get(paymentChannel));
 
-        return null;
+
+
+        return transactionResult;
     }
 
 }
