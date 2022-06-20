@@ -2,12 +2,11 @@ package com.byritium.service.transaction.impl;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.TransactionType;
-import com.byritium.dto.Deduction;
-import com.byritium.dto.TransactionParam;
-import com.byritium.dto.TransactionResult;
+import com.byritium.dto.*;
 import com.byritium.entity.transaction.TransactionPayOrder;
 import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.rpc.PaymentRpc;
+import com.byritium.service.common.RpcRspService;
 import com.byritium.service.transaction.ITransactionService;
 import com.byritium.service.transaction.order.TransactionOrderService;
 import com.byritium.service.transaction.order.PayOrderService;
@@ -81,10 +80,9 @@ public class GuaranteeTransactionService implements ITransactionService {
             payOrderService.save(transactionPayOrder);
         }
 
-        paymentRpc.pay(map.get(paymentChannel));
-
-
-
+        ResponseBody<PaymentResult> responseBody = paymentRpc.pay(map.get(paymentChannel));
+        PaymentResult paymentResult = responseBody.getData();
+        transactionResult.setPaySign(paymentResult.getSign());
         return transactionResult;
     }
 

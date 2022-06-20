@@ -16,4 +16,5 @@ public class TransactionResult {
     private TransactionTradeOrder tradeOrder;
     private PaymentState paymentState;
     private String transactionOrderId;
+    private String paySign;
 }
