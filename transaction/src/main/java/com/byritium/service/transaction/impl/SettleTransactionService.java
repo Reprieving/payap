@@ -10,14 +10,14 @@ import com.byritium.exception.BusinessException;
 import com.byritium.service.transaction.order.PayOrderService;
 import com.byritium.service.payment.PaymentService;
 import com.byritium.service.transaction.order.SettleOrderService;
-import com.byritium.service.transaction.ITransactionService;
+import com.byritium.service.transaction.ITransactionCallService;
 import com.byritium.service.transaction.order.TransactionOrderService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
-public class SettleTransactionService implements ITransactionService {
+public class SettleTransactionService implements ITransactionCallService {
     @Override
     public TransactionType type() {
         return TransactionType.SETTLE;

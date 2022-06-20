@@ -7,14 +7,14 @@ import com.byritium.dto.TransactionResult;
 import com.byritium.entity.transaction.TransactionFreezeOrder;
 import com.byritium.service.transaction.order.FreezeOrderService;
 import com.byritium.service.payment.PaymentService;
-import com.byritium.service.transaction.ITransactionService;
+import com.byritium.service.transaction.ITransactionCallService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
-public class FreezeTransactionService implements ITransactionService {
+public class FreezeTransactionService implements ITransactionCallService {
     @Override
     public TransactionType type() {
         return TransactionType.FREEZE;

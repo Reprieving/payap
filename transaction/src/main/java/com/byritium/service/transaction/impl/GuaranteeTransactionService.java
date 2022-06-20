@@ -6,16 +6,11 @@ import com.byritium.dto.*;
 import com.byritium.entity.transaction.TransactionPayOrder;
 import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.rpc.PaymentRpc;
-import com.byritium.service.common.RpcRspService;
-import com.byritium.service.transaction.ITransactionService;
+import com.byritium.service.transaction.ITransactionCallService;
 import com.byritium.service.transaction.order.TransactionOrderService;
 import com.byritium.service.transaction.order.PayOrderService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -24,7 +19,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class GuaranteeTransactionService implements ITransactionService {
+public class GuaranteeTransactionService implements ITransactionCallService {
     public GuaranteeTransactionService(TransactionOrderService transactionOrderService, PayOrderService payOrderService, PaymentRpc paymentRpc) {
         this.transactionOrderService = transactionOrderService;
         this.payOrderService = payOrderService;
@@ -41,10 +36,9 @@ public class GuaranteeTransactionService implements ITransactionService {
     private final PaymentRpc paymentRpc;
 
     public TransactionResult call(String clientId, TransactionParam param) {
-//        TransactionResult transactionResult = transactionOrderService.trade(clientId, param);
-//        return transactionResult;
         return null;
     }
+
 
     public TransactionResult call(TransactionParam param) {
         TransactionResult transactionResult = new TransactionResult();

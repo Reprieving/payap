@@ -3,7 +3,6 @@ package com.byritium.service.transaction;
 import com.byritium.constance.TransactionType;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.service.transaction.ITransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -16,12 +15,12 @@ import java.util.Map;
 @Service
 @Slf4j
 public class TransactionManagerService implements ApplicationContextAware{
-    private static Map<TransactionType, ITransactionService> transactionServiceMap;
+    private static Map<TransactionType, ITransactionCallService> transactionServiceMap;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         transactionServiceMap = new HashMap<>();
-        Map<String, ITransactionService> map = applicationContext.getBeansOfType(ITransactionService.class);
+        Map<String, ITransactionCallService> map = applicationContext.getBeansOfType(ITransactionCallService.class);
         map.forEach((key, value) -> {
             if (value.type() != null)
                 transactionServiceMap.put(value.type(), value);

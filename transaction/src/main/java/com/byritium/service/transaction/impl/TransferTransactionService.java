@@ -7,13 +7,13 @@ import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.transaction.TransactionTransferOrder;
 import com.byritium.service.payment.PaymentService;
-import com.byritium.service.transaction.ITransactionService;
+import com.byritium.service.transaction.ITransactionCallService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
-public class TransferTransactionService implements ITransactionService {
+public class TransferTransactionService implements ITransactionCallService {
     public TransferTransactionService(TransferOrderDao transferOrderDao, PaymentService paymentService) {
         this.transferOrderDao = transferOrderDao;
         this.paymentService = paymentService;

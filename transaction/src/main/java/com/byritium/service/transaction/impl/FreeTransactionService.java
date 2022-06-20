@@ -9,13 +9,13 @@ import com.byritium.entity.transaction.TransactionFreezeOrder;
 import com.byritium.service.transaction.order.FreeOrderService;
 import com.byritium.service.transaction.order.FreezeOrderService;
 import com.byritium.service.payment.PaymentService;
-import com.byritium.service.transaction.ITransactionService;
+import com.byritium.service.transaction.ITransactionCallService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
-public class FreeTransactionService implements ITransactionService {
+public class FreeTransactionService implements ITransactionCallService {
     public FreeTransactionService(FreezeTransactionService freezeTransactionService, FreezeOrderService freezeOrderService, FreeOrderService freeOrderService, PaymentService paymentService) {
         this.freezeOrderService = freezeOrderService;
         this.freeOrderService = freeOrderService;
