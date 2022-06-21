@@ -6,6 +6,7 @@ import com.byritium.dto.*;
 import com.byritium.entity.transaction.TransactionPayOrder;
 import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.rpc.PaymentRpc;
+import com.byritium.service.transaction.ITransactionCallBackService;
 import com.byritium.service.transaction.ITransactionCallService;
 import com.byritium.service.transaction.order.TransactionOrderService;
 import com.byritium.service.transaction.order.PayOrderService;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class GuaranteeTransactionService implements ITransactionCallService {
+public class GuaranteeTransactionService implements ITransactionCallService, ITransactionCallBackService {
     public GuaranteeTransactionService(TransactionOrderService transactionOrderService, PayOrderService payOrderService, PaymentRpc paymentRpc) {
         this.transactionOrderService = transactionOrderService;
         this.payOrderService = payOrderService;
@@ -80,4 +81,8 @@ public class GuaranteeTransactionService implements ITransactionCallService {
         return transactionResult;
     }
 
+    @Override
+    public TransactionResult callback(String clientId, TransactionParam param) {
+        return null;
+    }
 }
