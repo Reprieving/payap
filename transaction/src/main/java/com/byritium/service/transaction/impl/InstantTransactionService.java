@@ -1,6 +1,7 @@
 package com.byritium.service.transaction.impl;
 
 import com.byritium.constance.TransactionType;
+import com.byritium.dto.PaymentResult;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.service.transaction.ITransactionCallBackService;
@@ -27,7 +28,12 @@ public class InstantTransactionService implements ITransactionCallService, ITran
     }
 
     @Override
-    public TransactionResult callback(String clientId, TransactionParam param) {
+    public TransactionResult paymentCallback(PaymentResult paymentResult) {
+        return null;
+    }
+
+    @Override
+    public TransactionResult refundCallback(PaymentResult paymentResult) {
         return null;
     }
 }

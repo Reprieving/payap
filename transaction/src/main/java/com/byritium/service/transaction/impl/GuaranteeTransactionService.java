@@ -82,7 +82,12 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
     }
 
     @Override
-    public TransactionResult callback(String clientId, TransactionParam param) {
+    public TransactionResult paymentCallback(PaymentResult paymentResult) {
+        return null;
+    }
+
+    @Override
+    public TransactionResult refundCallback(PaymentResult paymentResult) {
         return null;
     }
 }
