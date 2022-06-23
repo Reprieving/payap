@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -90,13 +91,16 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
             throw new BusinessException("未找到订单");
         }
 
+        String transactionId = transactionPayOrder.getTransactionOrderId();
         PaymentState paymentState = paymentResult.getState();
         boolean coreFlag = transactionPayOrder.getCoreFlag();
         transactionPayOrder.setState(paymentState);
         payOrderService.update(transactionPayOrder);
 
         if (PaymentState.PAYMENT_SUCCESS == paymentState && coreFlag) {
+            List<TransactionPayOrder> transactionPayOrderList = payOrderService.listByNotCoreFlag(transactionId);
 
+            //TODO send payment requedt
         }
 
     }

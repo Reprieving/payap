@@ -148,4 +148,7 @@ public class PayOrderService {
     }
 
 
+    public List<TransactionPayOrder> listByNotCoreFlag(String transactionId) {
+        return null;
+    }
 }
