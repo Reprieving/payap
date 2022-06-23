@@ -1,7 +1,8 @@
 package com.byritium.service.transaction.order;
 
 import com.byritium.dao.TradeOrderDao;
-import com.byritium.dto.*;
+import com.byritium.dto.TransactionParam;
+import com.byritium.dto.TransactionResult;
 import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.service.payment.PaymentService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +40,9 @@ public class TransactionOrderService {
     @Resource
     private TransactionTemplate transactionTemplate;
 
-
+    public TransactionTradeOrder get(String id) {
+        return tradeOrderDao.findById(id).orElse(null);
+    }
 
 
     public TransactionResult trade(String clientId, TransactionParam param) {

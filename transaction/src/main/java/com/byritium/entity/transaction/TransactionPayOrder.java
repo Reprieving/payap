@@ -22,6 +22,7 @@ public class TransactionPayOrder extends CommonEntity {
     private BigDecimal orderAmount;
     private BigDecimal paymentAmount;
     private PaymentState state;
+    private Boolean coreFlag;
     private Boolean refundFlag;
     private String sign;
 }

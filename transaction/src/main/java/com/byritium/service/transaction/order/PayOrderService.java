@@ -39,6 +39,10 @@ public class PayOrderService {
         this.transactionTemplate = transactionTemplate;
     }
 
+    public TransactionPayOrder get(String id) {
+        return payOrderDao.findById(id).orElseGet(null);
+    }
+
     public TransactionPayOrder buildCoreOrder(PaymentChannel paymentChannel, String payerId, BigDecimal amount) {
         TransactionPayOrder transactionPayOrder = new TransactionPayOrder();
         transactionPayOrder.setPaymentChannel(paymentChannel);
