@@ -28,12 +28,12 @@ public class InstantTransactionService implements ITransactionCallService, ITran
     }
 
     @Override
-    public TransactionResult paymentCallback(PaymentResult paymentResult) {
-        return null;
+    public void paymentCallback(PaymentResult paymentResult) {
+
     }
 
     @Override
-    public TransactionResult refundCallback(PaymentResult paymentResult) {
-        return null;
+    public void refundCallback(PaymentResult paymentResult) {
+
     }
 }

@@ -4,7 +4,7 @@ import com.byritium.dto.PaymentResult;
 import com.byritium.dto.TransactionResult;
 
 public interface ITransactionCallBackService {
-    TransactionResult paymentCallback(PaymentResult paymentResult);
+    void paymentCallback(PaymentResult paymentResult);
 
-    TransactionResult refundCallback(PaymentResult paymentResult);
+    void refundCallback(PaymentResult paymentResult);
 }

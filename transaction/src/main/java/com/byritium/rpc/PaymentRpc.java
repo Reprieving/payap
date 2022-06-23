@@ -7,10 +7,12 @@ import com.byritium.entity.payment.PaymentOrder;
 import com.byritium.entity.payment.PaymentRechargeOrder;
 import com.byritium.entity.transaction.TransactionPayOrder;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient(value = "payment")
+@Component
 public interface PaymentRpc {
     @RequestMapping("call")
     ResponseBody<PaymentResult> call(@RequestBody PaymentRequest paymentRequest);

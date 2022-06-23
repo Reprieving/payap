@@ -84,25 +84,25 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
     }
 
     @Override
-    public TransactionResult paymentCallback(PaymentResult paymentResult) {
+    public void paymentCallback(PaymentResult paymentResult) {
         TransactionPayOrder transactionPayOrder = payOrderService.get(paymentResult.getPaymentOrderId());
         if (transactionPayOrder == null) {
             throw new BusinessException("未找到订单");
         }
 
         PaymentState paymentState = paymentResult.getState();
+        boolean coreFlag = transactionPayOrder.getCoreFlag();
         transactionPayOrder.setState(paymentState);
         payOrderService.update(transactionPayOrder);
 
-        if (PaymentState.PAYMENT_SUCCESS == paymentState && transactionPayOrder.getCoreFlag()) {
+        if (PaymentState.PAYMENT_SUCCESS == paymentState && coreFlag) {
 
         }
 
-        return null;
     }
 
     @Override
-    public TransactionResult refundCallback(PaymentResult paymentResult) {
-        return null;
+    public void refundCallback(PaymentResult paymentResult) {
+
     }
 }
