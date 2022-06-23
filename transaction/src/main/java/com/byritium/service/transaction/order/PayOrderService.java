@@ -40,7 +40,11 @@ public class PayOrderService {
     }
 
     public TransactionPayOrder get(String id) {
-        return payOrderDao.findById(id).orElseGet(null);
+        return payOrderDao.findById(id).orElse(null);
+    }
+
+    public TransactionPayOrder update(TransactionPayOrder transactionPayOrder) {
+        return payOrderDao.save(transactionPayOrder);
     }
 
     public TransactionPayOrder buildCoreOrder(PaymentChannel paymentChannel, String payerId, BigDecimal amount) {

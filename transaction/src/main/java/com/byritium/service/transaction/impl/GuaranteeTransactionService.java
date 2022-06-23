@@ -92,7 +92,7 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
 
         PaymentState paymentState = paymentResult.getState();
         transactionPayOrder.setState(paymentState);
-
+        payOrderService.update(transactionPayOrder);
 
         if (PaymentState.PAYMENT_SUCCESS == paymentState && transactionPayOrder.getCoreFlag()) {
 
