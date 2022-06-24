@@ -3,11 +3,14 @@ package com.byritium.service.transaction.impl;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionType;
-import com.byritium.dto.*;
+import com.byritium.dto.Deduction;
+import com.byritium.dto.PaymentResult;
+import com.byritium.dto.TransactionParam;
+import com.byritium.dto.TransactionResult;
 import com.byritium.entity.transaction.TransactionPayOrder;
 import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.exception.BusinessException;
-import com.byritium.rpc.PaymentRpc;
+import com.byritium.service.payment.PaymentService;
 import com.byritium.service.transaction.ITransactionCallBackService;
 import com.byritium.service.transaction.ITransactionCallService;
 import com.byritium.service.transaction.order.PayOrderService;
@@ -20,14 +23,17 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class GuaranteeTransactionService implements ITransactionCallService, ITransactionCallBackService {
-    public GuaranteeTransactionService(TransactionOrderService transactionOrderService, PayOrderService payOrderService, PaymentRpc paymentRpc) {
+    public GuaranteeTransactionService(TransactionOrderService transactionOrderService, PayOrderService payOrderService, PaymentService paymentService) {
         this.transactionOrderService = transactionOrderService;
         this.payOrderService = payOrderService;
-        this.paymentRpc = paymentRpc;
+        this.paymentService = paymentService;
     }
 
     @Override
@@ -37,7 +43,7 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
 
     private final TransactionOrderService transactionOrderService;
     private final PayOrderService payOrderService;
-    private final PaymentRpc paymentRpc;
+    private final PaymentService paymentService;
 
     public TransactionResult call(String clientId, TransactionParam param) {
         return null;
@@ -78,8 +84,7 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
             payOrderService.save(transactionPayOrder);
         }
 
-        ResponseBody<PaymentResult> responseBody = paymentRpc.pay(map.get(paymentChannel));
-        PaymentResult paymentResult = responseBody.getData();
+        PaymentResult paymentResult = paymentService.pay(map.get(paymentChannel));
         transactionResult.setPaySign(paymentResult.getSign());
         return transactionResult;
     }
@@ -99,8 +104,24 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
 
         if (PaymentState.PAYMENT_SUCCESS == paymentState && coreFlag) {
             List<TransactionPayOrder> transactionPayOrderList = payOrderService.listByNotCoreFlag(transactionId);
+            List<CompletableFuture<TransactionPayOrder>> futureList = transactionPayOrderList.stream().map(
+                            (TransactionPayOrder order) -> CompletableFuture.supplyAsync(() -> {
+                                PaymentResult result = paymentService.pay(order);
+                                order.setState(result.getState());
+                                order.setSign(result.getSign());
+                                return order;
+                            }))
+                    .collect(Collectors.toList());
 
-            //TODO send payment requedt
+            CompletableFuture<Void> allFutures = CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
+            CompletableFuture<List<TransactionPayOrder>> futureResult = allFutures.thenApply(v -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+            List<TransactionPayOrder> transactionPayOrders;
+            try {
+                transactionPayOrders = futureResult.get();
+            } catch (InterruptedException | ExecutionException e) {
+                log.error("get payment order exception", e);
+                throw new BusinessException("get payment order exception");
+            }
         }
 
     }

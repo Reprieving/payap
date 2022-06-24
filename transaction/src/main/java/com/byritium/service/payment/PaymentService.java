@@ -3,12 +3,9 @@ package com.byritium.service.payment;
 import com.byritium.dto.PaymentRequest;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.ResponseBody;
-import com.byritium.entity.payment.PaymentRefundOrder;
-import com.byritium.entity.payment.PaymentTransferOrder;
-import com.byritium.entity.payment.PaymentWithdrawOrder;
+import com.byritium.entity.transaction.TransactionPayOrder;
 import com.byritium.rpc.PaymentRpc;
 import com.byritium.service.common.RpcRspService;
-import com.byritium.entity.payment.PaymentRechargeOrder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +21,8 @@ public class PaymentService {
         this.rpcRspService = rpcRspService;
     }
 
-    public PaymentResult call(PaymentRequest paymentRequest) {
-        ResponseBody<PaymentResult> responseBody = paymentRpc.call(paymentRequest);
+    public PaymentResult pay( TransactionPayOrder transactionPayOrder) {
+        ResponseBody<PaymentResult> responseBody = paymentRpc.pay(transactionPayOrder);
         return rpcRspService.get(responseBody);
     }
 }
