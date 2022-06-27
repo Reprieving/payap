@@ -98,17 +98,15 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
 
         String transactionId = transactionPayOrder.getTransactionOrderId();
         PaymentState paymentState = paymentResult.getState();
-        boolean coreFlag = transactionPayOrder.getCoreFlag();
         transactionPayOrder.setState(paymentState);
         payOrderService.update(transactionPayOrder);
 
-        if (PaymentState.PAYMENT_SUCCESS == paymentState && coreFlag) {
+        if (PaymentState.PAYMENT_SUCCESS == paymentState) {
             List<TransactionPayOrder> transactionPayOrderList = payOrderService.listByNotCoreFlag(transactionId);
             List<CompletableFuture<TransactionPayOrder>> futureList = transactionPayOrderList.stream().map(
                             (TransactionPayOrder order) -> CompletableFuture.supplyAsync(() -> {
                                 PaymentResult result = paymentService.pay(order);
                                 order.setState(result.getState());
-                                order.setSign(result.getSign());
                                 return order;
                             }))
                     .collect(Collectors.toList());
@@ -122,6 +120,13 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
                 log.error("get payment order exception", e);
                 throw new BusinessException("get payment order exception");
             }
+
+            if (verifyAllSuccess(transactionPayOrders)) {
+
+            }else {
+
+            }
+
         }
 
     }
