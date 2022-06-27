@@ -44,7 +44,6 @@ public class TransactionOrderService {
         return tradeOrderDao.findById(id).orElse(null);
     }
 
-
     public TransactionResult trade(String clientId, TransactionParam param) {
 //        PaymentChannel paymentChannel = param.getPaymentChannel();
 //        Map<PaymentChannel, TransactionPayOrder> map = new HashMap<>();

@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -45,6 +46,10 @@ public class PayOrderService {
 
     public TransactionPayOrder update(TransactionPayOrder transactionPayOrder) {
         return payOrderDao.save(transactionPayOrder);
+    }
+
+    public Iterable<TransactionPayOrder> saveAll(List<TransactionPayOrder> transactionPayOrders) {
+        return payOrderDao.saveAll(transactionPayOrders);
     }
 
     public TransactionPayOrder buildCoreOrder(PaymentChannel paymentChannel, String payerId, BigDecimal amount) {

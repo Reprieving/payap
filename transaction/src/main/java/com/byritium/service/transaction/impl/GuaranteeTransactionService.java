@@ -97,6 +97,7 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
         }
 
         String transactionId = transactionPayOrder.getTransactionOrderId();
+        TransactionTradeOrder transactionTradeOrder = transactionOrderService.get(transactionId);
         PaymentState paymentState = paymentResult.getState();
         transactionPayOrder.setState(paymentState);
         payOrderService.update(transactionPayOrder);
@@ -122,10 +123,13 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
             }
 
             if (verifyAllSuccess(transactionPayOrders)) {
-
-            }else {
-
+                payOrderService.saveAll(transactionPayOrders);
+                transactionTradeOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
+            } else {
+                transactionTradeOrder.setPaymentState(PaymentState.PAYMENT_FAIL);
             }
+
+            transactionOrderService.save(transactionTradeOrder);
 
         }
 
