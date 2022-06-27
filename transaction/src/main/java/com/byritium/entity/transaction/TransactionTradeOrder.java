@@ -23,6 +23,7 @@ public class TransactionTradeOrder extends CommonEntity {
     private BigDecimal payAmount;
     private TransactionType transactionType;
     private TransactionState transactionState;
+    private RefundState refundState;
     private PaymentChannel paymentChannel;
     private PaymentState paymentState;
 

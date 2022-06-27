@@ -128,7 +128,6 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
             } else {
                 transactionTradeOrder.setPaymentState(PaymentState.PAYMENT_FAIL);
             }
-
             transactionOrderService.save(transactionTradeOrder);
 
         }
@@ -137,6 +136,13 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
 
     @Override
     public void refundCallback(PaymentResult paymentResult) {
+        TransactionPayOrder transactionPayOrder = payOrderService.get(paymentResult.getPaymentOrderId());
+        if (transactionPayOrder == null) {
+            throw new BusinessException("未找到订单");
+        }
 
+        String transactionId = transactionPayOrder.getTransactionOrderId();
+        TransactionTradeOrder transactionTradeOrder = transactionOrderService.get(transactionId);
+        PaymentState paymentState = paymentResult.getState();
     }
 }
