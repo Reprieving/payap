@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @FeignClient(value = "payment")
 @Component
 public interface PaymentRpc {
@@ -17,5 +19,5 @@ public interface PaymentRpc {
 
 
     @RequestMapping("pay")
-    ResponseBody<PaymentResult> pay(@RequestBody TransactionPayOrder transactionPayOrder);
+    ResponseBody<PaymentResult> pay(@RequestBody List<TransactionPayOrder> transactionPayOrder);
 }

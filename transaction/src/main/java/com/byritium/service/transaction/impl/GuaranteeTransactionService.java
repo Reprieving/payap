@@ -20,9 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -53,7 +52,8 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
     public TransactionResult call(TransactionParam param) {
         TransactionResult transactionResult = new TransactionResult();
         PaymentChannel paymentChannel = param.getPaymentChannel();
-        Map<PaymentChannel, TransactionPayOrder> map = new HashMap<>();
+
+        List<TransactionPayOrder> list = new ArrayList<>();
         String userId = param.getUserId();
 
         BigDecimal orderAmount = param.getOrderAmount();
@@ -61,30 +61,24 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
         String couponId = param.getCouponId();
         if (StringUtils.hasText(couponId)) {
             TransactionPayOrder transactionPayOrder = payOrderService.buildCouponOrder(couponId);
-            map.put(PaymentChannel.COUPON_PAY, transactionPayOrder);
+            list.add(transactionPayOrder);
         }
 
         Deduction deduction = param.getDeduction();
         if (deduction != null) {
             TransactionPayOrder transactionPayOrder = payOrderService.buildDeductionOrder(userId, deduction);
-            map.put(deduction.getPaymentChannel(), transactionPayOrder);
+            list.add(transactionPayOrder);
         }
 
         if (paymentChannel != null) {
-            map.put(paymentChannel, payOrderService.buildCoreOrder(paymentChannel, userId, orderAmount));
+            TransactionPayOrder transactionPayOrder = payOrderService.buildCoreOrder(paymentChannel, userId, orderAmount);
+            list.add(transactionPayOrder);
         }
 
         TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder(param);
         transactionOrderService.save(transactionTradeOrder);
-        String transactionOrderId = transactionTradeOrder.getId();
 
-        for (Map.Entry<PaymentChannel, TransactionPayOrder> entry : map.entrySet()) {
-            TransactionPayOrder transactionPayOrder = entry.getValue();
-            transactionPayOrder.setTransactionOrderId(transactionOrderId);
-            payOrderService.save(transactionPayOrder);
-        }
-
-        PaymentResult paymentResult = paymentService.pay(map.get(paymentChannel));
+        PaymentResult paymentResult = paymentService.pay(list);
         transactionResult.setPaySign(paymentResult.getSign());
         return transactionResult;
     }
@@ -96,41 +90,41 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
             throw new BusinessException("未找到订单");
         }
 
-        String transactionId = transactionPayOrder.getTransactionOrderId();
-        TransactionTradeOrder transactionTradeOrder = transactionOrderService.get(transactionId);
-        PaymentState paymentState = paymentResult.getState();
-        transactionPayOrder.setState(paymentState);
-        payOrderService.update(transactionPayOrder);
-
-        if (PaymentState.PAYMENT_SUCCESS == paymentState) {
-            List<TransactionPayOrder> transactionPayOrderList = payOrderService.listByNotCoreFlag(transactionId);
-            List<CompletableFuture<TransactionPayOrder>> futureList = transactionPayOrderList.stream().map(
-                            (TransactionPayOrder order) -> CompletableFuture.supplyAsync(() -> {
-                                PaymentResult result = paymentService.pay(order);
-                                order.setState(result.getState());
-                                return order;
-                            }))
-                    .collect(Collectors.toList());
-
-            CompletableFuture<Void> allFutures = CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
-            CompletableFuture<List<TransactionPayOrder>> futureResult = allFutures.thenApply(v -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
-            List<TransactionPayOrder> transactionPayOrders;
-            try {
-                transactionPayOrders = futureResult.get();
-            } catch (InterruptedException | ExecutionException e) {
-                log.error("get payment order exception", e);
-                throw new BusinessException("get payment order exception");
-            }
-
-            if (verifyAllSuccess(transactionPayOrders)) {
-                payOrderService.saveAll(transactionPayOrders);
-                transactionTradeOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
-            } else {
-                transactionTradeOrder.setPaymentState(PaymentState.PAYMENT_FAIL);
-            }
-            transactionOrderService.save(transactionTradeOrder);
-
-        }
+//        String transactionId = transactionPayOrder.getTransactionOrderId();
+//        TransactionTradeOrder transactionTradeOrder = transactionOrderService.get(transactionId);
+//        PaymentState paymentState = paymentResult.getState();
+//        transactionPayOrder.setState(paymentState);
+//        payOrderService.update(transactionPayOrder);
+//
+//        if (PaymentState.PAYMENT_SUCCESS == paymentState) {
+//            List<TransactionPayOrder> transactionPayOrderList = payOrderService.listByNotCoreFlag(transactionId);
+//            List<CompletableFuture<TransactionPayOrder>> futureList = transactionPayOrderList.stream().map(
+//                            (TransactionPayOrder order) -> CompletableFuture.supplyAsync(() -> {
+//                                PaymentResult result = paymentService.pay(order);
+//                                order.setState(result.getState());
+//                                return order;
+//                            }))
+//                    .collect(Collectors.toList());
+//
+//            CompletableFuture<Void> allFutures = CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
+//            CompletableFuture<List<TransactionPayOrder>> futureResult = allFutures.thenApply(v -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+//            List<TransactionPayOrder> transactionPayOrders;
+//            try {
+//                transactionPayOrders = futureResult.get();
+//            } catch (InterruptedException | ExecutionException e) {
+//                log.error("get payment order exception", e);
+//                throw new BusinessException("get payment order exception");
+//            }
+//
+//            if (verifyAllSuccess(transactionPayOrders)) {
+//                payOrderService.saveAll(transactionPayOrders);
+//                transactionTradeOrder.setPaymentState(PaymentState.PAYMENT_SUCCESS);
+//            } else {
+//                transactionTradeOrder.setPaymentState(PaymentState.PAYMENT_FAIL);
+//            }
+//            transactionOrderService.save(transactionTradeOrder);
+//
+//        }
 
     }
 
