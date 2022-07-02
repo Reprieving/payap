@@ -21,4 +21,11 @@ public class PaymentResult {
                 .findFirst().orElse(null);
 
     }
+
+    public PaymentResultItem get() {
+        Assert.notNull(paymentChannel,"paymentChannel require");
+        return details.stream().filter(paymentResultItem -> paymentResultItem.getPaymentChannel() == paymentChannel)
+                .findFirst().orElse(null);
+
+    }
 }

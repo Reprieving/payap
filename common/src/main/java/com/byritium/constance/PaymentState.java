@@ -8,7 +8,7 @@ public enum PaymentState {
     PAYMENT_PENDING("PAYMENT_PENDING", "处理中"),
     PAYMENT_SUCCESS("PAYMENT_SUCCESS", "成功"),
     PAYMENT_FAIL("PAYMENT_FAIL", "失败"),
-
+    PAYMENT_CLOSE("PAYMENT_CLOSE", "关闭"),
     ;
 
     private final String state;

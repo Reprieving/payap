@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,6 +79,7 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
 
         PaymentResult paymentResult = paymentService.pay(list);
         PaymentResultItem item = paymentResult.get(paymentChannel);
+        Assert.notNull(item, "null paymentResultItem");
         transactionResult.setPaySign(item.getSign());
 
         return transactionResult;
@@ -85,6 +87,14 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
 
     @Override
     public void paymentCallback(PaymentResult paymentResult) {
+        String txOrderId = paymentResult.getTransactionOrderId();
+        PaymentState state = paymentResult.getState();
+        if (PaymentState.PAYMENT_SUCCESS != state && PaymentState.PAYMENT_FAIL != state) {
+            return;
+        }
+        TransactionTradeOrder transactionTradeOrder = transactionOrderService.get(txOrderId);
+        transactionTradeOrder.setPaymentState(state);
+
 //        TransactionPayOrder transactionPayOrder = payOrderService.get(paymentResult.getPaymentOrderId());
 //        if (transactionPayOrder == null) {
 //            throw new BusinessException("未找到订单");
