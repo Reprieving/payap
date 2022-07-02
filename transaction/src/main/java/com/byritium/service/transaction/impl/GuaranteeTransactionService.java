@@ -3,10 +3,7 @@ package com.byritium.service.transaction.impl;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionType;
-import com.byritium.dto.Deduction;
-import com.byritium.dto.PaymentResult;
-import com.byritium.dto.TransactionParam;
-import com.byritium.dto.TransactionResult;
+import com.byritium.dto.*;
 import com.byritium.entity.transaction.TransactionPayOrder;
 import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.exception.BusinessException;
@@ -17,6 +14,7 @@ import com.byritium.service.transaction.order.PayOrderService;
 import com.byritium.service.transaction.order.TransactionOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -79,16 +77,18 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
         transactionOrderService.save(transactionTradeOrder);
 
         PaymentResult paymentResult = paymentService.pay(list);
-        transactionResult.setPaySign(paymentResult.getSign());
+        PaymentResultItem item = paymentResult.get(paymentChannel);
+        transactionResult.setPaySign(item.getSign());
+
         return transactionResult;
     }
 
     @Override
     public void paymentCallback(PaymentResult paymentResult) {
-        TransactionPayOrder transactionPayOrder = payOrderService.get(paymentResult.getPaymentOrderId());
-        if (transactionPayOrder == null) {
-            throw new BusinessException("未找到订单");
-        }
+//        TransactionPayOrder transactionPayOrder = payOrderService.get(paymentResult.getPaymentOrderId());
+//        if (transactionPayOrder == null) {
+//            throw new BusinessException("未找到订单");
+//        }
 
 //        String transactionId = transactionPayOrder.getTransactionOrderId();
 //        TransactionTradeOrder transactionTradeOrder = transactionOrderService.get(transactionId);
@@ -130,13 +130,13 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
 
     @Override
     public void refundCallback(PaymentResult paymentResult) {
-        TransactionPayOrder transactionPayOrder = payOrderService.get(paymentResult.getPaymentOrderId());
-        if (transactionPayOrder == null) {
-            throw new BusinessException("未找到订单");
-        }
-
-        String transactionId = transactionPayOrder.getTransactionOrderId();
-        TransactionTradeOrder transactionTradeOrder = transactionOrderService.get(transactionId);
-        PaymentState paymentState = paymentResult.getState();
+//        TransactionPayOrder transactionPayOrder = payOrderService.get(paymentResult.getPaymentOrderId());
+//        if (transactionPayOrder == null) {
+//            throw new BusinessException("未找到订单");
+//        }
+//
+//        String transactionId = transactionPayOrder.getTransactionOrderId();
+//        TransactionTradeOrder transactionTradeOrder = transactionOrderService.get(transactionId);
+//        PaymentState paymentState = paymentResult.getState();
     }
 }

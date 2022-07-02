@@ -2,13 +2,23 @@ package com.byritium.dto;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
+import com.byritium.exception.BusinessException;
 import lombok.Data;
+import org.springframework.util.Assert;
+
+import java.util.List;
 
 @Data
 public class PaymentResult {
     private String transactionOrderId;
     private PaymentChannel paymentChannel;
-    private String paymentOrderId;
+    private List<PaymentResultItem> details;
     private PaymentState state;
-    private String sign;
+
+    public PaymentResultItem get(PaymentChannel paymentChannel) {
+        Assert.notNull(paymentChannel,"paymentChannel require");
+        return details.stream().filter(paymentResultItem -> paymentResultItem.getPaymentChannel() == paymentChannel)
+                .findFirst().orElse(null);
+
+    }
 }
