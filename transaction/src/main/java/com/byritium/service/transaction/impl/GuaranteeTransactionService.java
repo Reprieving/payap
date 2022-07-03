@@ -94,6 +94,12 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
         }
         TransactionTradeOrder transactionTradeOrder = transactionOrderService.get(txOrderId);
         transactionTradeOrder.setPaymentState(state);
+        transactionOrderService.save(transactionTradeOrder);
+
+        if (PaymentState.PAYMENT_SUCCESS == state) {
+            //TODO notice business
+        }
+
 
 //        TransactionPayOrder transactionPayOrder = payOrderService.get(paymentResult.getPaymentOrderId());
 //        if (transactionPayOrder == null) {
