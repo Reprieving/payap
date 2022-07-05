@@ -1,17 +1,19 @@
 package com.byritium.controller;
 
-import com.byritium.constance.PaymentStatus;
-import com.byritium.dto.PaymentRequest;
-import com.byritium.entity.PaymentOrder;
+
+import com.byritium.dto.order.TransactionPayOrder;
+import org.hibernate.Transaction;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("order")
 public class PaymentOrderController {
     @RequestMapping("pay")
-    public void pay() {
+    public void pay(@RequestBody List<TransactionPayOrder> orders) {
 
     }
 

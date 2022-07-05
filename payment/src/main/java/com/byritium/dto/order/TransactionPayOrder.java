@@ -1,16 +1,12 @@
-package com.byritium.entity.transaction;
+package com.byritium.dto.order;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentState;
-import com.byritium.entity.CommonEntity;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class TransactionPayOrder extends CommonEntity {
+public class TransactionPayOrder {
     private String id;
     private String bizOrderId;
     private String transactionOrderId;
