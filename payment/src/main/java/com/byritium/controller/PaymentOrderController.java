@@ -10,15 +10,20 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("order")
 public class PaymentOrderController {
+
+    @RequestMapping("call")
+    public void call(@RequestBody List<TransactionPayOrder> orders) {
+
+    }
+
     @RequestMapping("pay")
     public void pay(@RequestBody List<TransactionPayOrder> orders) {
 
     }
 
     @RequestMapping("withdraw")
-    public void withdraw() {
+    public void withdraw(@RequestBody List<TransactionPayOrder> orders) {
 
     }
 
