@@ -2,7 +2,6 @@ package com.byritium.controller;
 
 
 import com.byritium.dto.order.TransactionPayOrder;
-import org.hibernate.Transaction;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class PaymentOrderController {
+public class PaymentController {
+
+
 
     @RequestMapping("call")
     public void call(@RequestBody List<TransactionPayOrder> orders) {
