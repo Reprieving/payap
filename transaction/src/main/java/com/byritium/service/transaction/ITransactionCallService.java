@@ -13,8 +13,4 @@ public interface ITransactionCallService {
 
     TransactionResult call(String clientId, TransactionParam param);
 
-
-    default boolean verifyAllSuccess(List<TransactionPayOrder> list) {
-        return list.stream().filter(transactionPayOrder -> transactionPayOrder.getState() == PaymentState.PAYMENT_SUCCESS).count() == list.size();
-    }
 }
