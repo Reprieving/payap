@@ -10,12 +10,10 @@ import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.byritium.constance.BaseConst;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.dto.AliPayConfig;
-import com.byritium.dto.PayParam;
+import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.PayService;
-import com.byritium.service.RefundService;
-import com.byritium.service.WithdrawService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -33,7 +31,7 @@ public class AliPayAppService extends AliPayService implements PayService {
     }
 
     @Override
-    public PayParam pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra) {
+    public PaymentResult pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra) {
         AliPayConfig aliPayConfig = new AliPayConfig();
 
         CertAlipayRequest certAlipayRequest = buildRequest(aliPayConfig);
@@ -58,10 +56,10 @@ public class AliPayAppService extends AliPayService implements PayService {
             String body = response.getBody();
             Assert.state(!StringUtils.hasText(body), "支付宝签名失败");
 
-            PayParam payParam = new PayParam();
-            payParam.setPrePayId(body);
+            PaymentResult paymentResult = new PaymentResult();
+            paymentResult.setPrePayId(body);
 
-            return payParam;
+            return paymentResult;
         } catch (AlipayApiException e) {
             log.error("支付宝渠道支付失败，支付订单id：{}", businessOrderId, e);
             throw new BusinessException("支付宝渠道支付失败");

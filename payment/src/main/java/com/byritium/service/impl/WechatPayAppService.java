@@ -1,7 +1,7 @@
 package com.byritium.service.impl;
 
 import com.byritium.constance.BaseConst;
-import com.byritium.dto.PayParam;
+import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.dto.WechatPayConfig;
 import com.byritium.dto.wechat.WechatPayAmount;
@@ -23,14 +23,13 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.util.Map;
-import java.util.UUID;
 
 @Slf4j
 @Service
 public class WechatPayAppService extends WechatPayService implements PayService {
 
     @Override
-    public PayParam pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra) {
+    public PaymentResult pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra) {
         WechatPayConfig wechatPayConfig = new WechatPayConfig();
 
         String appId = wechatPayConfig.getAppId();
@@ -66,8 +65,8 @@ public class WechatPayAppService extends WechatPayService implements PayService 
             throw new BusinessException("支付失败");
         }
 
-        PayParam payParam = new PayParam();
-        payParam.setPrePayId(wechatPayResult.getPrepay_id());
+        PaymentResult paymentResult = new PaymentResult();
+        paymentResult.setPrePayId(wechatPayResult.getPrepay_id());
         return null;
     }
 
@@ -77,7 +76,7 @@ public class WechatPayAppService extends WechatPayService implements PayService 
     }
 
     @Override
-    public PayParam query(String businessOrderId, PaymentExtra paymentExtra) {
+    public PaymentResult query(String businessOrderId, PaymentExtra paymentExtra) {
         return super.query(businessOrderId, paymentExtra);
     }
 }

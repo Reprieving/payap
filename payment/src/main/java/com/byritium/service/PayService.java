@@ -1,8 +1,7 @@
 package com.byritium.service;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentProduct;
-import com.byritium.dto.PayParam;
+import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 
 import java.math.BigDecimal;
@@ -10,6 +9,6 @@ import java.math.BigDecimal;
 public interface PayService {
     PaymentChannel channel();
 
-    PayParam pay(String businessOrderId, String subject, BigDecimal payAmount, PaymentExtra paymentExtra);
+    PaymentResult pay(String businessOrderId, String subject, BigDecimal payAmount, PaymentExtra paymentExtra);
 
 }

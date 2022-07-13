@@ -4,7 +4,7 @@ package com.byritium.service.impl;
 import com.byritium.constance.BaseConst;
 import com.byritium.constance.InterfaceProvider;
 import com.byritium.constance.PaymentChannel;
-import com.byritium.dto.PayParam;
+import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.dto.SSLRequest;
 import com.byritium.dto.WechatPayConfig;
@@ -234,7 +234,7 @@ public abstract class WechatPayService implements RefundService, WithdrawService
     }
 
     @Override
-    public PayParam query(String businessOrderId, PaymentExtra paymentExtra) {
+    public PaymentResult query(String businessOrderId, PaymentExtra paymentExtra) {
         return null;
     }
 }

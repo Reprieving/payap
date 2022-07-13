@@ -1,7 +1,7 @@
 package com.byritium.service.wrapper;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.dto.PayParam;
+import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.PayService;
@@ -36,7 +36,7 @@ public class PayWrapperService implements ApplicationContextAware, PayService {
     }
 
     @Override
-    public PayParam pay(String businessOrderId, String subject, BigDecimal payAmount, PaymentExtra paymentExtra) {
+    public PaymentResult pay(String businessOrderId, String subject, BigDecimal payAmount, PaymentExtra paymentExtra) {
         PaymentChannel paymentChannel = paymentExtra.getPaymentChannel();
 
         Assert.notNull(paymentChannel, "未选择支付渠道");

@@ -1,17 +1,15 @@
 package com.byritium.dto;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentStatus;
+import lombok.Data;
 
-import java.math.BigDecimal;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class PayParam {
-    private String prePayId;
-    private BigDecimal amount;
+    private String bizOrderId;
+    private String txOrderId;
+    private String userId;
     private PaymentChannel paymentChannel;
-    private PaymentStatus paymentStatus;
+    private List<PaymentOrder> orderList;
 }

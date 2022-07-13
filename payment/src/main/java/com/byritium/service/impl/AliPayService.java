@@ -5,24 +5,19 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.CertAlipayRequest;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayFundTransAppPayModel;
-import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.domain.Participant;
 import com.alipay.api.request.AlipayFundTransUniTransferRequest;
-import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayFundTransUniTransferResponse;
-import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.byritium.constance.BaseConst;
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentProduct;
 import com.byritium.constance.alipay.AliPayCode;
 import com.byritium.dto.AliPayConfig;
-import com.byritium.dto.PayParam;
+import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.exception.BusinessException;
-import com.byritium.service.PayService;
 import com.byritium.service.QueryService;
 import com.byritium.service.RefundService;
 import com.byritium.service.WithdrawService;
@@ -136,7 +131,7 @@ public abstract class AliPayService implements RefundService, WithdrawService, Q
 
 
     @Override
-    public PayParam query(String businessOrderId, PaymentExtra paymentExtra) {
+    public PaymentResult query(String businessOrderId, PaymentExtra paymentExtra) {
         return null;
     }
 }

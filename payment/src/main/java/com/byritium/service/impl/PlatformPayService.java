@@ -1,7 +1,7 @@
 package com.byritium.service.impl;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.dto.PayParam;
+import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.service.PayService;
 import com.byritium.service.RefundService;
@@ -18,7 +18,7 @@ public class PlatformPayService implements PayService, RefundService {
     }
 
     @Override
-    public PayParam pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra) {
+    public PaymentResult pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra) {
         //调用清算服务
 
 

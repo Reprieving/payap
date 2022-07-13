@@ -1,7 +1,7 @@
 package com.byritium.service.wrapper;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.dto.PayParam;
+import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.QueryService;
@@ -36,7 +36,7 @@ public class QueryWrapperService implements ApplicationContextAware, QueryServic
     }
 
     @Override
-    public PayParam query(String businessOrderId, PaymentExtra paymentExtra) {
+    public PaymentResult query(String businessOrderId, PaymentExtra paymentExtra) {
         PaymentChannel paymentChannel = paymentExtra.getPaymentChannel();
 
         Assert.notNull(paymentChannel, "未选择支付渠道");

@@ -4,7 +4,7 @@ import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentProduct;
 import com.byritium.constance.PaymentStatus;
 import com.byritium.dao.PaymentOrderRepository;
-import com.byritium.dto.PayParam;
+import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.entity.PaymentOrder;
 import com.byritium.service.wrapper.PayWrapperService;
@@ -34,7 +34,7 @@ public class PaymentOrderService {
     @Resource
     private PaymentOrderRepository paymentOrderRepository;
 
-    public PayParam pay(PaymentOrder paymentOrder) {
+    public PaymentResult pay(PaymentOrder paymentOrder) {
         PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
         PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
 
@@ -49,10 +49,10 @@ public class PaymentOrderService {
         String paymentOrderId = save.getId();
 
 
-        PayParam payParam = null;
+        PaymentResult paymentResult = null;
         switch (paymentStatus) {
             case PAYMENT_PENDING:
-                payParam = payWrapperService.pay(paymentOrderId, paymentOrder.getSubject(), paymentOrder.getPayAmount(), paymentExtra);
+                paymentResult = payWrapperService.pay(paymentOrderId, paymentOrder.getSubject(), paymentOrder.getPayAmount(), paymentExtra);
 
                 break;
 
@@ -70,7 +70,7 @@ public class PaymentOrderService {
 
                 break;
         }
-        return payParam;
+        return paymentResult;
     }
 
     public void refund(PaymentOrder paymentOrder) {
