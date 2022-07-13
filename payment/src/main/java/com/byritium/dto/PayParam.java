@@ -11,5 +11,5 @@ public class PayParam {
     private String txOrderId;
     private String userId;
     private PaymentChannel paymentChannel;
-    private List<PaymentOrder> orderList;
+    private List<PayOrder> orderList;
 }
