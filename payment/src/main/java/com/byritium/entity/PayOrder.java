@@ -1,4 +1,4 @@
-package com.byritium.dto;
+package com.byritium.entity;
 
 
 import com.byritium.constance.PaymentChannel;

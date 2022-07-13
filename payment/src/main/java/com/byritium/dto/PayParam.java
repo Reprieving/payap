@@ -1,6 +1,7 @@
 package com.byritium.dto;
 
 import com.byritium.constance.PaymentChannel;
+import com.byritium.entity.PayOrder;
 import lombok.Data;
 
 import java.util.List;

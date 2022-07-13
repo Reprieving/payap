@@ -13,7 +13,7 @@ import com.byritium.dto.AliPayConfig;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.exception.BusinessException;
-import com.byritium.service.PayService;
+import com.byritium.service.IPayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 
 @Service
 @Slf4j
-public class AliPayAppService extends AliPayService implements PayService {
+public class AliPayAppService extends AliPayService implements IPayService {
 
     @Override
     public PaymentChannel channel() {

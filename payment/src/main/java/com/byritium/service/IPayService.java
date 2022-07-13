@@ -6,7 +6,7 @@ import com.byritium.dto.PaymentExtra;
 
 import java.math.BigDecimal;
 
-public interface PayService {
+public interface IPayService {
     PaymentChannel channel();
 
     PaymentResult pay(String businessOrderId, String subject, BigDecimal payAmount, PaymentExtra paymentExtra);

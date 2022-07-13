@@ -2,19 +2,26 @@ package com.byritium.controller;
 
 
 import com.byritium.dto.PayParam;
-import com.byritium.dto.order.TransactionPayOrder;
+import com.byritium.service.IPayService;
+import com.byritium.service.payment.PayService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 @RestController
 public class PaymentController {
 
+    private final PayService payService;
+
+    public PaymentController(PayService payService) {
+        this.payService = payService;
+    }
+
+
     @RequestMapping("pay")
     public void pay(@RequestBody PayParam param) {
-
+        payService.call(param.getPaymentChannel(), param.getOrderList());
     }
 
     @RequestMapping("withdraw")
