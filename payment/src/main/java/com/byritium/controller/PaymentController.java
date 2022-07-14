@@ -18,7 +18,6 @@ public class PaymentController {
         this.payService = payService;
     }
 
-
     @RequestMapping("pay")
     public void pay(@RequestBody PayParam param) {
         payService.call(param.getPaymentChannel(), param.getOrderList());
