@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("pay")
 public class PayController {
 
-    @RequestMapping("")
-    public void pay(@RequestBody PayParam param) {
+    @RequestMapping("all")
+    public void call(@RequestBody PayParam param) {
 
     }
 
