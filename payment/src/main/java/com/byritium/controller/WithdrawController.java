@@ -7,13 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("withdraw")
 public class WithdrawController {
 
-    @RequestMapping("call")
-    public void call(){
-
-    }
-
-    @RequestMapping("query")
-    public void query(){
+    @RequestMapping("")
+    public void call() {
 
     }
 }
