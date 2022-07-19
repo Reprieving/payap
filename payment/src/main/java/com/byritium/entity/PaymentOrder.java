@@ -50,12 +50,6 @@ public class PaymentOrder {
     @Column(name = "payment_channel", nullable = false, length = 64)
     private PaymentChannel paymentChannel;
 
-    @Column(name = "transaction_product", nullable = false, length = 64)
-    private TransactionProduct transactionProduct;
-
-    @Column(name = "payment_product", nullable = false)
-    private PaymentProduct paymentProduct;
-
     @Column(name = "payment_state", nullable = false)
     private PaymentStatus paymentStatus;
 

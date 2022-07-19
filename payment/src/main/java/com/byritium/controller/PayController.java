@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping("pay")
 public class PayController {
-
     final PayService payService;
 
     public PayController(PayService payService) {
@@ -23,10 +22,10 @@ public class PayController {
     }
 
     @RequestMapping("")
-    public void call(@RequestBody PayParam param) {
+    public void pay(@RequestBody PayParam param) {
         PaymentChannel paymentChannel = param.getPaymentChannel();
         List<PayOrder> orderList = param.getOrderList();
-        payService.call(paymentChannel, orderList);
+
     }
 
 
