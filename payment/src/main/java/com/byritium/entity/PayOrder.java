@@ -9,9 +9,9 @@ import java.math.BigDecimal;
 @Data
 public class PayOrder {
     private String id;
-    private String userId;
+    private String uid;
     private String subject;
-    private String trxOrderId;
+    private String txOrderId;
     private String bizOrderId;
     private BigDecimal orderAmount;
     private PaymentChannel paymentChannel;

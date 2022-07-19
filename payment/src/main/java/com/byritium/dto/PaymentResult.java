@@ -13,7 +13,6 @@ import lombok.Setter;
 public class PaymentResult {
     private String prePayId;
     private String sign;
-    private BigDecimal amount;
     private PaymentChannel paymentChannel;
     private PaymentStatus paymentStatus;
 }

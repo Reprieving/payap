@@ -13,8 +13,6 @@ import java.util.List;
 
 @Service
 public class PayService {
-
-
     private final PayOrderDao payOrderDao;
     private final ChannelPaymentRpc channelPaymentRpc;
 
@@ -25,11 +23,15 @@ public class PayService {
 
     public PaymentResult call(PaymentChannel channel, List<PayOrder> orderList) {
         payOrderDao.saveAll(orderList);
-        PayOrder payOrder = orderList.stream().filter(payOrder1 -> channel == payOrder1.getPaymentChannel()).findFirst().get();
+        PayOrder payOrder = orderList.stream().filter(order -> channel == order.getPaymentChannel()).findFirst().get();
 
         ResponseBody<PaymentResult> rsp = channelPaymentRpc.pay(payOrder);
         PaymentResult paymentResult = rsp.getData();
 
         return paymentResult;
+    }
+
+    public void callback(PayOrder payOrder) {
+
     }
 }
