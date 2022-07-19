@@ -4,6 +4,7 @@ import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentStatus;
 
 import java.math.BigDecimal;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import lombok.Setter;
 @Setter
 public class PaymentResult {
     private String prePayId;
+    private String sign;
     private BigDecimal amount;
     private PaymentChannel paymentChannel;
     private PaymentStatus paymentStatus;
