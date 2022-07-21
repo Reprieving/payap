@@ -1,9 +1,7 @@
 package com.byritium.entity;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentProduct;
 import com.byritium.constance.PaymentStatus;
-import com.byritium.constance.TransactionProduct;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;

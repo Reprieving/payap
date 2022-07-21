@@ -9,8 +9,8 @@ public enum PaymentStatus {
     PAYMENT_FAIL("PAYMENT_FAIL", "支付失败"),
 
     ;
-    private String state;
-    private String message;
+    private final String state;
+    private final String message;
 
     PaymentStatus(String state, String message) {
         this.state = state;

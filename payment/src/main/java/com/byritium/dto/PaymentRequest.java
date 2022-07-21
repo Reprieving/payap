@@ -1,8 +1,7 @@
 package com.byritium.dto;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentProduct;
-import com.byritium.constance.TransactionProduct;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
@@ -18,7 +17,5 @@ public class PaymentRequest {
     private BigDecimal orderAmount;
     private BigDecimal payAmount;
     private PaymentChannel paymentChannel;
-    private TransactionProduct transactionProduct;
-    private PaymentProduct paymentProduct;
     private Timestamp createTime;
 }

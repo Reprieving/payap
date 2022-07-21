@@ -14,4 +14,5 @@ public interface ChannelPaymentRpc {
 
     @RequestMapping("pay")
     ResponseBody<PaymentResult> pay(@RequestBody PayOrder payOrder);
+
 }

@@ -1,7 +1,6 @@
 package com.byritium.service.wrapper;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentProduct;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.SettleService;
@@ -37,16 +36,11 @@ public class SettleWrapperService implements ApplicationContextAware, SettleServ
 
     @Override
     public void settle(String businessOrderId, PaymentExtra paymentExtra) {
-        PaymentProduct paymentProduct = paymentExtra.getPaymentProduct();
         PaymentChannel paymentChannel = paymentExtra.getPaymentChannel();
 
-        Assert.notNull(paymentProduct, "未选择支付产品");
         Assert.notNull(paymentChannel, "未选择支付渠道");
 
         SettleService settleService = serviceMap.get(paymentChannel);
-        if (settleService == null) {
-            throw new BusinessException(paymentProduct.getMessage() + "-" + paymentChannel.getMessage() + "结算暂不开放");
-        }
 
         settleService.settle(businessOrderId, paymentExtra);
     }

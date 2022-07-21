@@ -2,7 +2,6 @@ package com.byritium.dto;
 
 import com.byritium.constance.AssetsType;
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentProduct;
 import lombok.Getter;
 import lombok.Setter;
 
