@@ -15,4 +15,13 @@ public interface ChannelPaymentRpc {
     @RequestMapping("pay")
     ResponseBody<PaymentResult> pay(@RequestBody PayOrder payOrder);
 
+    @RequestMapping("withdraw")
+    ResponseBody<PaymentResult> withdraw();
+
+    @RequestMapping("transfer")
+    ResponseBody<PaymentResult> transfer();
+
+    @RequestMapping("refund")
+    ResponseBody<PaymentResult> refund();
+
 }
