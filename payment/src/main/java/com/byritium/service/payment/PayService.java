@@ -9,6 +9,8 @@ import com.byritium.rpc.ChannelPaymentRpc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,7 +23,9 @@ public class PayService {
         this.channelPaymentRpc = channelPaymentRpc;
     }
 
-    public PaymentResult call(PaymentChannel channel, List<PayOrder> orderList) {
+    public PaymentResult call(PaymentChannel channel, String userId, BigDecimal payAmount) {
+
+        List<PayOrder> orderList = new ArrayList<>();
         payOrderDao.saveAll(orderList);
         PayOrder payOrder = orderList.stream().filter(order -> channel == order.getPaymentChannel()).findFirst().get();
 
