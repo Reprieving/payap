@@ -35,7 +35,7 @@ public class PayService {
         return paymentResult;
     }
 
-    public void callback(PayOrder payOrder) {
+    public void callback(String bizOrderId, String payOrderId) {
 
     }
 }
