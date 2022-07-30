@@ -23,7 +23,7 @@ public class PayService {
         this.channelPaymentRpc = channelPaymentRpc;
     }
 
-    public PaymentResult call(PaymentChannel channel, String userId, BigDecimal payAmount) {
+    public PaymentResult call(PaymentChannel channel, String bizOrderId, String txOrderId, String userId, String subject, BigDecimal payAmount) {
 
         List<PayOrder> orderList = new ArrayList<>();
         payOrderDao.saveAll(orderList);
