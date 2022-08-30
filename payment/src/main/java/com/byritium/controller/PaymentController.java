@@ -26,6 +26,11 @@ public class PaymentController {
 
     }
 
+    @RequestMapping("pay/query")
+    public void queryPay(@RequestBody PayParam param) {
+
+    }
+
     @RequestMapping("refund")
     public void refund(@RequestBody PayParam param) {
 
