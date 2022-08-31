@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("pay")
-public class PayController {
+@RequestMapping("agreement")
+public class AgreementController {
 
-    @RequestMapping("call")
-    public void call(@RequestBody PayParam param) {
+    @RequestMapping("sign")
+    public void sign(@RequestBody PayParam param) {
 
     }
 
@@ -19,8 +19,8 @@ public class PayController {
 
     }
 
-    @RequestMapping("close")
-    public void close(@RequestBody PayParam param) {
+    @RequestMapping("unsign")
+    public void unsign(@RequestBody PayParam param) {
 
     }
 }

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("refund")
 public class RefundController {
 
-    @RequestMapping("launch")
-    public void launch(@RequestBody PayParam param) {
+    @RequestMapping("call")
+    public void call(@RequestBody PayParam param) {
 
     }
 
