@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("withdraw")
 public class WithdrawController {
 
-    @RequestMapping("call")
-    public void call(@RequestBody PayParam param) {
+    @RequestMapping("orders")
+    public void orders(@RequestBody PayParam param) {
 
     }
 

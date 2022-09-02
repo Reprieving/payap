@@ -9,13 +9,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("settle")
 public class SettleController {
 
-    @RequestMapping("call")
-    public void call(@RequestBody PayParam param) {
+    @RequestMapping("orders")
+    public void orders(@RequestBody PayParam param) {
 
     }
 
-    @RequestMapping("query")
-    public void query(@RequestBody PayParam param) {
+    @RequestMapping("orders/query")
+    public void queryOrders(@RequestBody PayParam param) {
+
+    }
+
+    @RequestMapping("receiver/add")
+    public void addReceiver(@RequestBody PayParam param) {
+
+    }
+
+    @RequestMapping("receiver/delete")
+    public void deleteReceiver(@RequestBody PayParam param) {
 
     }
 }
