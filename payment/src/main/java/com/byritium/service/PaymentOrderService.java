@@ -34,7 +34,6 @@ public class PaymentOrderService {
     private PaymentOrderRepository paymentOrderRepository;
 
     public PaymentResult pay(PaymentOrder paymentOrder) {
-        PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
         PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
 
         PaymentStatus paymentStatus = paymentOrder.getPaymentStatus();
@@ -42,7 +41,6 @@ public class PaymentOrderService {
 
         PaymentExtra paymentExtra = new PaymentExtra();
         paymentExtra.setPaymentChannel(paymentChannel);
-        paymentExtra.setPaymentProduct(paymentProduct);
 
         PaymentOrder save = paymentOrderRepository.save(paymentOrder);
         String paymentOrderId = save.getId();
@@ -73,13 +71,11 @@ public class PaymentOrderService {
     }
 
     public void refund(PaymentOrder paymentOrder) {
-        PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
         PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
 
 
         PaymentExtra paymentExtra = new PaymentExtra();
         paymentExtra.setPaymentChannel(paymentChannel);
-        paymentExtra.setPaymentProduct(paymentProduct);
 
         String businessOrderId = "";
         String refundOrderId = "";
@@ -92,13 +88,11 @@ public class PaymentOrderService {
 
 
     public void withdraw(PaymentOrder paymentOrder) {
-        PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
         PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
 
 
         PaymentExtra paymentExtra = new PaymentExtra();
         paymentExtra.setPaymentChannel(paymentChannel);
-        paymentExtra.setPaymentProduct(paymentProduct);
 
         String businessOrderId = "";
         String sdkId = "";
@@ -110,7 +104,6 @@ public class PaymentOrderService {
     }
 
     public void query(PaymentOrder paymentOrder) {
-        PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
         PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
 
         PaymentStatus paymentStatus = paymentOrder.getPaymentStatus();
@@ -118,7 +111,6 @@ public class PaymentOrderService {
 
         PaymentExtra paymentExtra = new PaymentExtra();
         paymentExtra.setPaymentChannel(paymentChannel);
-        paymentExtra.setPaymentProduct(paymentProduct);
 
         String businessOrderId = "";
 
@@ -127,7 +119,6 @@ public class PaymentOrderService {
     }
 
     public void settle(PaymentOrder paymentOrder) {
-        PaymentProduct paymentProduct = paymentOrder.getPaymentProduct();
         PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
 
         PaymentStatus paymentStatus = paymentOrder.getPaymentStatus();
@@ -135,7 +126,6 @@ public class PaymentOrderService {
 
         PaymentExtra paymentExtra = new PaymentExtra();
         paymentExtra.setPaymentChannel(paymentChannel);
-        paymentExtra.setPaymentProduct(paymentProduct);
 
     }
 }

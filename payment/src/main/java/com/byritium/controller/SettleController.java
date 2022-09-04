@@ -24,6 +24,11 @@ public class SettleController {
 
     }
 
+    @RequestMapping("receiver/query")
+    public void queryReceiver(@RequestBody PayParam param) {
+
+    }
+
     @RequestMapping("receiver/delete")
     public void deleteReceiver(@RequestBody PayParam param) {
 
