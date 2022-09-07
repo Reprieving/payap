@@ -9,4 +9,16 @@ public class FastPayService {
 
     }
 
+    public void callback() {
+
+    }
+
+    public void verify() {
+
+    }
+
+    public void settle() {
+
+    }
+
 }
