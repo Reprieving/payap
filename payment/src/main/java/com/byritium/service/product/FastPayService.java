@@ -1,4 +1,4 @@
-package com.byritium.service;
+package com.byritium.service.product;
 
 import org.springframework.stereotype.Service;
 
