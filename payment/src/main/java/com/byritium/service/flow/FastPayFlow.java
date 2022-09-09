@@ -1,9 +1,9 @@
-package com.byritium.service.product;
+package com.byritium.service.flow;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class FastPayService {
+@Component
+public class FastPayFlow {
 
     public void prepare() {
 
