@@ -9,7 +9,7 @@ public class FastPayFlow {
 
     }
 
-    public void callback() {
+    public void payCallback() {
 
     }
 
@@ -18,6 +18,10 @@ public class FastPayFlow {
     }
 
     public void settle() {
+
+    }
+
+    public void settleCallback() {
 
     }
 
