@@ -1,4 +1,4 @@
-package com.byritium.service.directive;
+package com.byritium.service.flow.directive;
 
 public class PayResultDirective implements FlowDirective{
     @Override
