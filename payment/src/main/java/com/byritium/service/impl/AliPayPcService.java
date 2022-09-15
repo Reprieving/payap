@@ -5,10 +5,9 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.CertAlipayRequest;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.domain.AlipayTradePagePayModel;
 import com.alipay.api.request.AlipayTradePagePayRequest;
-import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradePagePayResponse;
-import com.alipay.api.response.AlipayTradeWapPayResponse;
 import com.byritium.constance.BaseConst;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.dto.AliPayConfig;
@@ -29,7 +28,7 @@ public class AliPayPcService extends AliPayService implements IPayService {
 
     @Override
     public PaymentChannel channel() {
-        return PaymentChannel.ALI_APP_PAY;
+        return PaymentChannel.ALI_PAY_PC;
     }
 
     @Override
@@ -42,10 +41,10 @@ public class AliPayPcService extends AliPayService implements IPayService {
         try {
             alipayClient = new DefaultAlipayClient(certAlipayRequest);
             AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
-            AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+            AlipayTradePagePayModel model = new AlipayTradePagePayModel();
             model.setSubject(subject);
             model.setOutTradeNo(businessOrderId);
-            model.setTimeoutExpress("30m");
+            model.setTimeExpire("30m");
             model.setTotalAmount(orderAmount.toPlainString());
             model.setProductCode("FAST_INSTANT_TRADE_PAY");
             request.setBizModel(model);

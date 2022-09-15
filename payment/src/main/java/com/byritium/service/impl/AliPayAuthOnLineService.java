@@ -4,7 +4,6 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.CertAlipayRequest;
 import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
@@ -24,11 +23,11 @@ import java.math.BigDecimal;
 
 @Service
 @Slf4j
-public class AliPayWapService extends AliPayService implements IPayService {
+public class AliPayAuthOnLineService extends AliPayService implements IPayService {
 
     @Override
     public PaymentChannel channel() {
-        return PaymentChannel.ALI_PAY_WAP;
+        return PaymentChannel.ALI_PAY_AUTH_ONLINE;
     }
 
     @Override

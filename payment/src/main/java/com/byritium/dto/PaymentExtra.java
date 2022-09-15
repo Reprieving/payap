@@ -8,7 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PaymentExtra {
-    private PaymentProduct paymentProduct;
     private PaymentChannel paymentChannel;
     private AssetsType assetsType;
 }

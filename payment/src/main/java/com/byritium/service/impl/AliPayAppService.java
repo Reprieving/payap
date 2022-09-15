@@ -5,7 +5,6 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.CertAlipayRequest;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
-import com.alipay.api.domain.SettleDetailInfo;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.byritium.constance.BaseConst;
@@ -28,7 +27,7 @@ public class AliPayAppService extends AliPayService implements IPayService {
 
     @Override
     public PaymentChannel channel() {
-        return PaymentChannel.ALI_APP_PAY;
+        return PaymentChannel.ALI_PAY_APP;
     }
 
     @Override
@@ -46,7 +45,7 @@ public class AliPayAppService extends AliPayService implements IPayService {
             AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
             model.setSubject(subject);
             model.setOutTradeNo(businessOrderId);
-            model.setTimeoutExpress("30m");
+            model.setTimeExpire("30m");
             model.setTotalAmount(orderAmount.toPlainString());
             model.setProductCode("QUICK_MSECURITY_PAY");
             request.setBizModel(model);
