@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("pay")
 public class PayController {
 
+
     @RequestMapping("orders")
     public void orders(@RequestBody PayParam param) {
+
+
 
     }
 
@@ -21,6 +24,11 @@ public class PayController {
 
     @RequestMapping("close")
     public void close(@RequestBody PayParam param) {
+
+    }
+
+    @RequestMapping("notice")
+    public void notice(@RequestBody PayParam param) {
 
     }
 }
