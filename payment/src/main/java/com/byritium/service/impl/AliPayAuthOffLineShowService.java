@@ -4,11 +4,12 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.CertAlipayRequest;
 import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.domain.*;
-import com.alipay.api.request.AlipayFundAuthOrderAppFreezeRequest;
-import com.alipay.api.request.AlipayTradeWapPayRequest;
-import com.alipay.api.response.AlipayFundAuthOrderAppFreezeResponse;
-import com.alipay.api.response.AlipayTradeWapPayResponse;
+import com.alipay.api.domain.AlipayFundAuthOrderFreezeModel;
+import com.alipay.api.domain.AlipayFundAuthOrderVoucherCreateModel;
+import com.alipay.api.request.AlipayFundAuthOrderFreezeRequest;
+import com.alipay.api.request.AlipayFundAuthOrderVoucherCreateRequest;
+import com.alipay.api.response.AlipayFundAuthOrderFreezeResponse;
+import com.alipay.api.response.AlipayFundAuthOrderVoucherCreateResponse;
 import com.byritium.constance.BaseConst;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.dto.AliPayConfig;
@@ -25,11 +26,11 @@ import java.math.BigDecimal;
 
 @Service
 @Slf4j
-public class AliPayAuthOnLineService extends AliPayService implements IPayService {
+public class AliPayAuthOffLineShowService extends AliPayService implements IPayService {
 
     @Override
     public PaymentChannel channel() {
-        return PaymentChannel.ALI_PAY_AUTH_ONLINE;
+        return PaymentChannel.ALI_PAY_AUTH_OFFLINE_SHOW;
     }
 
     @Override
@@ -41,17 +42,17 @@ public class AliPayAuthOnLineService extends AliPayService implements IPayServic
         AlipayClient alipayClient;
         try {
             alipayClient = new DefaultAlipayClient(certAlipayRequest);
-            AlipayFundAuthOrderAppFreezeRequest request = new AlipayFundAuthOrderAppFreezeRequest ();
-            AlipayFundAuthOrderAppFreezeModel model = new AlipayFundAuthOrderAppFreezeModel();
+            AlipayFundAuthOrderVoucherCreateRequest request = new AlipayFundAuthOrderVoucherCreateRequest();
+            AlipayFundAuthOrderVoucherCreateModel model = new AlipayFundAuthOrderVoucherCreateModel();
             model.setOutOrderNo(businessOrderId);
             model.setOutRequestNo(businessOrderId);
             model.setOrderTitle(subject);
             model.setAmount(orderAmount.toPlainString());
-            model.setProductCode("PRE_AUTH_ONLINE");
+            model.setProductCode("PRE_AUTH");
             request.setBizModel(model);
             request.setNotifyUrl(BaseConst.ALIPAY_NOTICE_URL);
 
-            AlipayFundAuthOrderAppFreezeResponse response = alipayClient.sdkExecute(request);
+            AlipayFundAuthOrderVoucherCreateResponse response = alipayClient.execute(request);
             String body = response.getBody();
             Assert.state(!StringUtils.hasText(body), "支付宝签名失败");
 
