@@ -6,16 +6,14 @@ import com.alipay.api.CertAlipayRequest;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.*;
 import com.alipay.api.request.AlipayFundAuthOrderAppFreezeRequest;
-import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayFundAuthOrderAppFreezeResponse;
-import com.alipay.api.response.AlipayTradeWapPayResponse;
 import com.byritium.constance.BaseConst;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.dto.AliPayConfig;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.dto.PaymentResult;
 import com.byritium.exception.BusinessException;
-import com.byritium.service.IPayService;
+import com.byritium.service.QuickPayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -25,7 +23,7 @@ import java.math.BigDecimal;
 
 @Service
 @Slf4j
-public class AliPayAuthOnLineService extends AliPayService implements IPayService {
+public class AliPayAuthOnLineService extends AliPayService implements QuickPayService {
 
     @Override
     public PaymentChannel channel() {

@@ -3,14 +3,14 @@ package com.byritium.service.impl;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
-import com.byritium.service.IPayService;
+import com.byritium.service.QuickPayService;
 import com.byritium.service.RefundService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
-public class PlatformPayService implements IPayService, RefundService {
+public class PlatformPayService implements QuickPayService, RefundService {
 
     @Override
     public PaymentChannel channel() {

@@ -4,7 +4,6 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.CertAlipayRequest;
 import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.domain.AlipayTradePagePayModel;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.response.AlipayTradePagePayResponse;
@@ -14,7 +13,7 @@ import com.byritium.dto.AliPayConfig;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.dto.PaymentResult;
 import com.byritium.exception.BusinessException;
-import com.byritium.service.IPayService;
+import com.byritium.service.QuickPayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -24,7 +23,7 @@ import java.math.BigDecimal;
 
 @Service
 @Slf4j
-public class AliPayPcService extends AliPayService implements IPayService {
+public class AliPayPcService extends AliPayService implements QuickPayService {
 
     @Override
     public PaymentChannel channel() {
