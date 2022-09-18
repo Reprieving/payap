@@ -10,4 +10,5 @@ import lombok.Setter;
 public class PaymentExtra {
     private PaymentChannel paymentChannel;
     private AssetsType assetsType;
+    private String autoCode;
 }

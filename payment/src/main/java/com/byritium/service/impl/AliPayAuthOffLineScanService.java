@@ -44,7 +44,7 @@ public class AliPayAuthOffLineScanService extends AliPayService implements IPayS
             alipayClient = new DefaultAlipayClient(certAlipayRequest);
             AlipayFundAuthOrderFreezeRequest request = new AlipayFundAuthOrderFreezeRequest  ();
             AlipayFundAuthOrderFreezeModel model = new AlipayFundAuthOrderFreezeModel();
-            model.setAuthCode("");
+            model.setAuthCode(paymentExtra.getAutoCode());
             model.setAuthCodeType("bar_code");
             model.setOutOrderNo(businessOrderId);
             model.setOutRequestNo(businessOrderId);
