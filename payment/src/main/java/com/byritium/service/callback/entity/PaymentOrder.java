@@ -1,4 +1,4 @@
-package com.byritium.entity;
+package com.byritium.service.callback.entity;
 
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentStatus;

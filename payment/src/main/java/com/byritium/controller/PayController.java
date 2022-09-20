@@ -6,14 +6,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("pay")
+@RequestMapping("trade")
 public class PayController {
 
+    @RequestMapping("order")
+    public void sign(@RequestBody PayParam param) {
 
-    @RequestMapping("orders")
-    public void orders(@RequestBody PayParam param) {
+    }
 
-
+    @RequestMapping("pay")
+    public void pay(@RequestBody PayParam param) {
 
     }
 

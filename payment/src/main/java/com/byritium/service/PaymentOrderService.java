@@ -5,7 +5,7 @@ import com.byritium.constance.PaymentStatus;
 import com.byritium.dao.PaymentOrderRepository;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
-import com.byritium.entity.PaymentOrder;
+import com.byritium.service.callback.entity.PaymentOrder;
 import com.byritium.service.wrapper.PayWrapperService;
 import com.byritium.service.wrapper.QueryWrapperService;
 import com.byritium.service.wrapper.RefundWrapperService;

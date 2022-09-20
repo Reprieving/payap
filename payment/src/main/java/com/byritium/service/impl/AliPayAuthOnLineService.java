@@ -13,6 +13,7 @@ import com.byritium.dto.AliPayConfig;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.dto.PaymentResult;
 import com.byritium.exception.BusinessException;
+import com.byritium.service.AuthPayService;
 import com.byritium.service.QuickPayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ import java.math.BigDecimal;
 
 @Service
 @Slf4j
-public class AliPayAuthOnLineService extends AliPayService implements QuickPayService {
+public class AliPayAuthOnLineService extends AliPayService implements AuthPayService {
 
     @Override
     public PaymentChannel channel() {
@@ -61,5 +62,20 @@ public class AliPayAuthOnLineService extends AliPayService implements QuickPaySe
             log.error("支付宝渠道支付失败，支付订单id：{}", businessOrderId, e);
             throw new BusinessException("支付宝渠道支付失败");
         }
+    }
+
+    @Override
+    public void freeze(long bizOrderNo, long trxOrderNo, long authOrderNo, String title, BigDecimal amount) {
+
+    }
+
+    @Override
+    public void pay(long authOrderNo, long payOrderNo, String title, BigDecimal amount) {
+
+    }
+
+    @Override
+    public void unfreeze(long authOrderNo, long payOrderNo, String title, BigDecimal amount) {
+
     }
 }

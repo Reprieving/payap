@@ -5,9 +5,8 @@ import com.byritium.dao.PayOrderDao;
 import com.byritium.dto.IdContainer;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.ResponseBody;
-import com.byritium.entity.PayOrder;
+import com.byritium.service.callback.entity.PayOrder;
 import com.byritium.rpc.ChannelPaymentRpc;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

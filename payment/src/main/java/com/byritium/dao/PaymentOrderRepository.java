@@ -1,6 +1,6 @@
 package com.byritium.dao;
 
-import com.byritium.entity.PaymentOrder;
+import com.byritium.service.callback.entity.PaymentOrder;
 import org.springframework.data.repository.RepositoryDefinition;
 
 @RepositoryDefinition(domainClass = PaymentOrder.class, idClass = String.class)

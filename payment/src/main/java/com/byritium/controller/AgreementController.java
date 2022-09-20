@@ -9,8 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("agreement")
 public class AgreementController {
 
-    @RequestMapping("sign")
+    @RequestMapping("order")
     public void sign(@RequestBody PayParam param) {
+
+    }
+
+    @RequestMapping("pay")
+    public void pay(@RequestBody PayParam param) {
 
     }
 

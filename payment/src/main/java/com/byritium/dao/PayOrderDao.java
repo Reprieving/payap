@@ -1,6 +1,6 @@
 package com.byritium.dao;
 
-import com.byritium.entity.PayOrder;
+import com.byritium.service.callback.entity.PayOrder;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 

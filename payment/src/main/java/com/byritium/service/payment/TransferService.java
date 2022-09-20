@@ -1,7 +1,7 @@
 package com.byritium.service.payment;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.entity.PayOrder;
+import com.byritium.service.callback.entity.PayOrder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
