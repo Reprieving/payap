@@ -14,6 +14,11 @@ public class AuthPayController {
 
     }
 
+    @RequestMapping("pay")
+    public void pay(@RequestBody PayParam param) {
+
+    }
+
     @RequestMapping("unfreeze")
     public void unfreeze(@RequestBody PayParam param) {
 
