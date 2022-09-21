@@ -1,6 +1,6 @@
 package com.byritium.dto.order;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -10,7 +10,7 @@ public class TransactionPayOrder {
     private String id;
     private String bizOrderId;
     private String transactionOrderId;
-    private PaymentChannel paymentChannel;
+    private PaymentPattern paymentPattern;
     private String payerId;
     private String payeeId;
     private String payMediumId;

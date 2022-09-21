@@ -1,6 +1,6 @@
 package com.byritium.entity.transaction;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.constance.PaymentState;
 import com.byritium.entity.CommonEntity;
 import lombok.Data;
@@ -14,7 +14,7 @@ public class TransactionRefundOrder extends CommonEntity {
     private String id;
     private String bizId;
     private String payOrderId;
-    private PaymentChannel paymentChannel;
+    private PaymentPattern paymentPattern;
     private String payerId;
     private String payeeId;
     private String payMediumId;

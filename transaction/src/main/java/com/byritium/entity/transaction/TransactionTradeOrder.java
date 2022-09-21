@@ -24,7 +24,7 @@ public class TransactionTradeOrder extends CommonEntity {
     private TransactionType transactionType;
     private TransactionState transactionState;
     private RefundState refundState;
-    private PaymentChannel paymentChannel;
+    private PaymentPattern paymentPattern;
     private PaymentState paymentState;
 
     public TransactionTradeOrder() {
@@ -39,7 +39,7 @@ public class TransactionTradeOrder extends CommonEntity {
         transactionTradeOrder.setTitle(param.getTitle());
         transactionTradeOrder.setUserId(param.getUserId());
         transactionTradeOrder.setPayeeId(param.getPayeeId());
-        transactionTradeOrder.setPaymentChannel(param.getPaymentChannel());
+        transactionTradeOrder.setPaymentPattern(param.getPaymentPattern());
         transactionTradeOrder.setOrderAmount(param.getOrderAmount());
         transactionTradeOrder.setTransactionType(param.getTransactionType());
         transactionTradeOrder.setTransactionState(TransactionState.TRANSACTION_PENDING);

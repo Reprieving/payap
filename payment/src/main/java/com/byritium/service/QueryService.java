@@ -1,11 +1,11 @@
 package com.byritium.service;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 
 public interface QueryService {
-    PaymentChannel channel();
+    PaymentPattern channel();
 
     PaymentResult query(String businessOrderId, PaymentExtra paymentExtra);
 }

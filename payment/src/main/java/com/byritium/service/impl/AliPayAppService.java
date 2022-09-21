@@ -8,7 +8,7 @@ import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.byritium.constance.BaseConst;
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.dto.AliPayConfig;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
@@ -26,8 +26,8 @@ import java.math.BigDecimal;
 public class AliPayAppService extends AliPayService implements QuickPayService {
 
     @Override
-    public PaymentChannel channel() {
-        return PaymentChannel.ALI_PAY_APP;
+    public PaymentPattern pattern() {
+        return PaymentPattern.ALI_PAY_APP;
     }
 
     @Override

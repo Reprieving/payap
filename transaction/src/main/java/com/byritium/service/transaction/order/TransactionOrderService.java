@@ -45,8 +45,8 @@ public class TransactionOrderService {
     }
 
     public TransactionResult trade(String clientId, TransactionParam param) {
-//        PaymentChannel paymentChannel = param.getPaymentChannel();
-//        Map<PaymentChannel, TransactionPayOrder> map = new HashMap<>();
+//        PaymentPattern paymentChannel = param.getPaymentPattern();
+//        Map<PaymentPattern, TransactionPayOrder> map = new HashMap<>();
 //        String userId = param.getUserId();
 //
 //        BigDecimal reductionAmount = BigDecimal.ZERO;
@@ -55,14 +55,14 @@ public class TransactionOrderService {
 //        String couponId = param.getCouponId();
 //        if (StringUtils.hasText(couponId) && reductionAmountQuota.compareTo(BigDecimal.ZERO) > 0) {
 //            TransactionPayOrder transactionPayOrder = payOrderService.buildCouponOrder(couponId);
-//            map.put(PaymentChannel.COUPON_PAY, transactionPayOrder);
+//            map.put(PaymentPattern.COUPON_PAY, transactionPayOrder);
 //            reductionAmount = reductionAmount.add(transactionPayOrder.getOrderAmount());
 //        }
 //
 //        Deduction deduction = param.getDeduction();
 //        if (deduction != null && reductionAmountQuota.compareTo(BigDecimal.ZERO) > 0) {
 //            TransactionPayOrder transactionPayOrder = payOrderService.buildDeductionOrder(userId, deduction, reductionAmountQuota);
-//            map.put(deduction.getPaymentChannel(), transactionPayOrder);
+//            map.put(deduction.getPaymentPattern(), transactionPayOrder);
 //            reductionAmount = reductionAmount.add(transactionPayOrder.getOrderAmount());
 //        }
 //
@@ -80,7 +80,7 @@ public class TransactionOrderService {
 //                transactionOrderService.save(transactionTradeOrder);
 //                String transactionOrderId = transactionTradeOrder.getId();
 //
-//                for (Map.Entry<PaymentChannel, TransactionPayOrder> entry : map.entrySet()) {
+//                for (Map.Entry<PaymentPattern, TransactionPayOrder> entry : map.entrySet()) {
 //                    TransactionPayOrder transactionPayOrder = entry.getValue();
 //                    transactionPayOrder.setTransactionOrderId(transactionOrderId);
 //                    payOrderService.save(transactionPayOrder);

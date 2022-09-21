@@ -48,7 +48,7 @@ public class SettleTransactionService implements ITransactionCallService {
             throw new BusinessException("分账金额异常");
         }
 
-        TransactionPayOrder transactionPayOrder = payOrderService.getByTxOrderIdAndPaymentChannel(transactionTradeOrder.getId(), transactionTradeOrder.getPaymentChannel());
+        TransactionPayOrder transactionPayOrder = payOrderService.getByTxOrderIdAndPaymentChannel(transactionTradeOrder.getId(), transactionTradeOrder.getPaymentPattern());
         if (transactionPayOrder == null) {
             throw new BusinessException("未找到支付订单");
         }
@@ -57,7 +57,7 @@ public class SettleTransactionService implements ITransactionCallService {
         TransactionSettleOrder transactionSettleOrder = new TransactionSettleOrder();
         transactionSettleOrder.setBizId(transactionPayOrder.getBizOrderId());
         transactionSettleOrder.setPayerId(transactionPayOrder.getId());
-        transactionSettleOrder.setPaymentChannel(transactionPayOrder.getPaymentChannel());
+        transactionSettleOrder.setPaymentPattern(transactionPayOrder.getPaymentPattern());
         transactionSettleOrder.setPayerId(transactionPayOrder.getPayeeId());
         transactionSettleOrder.setPayeeId(transactionPayOrder.getPayerId());
         transactionSettleOrder.setPayMediumId(transactionPayOrder.getPayMediumId());

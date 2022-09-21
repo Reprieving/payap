@@ -1,6 +1,6 @@
 package com.byritium.dto;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.constance.TransactionType;
 import lombok.Data;
 
@@ -16,5 +16,5 @@ public class PaymentRequest {
     private TransactionType transactionType;
     private String bizOrderId;
     private BigDecimal orderAmount;
-    private PaymentChannel paymentChannel;
+    private PaymentPattern paymentPattern;
 }

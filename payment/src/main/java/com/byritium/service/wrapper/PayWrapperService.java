@@ -1,6 +1,6 @@
 package com.byritium.service.wrapper;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.exception.BusinessException;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Service
 public class PayWrapperService implements ApplicationContextAware, QuickPayService {
-    private static Map<PaymentChannel, QuickPayService> serviceMap;
+    private static Map<PaymentPattern, QuickPayService> serviceMap;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -25,25 +25,25 @@ public class PayWrapperService implements ApplicationContextAware, QuickPayServi
         Map<String, QuickPayService> map = applicationContext.getBeansOfType(QuickPayService.class);
 
         map.forEach((key, value) -> {
-            if (value.channel() != null)
-                serviceMap.put(value.channel(), value);
+            if (value.pattern() != null)
+                serviceMap.put(value.pattern(), value);
         });
     }
 
     @Override
-    public PaymentChannel channel() {
+    public PaymentPattern pattern() {
         return null;
     }
 
     @Override
     public PaymentResult pay(String businessOrderId, String subject, BigDecimal payAmount, PaymentExtra paymentExtra) {
-        PaymentChannel paymentChannel = paymentExtra.getPaymentChannel();
+        PaymentPattern paymentPattern = paymentExtra.getPaymentPattern();
 
-        Assert.notNull(paymentChannel, "未选择支付渠道");
+        Assert.notNull(paymentPattern, "未选择支付渠道");
 
-        QuickPayService payService = serviceMap.get(paymentChannel);
+        QuickPayService payService = serviceMap.get(paymentPattern);
         if (payService == null) {
-            throw new BusinessException(paymentChannel.getMessage() + "暂不开放");
+            throw new BusinessException(paymentPattern.getMessage() + "暂不开放");
         }
 
         return payService.pay(businessOrderId, subject, payAmount, paymentExtra);

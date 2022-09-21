@@ -1,12 +1,11 @@
 package com.byritium.dto;
 
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.constance.TransactionType;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 public class TransactionParam {
@@ -19,7 +18,7 @@ public class TransactionParam {
     private BigDecimal payAmount;
     private String title;
     private TransactionType transactionType;
-    private PaymentChannel paymentChannel;
+    private PaymentPattern paymentPattern;
     private String couponId;
     private Deduction deduction;
 

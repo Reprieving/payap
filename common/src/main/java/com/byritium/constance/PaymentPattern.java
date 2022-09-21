@@ -3,7 +3,7 @@ package com.byritium.constance;
 import lombok.Getter;
 
 @Getter
-public enum PaymentChannel {//支付渠道
+public enum PaymentPattern {//支付渠道
     ACCOUNT_PAY("ACCOUNT_PAY", "账户支付"),
 
     ALI_PAY("ALI_PAY", "支付宝支付"),
@@ -23,10 +23,10 @@ public enum PaymentChannel {//支付渠道
 
 
     ;
-    private String channel;
-    private String message;
+    private final String channel;
+    private final String message;
 
-    PaymentChannel(String channel, String message) {
+    PaymentPattern(String channel, String message) {
         this.channel = channel;
         this.message = message;
     }

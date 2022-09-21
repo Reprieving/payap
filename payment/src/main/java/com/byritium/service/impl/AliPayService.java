@@ -12,7 +12,7 @@ import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayFundTransUniTransferResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.byritium.constance.BaseConst;
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.constance.alipay.AliPayCode;
 import com.byritium.dto.AliPayConfig;
 import com.byritium.dto.PaymentResult;
@@ -53,8 +53,8 @@ public abstract class AliPayService implements RefundService, WithdrawService, Q
     }
 
     @Override
-    public PaymentChannel channel() {
-        return PaymentChannel.ALI_PAY;
+    public PaymentPattern channel() {
+        return PaymentPattern.ALI_PAY;
     }
 
     @Override

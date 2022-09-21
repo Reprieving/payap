@@ -3,7 +3,7 @@ package com.byritium.service.impl;
 
 import com.byritium.constance.BaseConst;
 import com.byritium.constance.InterfaceProvider;
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.dto.SSLRequest;
@@ -136,9 +136,8 @@ public abstract class WechatPayService implements RefundService, WithdrawService
         }
     }
 
-    @Override
-    public PaymentChannel channel() {
-        return PaymentChannel.WECHAT_PAY;
+    public PaymentPattern pattern() {
+        return PaymentPattern.WECHAT_PAY;
     }
 
     @Override

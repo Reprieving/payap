@@ -8,7 +8,7 @@ import com.alipay.api.domain.AlipayFundAuthOrderFreezeModel;
 import com.alipay.api.request.AlipayFundAuthOrderFreezeRequest;
 import com.alipay.api.response.AlipayFundAuthOrderFreezeResponse;
 import com.byritium.constance.BaseConst;
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.dto.AliPayConfig;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.dto.PaymentResult;
@@ -26,8 +26,8 @@ import java.math.BigDecimal;
 public class AliPayAuthOffLineScanService extends AliPayService implements QuickPayService {
 
     @Override
-    public PaymentChannel channel() {
-        return PaymentChannel.ALI_PAY_AUTH_OFFLINE_SCAN;
+    public PaymentPattern pattern() {
+        return PaymentPattern.ALI_PAY_AUTH_OFFLINE_SCAN;
     }
 
     @Override

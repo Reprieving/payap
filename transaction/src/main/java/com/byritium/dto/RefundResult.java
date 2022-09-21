@@ -1,7 +1,6 @@
 package com.byritium.dto;
 
-import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentState;
+import com.byritium.constance.PaymentPattern;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,7 +8,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class RefundResult extends PaymentResult{
     private String transactionOrderId;
-    private PaymentChannel paymentChannel;
+    private PaymentPattern paymentPattern;
     private String paymentOrderId;
     private String refundOrderId;
 }

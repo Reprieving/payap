@@ -4,14 +4,11 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.CertAlipayRequest;
 import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.domain.AlipayTradePagePayModel;
 import com.alipay.api.domain.AlipayTradePrecreateModel;
-import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradePrecreateRequest;
-import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.byritium.constance.BaseConst;
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.dto.AliPayConfig;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.dto.PaymentResult;
@@ -29,8 +26,8 @@ import java.math.BigDecimal;
 public class AliPayScanCodeService extends AliPayService implements QuickPayService {
 
     @Override
-    public PaymentChannel channel() {
-        return PaymentChannel.ALI_PAY_SCAN_CODE;
+    public PaymentPattern pattern() {
+        return PaymentPattern.ALI_PAY_SCAN_CODE;
     }
 
     @Override

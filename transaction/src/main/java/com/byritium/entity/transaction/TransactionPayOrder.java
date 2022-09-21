@@ -1,7 +1,6 @@
 package com.byritium.entity.transaction;
 
-import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentState;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.entity.CommonEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +13,7 @@ public class TransactionPayOrder extends CommonEntity {
     private String id;
     private String bizOrderId;
     private String transactionOrderId;
-    private PaymentChannel paymentChannel;
+    private PaymentPattern paymentPattern;
     private String payerId;
     private String payeeId;
     private String payMediumId;

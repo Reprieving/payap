@@ -1,6 +1,6 @@
 package com.byritium.service.wrapper;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.WithdrawService;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Component
 public class WithdrawWrapperService implements ApplicationContextAware, WithdrawService {
-    private static Map<PaymentChannel, WithdrawService> serviceMap;
+    private static Map<PaymentPattern, WithdrawService> serviceMap;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -32,19 +32,19 @@ public class WithdrawWrapperService implements ApplicationContextAware, Withdraw
     }
 
     @Override
-    public PaymentChannel channel() {
+    public PaymentPattern channel() {
         return null;
     }
 
     @Override
     public void withdraw(String businessOrderId, String userId, BigDecimal amount, PaymentExtra paymentExtra) {
-        PaymentChannel paymentChannel = paymentExtra.getPaymentChannel();
+        PaymentPattern paymentPattern = paymentExtra.getPaymentPattern();
 
-        Assert.notNull(paymentChannel, "未选择支付渠道");
+        Assert.notNull(paymentPattern, "未选择支付渠道");
 
-        WithdrawService withdrawService = serviceMap.get(paymentChannel);
+        WithdrawService withdrawService = serviceMap.get(paymentPattern);
         if (withdrawService == null) {
-            throw new BusinessException(paymentChannel.getMessage() + "暂不开放");
+            throw new BusinessException(paymentPattern.getMessage() + "暂不开放");
         }
 
         withdrawService.withdraw(businessOrderId, userId, amount, paymentExtra);

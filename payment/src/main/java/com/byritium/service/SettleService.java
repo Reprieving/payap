@@ -1,10 +1,10 @@
 package com.byritium.service;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.dto.PaymentExtra;
 
 public interface SettleService {
-    PaymentChannel channel();
+    PaymentPattern channel();
 
     void settle(String businessOrderId, PaymentExtra paymentExtra);
 }

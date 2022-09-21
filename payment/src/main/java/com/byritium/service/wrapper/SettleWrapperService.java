@@ -1,8 +1,7 @@
 package com.byritium.service.wrapper;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.dto.PaymentExtra;
-import com.byritium.exception.BusinessException;
 import com.byritium.service.SettleService;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -16,7 +15,7 @@ import java.util.Map;
 @Component
 public class SettleWrapperService implements ApplicationContextAware, SettleService {
 
-    private static Map<PaymentChannel, SettleService> serviceMap;
+    private static Map<PaymentPattern, SettleService> serviceMap;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -30,17 +29,17 @@ public class SettleWrapperService implements ApplicationContextAware, SettleServ
     }
 
     @Override
-    public PaymentChannel channel() {
+    public PaymentPattern channel() {
         return null;
     }
 
     @Override
     public void settle(String businessOrderId, PaymentExtra paymentExtra) {
-        PaymentChannel paymentChannel = paymentExtra.getPaymentChannel();
+        PaymentPattern paymentPattern = paymentExtra.getPaymentPattern();
 
-        Assert.notNull(paymentChannel, "未选择支付渠道");
+        Assert.notNull(paymentPattern, "未选择支付渠道");
 
-        SettleService settleService = serviceMap.get(paymentChannel);
+        SettleService settleService = serviceMap.get(paymentPattern);
 
         settleService.settle(businessOrderId, paymentExtra);
     }

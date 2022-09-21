@@ -1,6 +1,6 @@
 package com.byritium.service.callback.entity;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.constance.PaymentStatus;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,7 +46,7 @@ public class PaymentOrder {
     private BigDecimal payAmount;
 
     @Column(name = "payment_channel", nullable = false, length = 64)
-    private PaymentChannel paymentChannel;
+    private PaymentPattern paymentPattern;
 
     @Column(name = "payment_state", nullable = false)
     private PaymentStatus paymentStatus;

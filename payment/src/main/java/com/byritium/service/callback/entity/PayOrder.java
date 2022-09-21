@@ -1,7 +1,7 @@
 package com.byritium.service.callback.entity;
 
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -14,5 +14,5 @@ public class PayOrder {
     private String txOrderId;
     private String bizOrderId;
     private BigDecimal orderAmount;
-    private PaymentChannel paymentChannel;
+    private PaymentPattern paymentPattern;
 }

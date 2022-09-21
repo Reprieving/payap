@@ -1,6 +1,6 @@
 package com.byritium.entity.transaction;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.constance.TransactionState;
 import com.byritium.constance.TransactionType;
 import com.byritium.entity.CommonEntity;
@@ -20,19 +20,19 @@ public class TransactionTransferOrder extends CommonEntity {
     private BigDecimal orderAmount;
     private TransactionType transactionType;
     private TransactionState transactionState;
-    private PaymentChannel paymentChannel;
+    private PaymentPattern paymentPattern;
 
     public TransactionTransferOrder() {
         this.transactionState = TransactionState.TRANSACTION_PENDING;
     }
 
-    public TransactionTransferOrder(String clientId, String businessOrderId, String senderId, String receiverIds, BigDecimal orderAmount, PaymentChannel paymentChannel) {
+    public TransactionTransferOrder(String clientId, String businessOrderId, String senderId, String receiverIds, BigDecimal orderAmount, PaymentPattern paymentPattern) {
         this.clientId = clientId;
         this.businessOrderId = businessOrderId;
         this.receiverIds = receiverIds;
         this.orderAmount = orderAmount;
         this.transactionType = TransactionType.SETTLE;
         this.transactionState = TransactionState.TRANSACTION_PENDING;
-        this.paymentChannel = paymentChannel;
+        this.paymentPattern = paymentPattern;
     }
 }

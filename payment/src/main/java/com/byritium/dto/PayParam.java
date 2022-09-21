@@ -1,6 +1,6 @@
 package com.byritium.dto;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.service.callback.entity.PayOrder;
 import lombok.Data;
 
@@ -11,6 +11,6 @@ public class PayParam {
     private String bizOrderId;
     private String txOrderId;
     private String userId;
-    private PaymentChannel paymentChannel;
+    private PaymentPattern paymentPattern;
     private List<PayOrder> orderList;
 }

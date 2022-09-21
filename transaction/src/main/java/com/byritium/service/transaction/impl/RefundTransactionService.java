@@ -52,7 +52,7 @@ public class RefundTransactionService implements ITransactionCallService {
             throw new BusinessException("退款金额异常");
         }
 
-        TransactionPayOrder transactionPayOrder = payOrderService.getByTxOrderIdAndPaymentChannel(transactionTradeOrder.getId(), transactionTradeOrder.getPaymentChannel());
+        TransactionPayOrder transactionPayOrder = payOrderService.getByTxOrderIdAndPaymentChannel(transactionTradeOrder.getId(), transactionTradeOrder.getPaymentPattern());
         if (transactionPayOrder == null) {
             throw new BusinessException("未找到支付订单");
         }
@@ -62,7 +62,7 @@ public class RefundTransactionService implements ITransactionCallService {
         TransactionRefundOrder transactionRefundOrder = new TransactionRefundOrder();
         transactionRefundOrder.setBizId(transactionPayOrder.getBizOrderId());
         transactionRefundOrder.setPayerId(transactionPayOrder.getId());
-        transactionRefundOrder.setPaymentChannel(transactionPayOrder.getPaymentChannel());
+        transactionRefundOrder.setPaymentPattern(transactionPayOrder.getPaymentPattern());
         transactionRefundOrder.setPayerId(transactionPayOrder.getPayeeId());
         transactionRefundOrder.setPayeeId(transactionPayOrder.getPayerId());
         transactionRefundOrder.setPayMediumId(transactionPayOrder.getPayMediumId());

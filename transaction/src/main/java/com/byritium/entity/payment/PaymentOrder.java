@@ -1,7 +1,6 @@
 package com.byritium.entity.payment;
 
-import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.TransactionType;
+import com.byritium.constance.PaymentPattern;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -14,5 +13,5 @@ public class PaymentOrder {
     private String trxOrderId;
     private String bizOrderId;
     private BigDecimal orderAmount;
-    private PaymentChannel paymentChannel;
+    private PaymentPattern paymentPattern;
 }

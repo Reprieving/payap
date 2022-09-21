@@ -1,6 +1,6 @@
 package com.byritium.service;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.constance.PaymentStatus;
 import com.byritium.dao.PaymentOrderRepository;
 import com.byritium.dto.PaymentResult;
@@ -34,13 +34,13 @@ public class PaymentOrderService {
     private PaymentOrderRepository paymentOrderRepository;
 
     public PaymentResult pay(PaymentOrder paymentOrder) {
-        PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
+        PaymentPattern paymentPattern = paymentOrder.getPaymentPattern();
 
         PaymentStatus paymentStatus = paymentOrder.getPaymentStatus();
 
 
         PaymentExtra paymentExtra = new PaymentExtra();
-        paymentExtra.setPaymentChannel(paymentChannel);
+        paymentExtra.setPaymentPattern(paymentPattern);
 
         PaymentOrder save = paymentOrderRepository.save(paymentOrder);
         String paymentOrderId = save.getId();
@@ -71,11 +71,11 @@ public class PaymentOrderService {
     }
 
     public void refund(PaymentOrder paymentOrder) {
-        PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
+        PaymentPattern paymentPattern = paymentOrder.getPaymentPattern();
 
 
         PaymentExtra paymentExtra = new PaymentExtra();
-        paymentExtra.setPaymentChannel(paymentChannel);
+        paymentExtra.setPaymentPattern(paymentPattern);
 
         String businessOrderId = "";
         String refundOrderId = "";
@@ -88,11 +88,11 @@ public class PaymentOrderService {
 
 
     public void withdraw(PaymentOrder paymentOrder) {
-        PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
+        PaymentPattern paymentPattern = paymentOrder.getPaymentPattern();
 
 
         PaymentExtra paymentExtra = new PaymentExtra();
-        paymentExtra.setPaymentChannel(paymentChannel);
+        paymentExtra.setPaymentPattern(paymentPattern);
 
         String businessOrderId = "";
         String sdkId = "";
@@ -104,13 +104,13 @@ public class PaymentOrderService {
     }
 
     public void query(PaymentOrder paymentOrder) {
-        PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
+        PaymentPattern paymentPattern = paymentOrder.getPaymentPattern();
 
         PaymentStatus paymentStatus = paymentOrder.getPaymentStatus();
 
 
         PaymentExtra paymentExtra = new PaymentExtra();
-        paymentExtra.setPaymentChannel(paymentChannel);
+        paymentExtra.setPaymentPattern(paymentPattern);
 
         String businessOrderId = "";
 
@@ -119,13 +119,13 @@ public class PaymentOrderService {
     }
 
     public void settle(PaymentOrder paymentOrder) {
-        PaymentChannel paymentChannel = paymentOrder.getPaymentChannel();
+        PaymentPattern paymentPattern = paymentOrder.getPaymentPattern();
 
         PaymentStatus paymentStatus = paymentOrder.getPaymentStatus();
 
 
         PaymentExtra paymentExtra = new PaymentExtra();
-        paymentExtra.setPaymentChannel(paymentChannel);
+        paymentExtra.setPaymentPattern(paymentPattern);
 
     }
 }

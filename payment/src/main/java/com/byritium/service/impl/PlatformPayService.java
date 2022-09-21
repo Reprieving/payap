@@ -1,6 +1,6 @@
 package com.byritium.service.impl;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.service.QuickPayService;
@@ -13,8 +13,8 @@ import java.math.BigDecimal;
 public class PlatformPayService implements QuickPayService, RefundService {
 
     @Override
-    public PaymentChannel channel() {
-        return PaymentChannel.PLATFORM_PAY;
+    public PaymentPattern pattern() {
+        return PaymentPattern.ACCOUNT_PAY;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.byritium.service.wrapper;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.RefundService;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Service
 public class RefundWrapperService implements ApplicationContextAware, RefundService {
-    private static Map<PaymentChannel, RefundService> serviceMap;
+    private static Map<PaymentPattern, RefundService> serviceMap;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -30,19 +30,19 @@ public class RefundWrapperService implements ApplicationContextAware, RefundServ
     }
 
     @Override
-    public PaymentChannel channel() {
+    public PaymentPattern channel() {
         return null;
     }
 
     @Override
     public void refund(String businessOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount, PaymentExtra paymentExtra) {
-        PaymentChannel paymentChannel = paymentExtra.getPaymentChannel();
+        PaymentPattern paymentPattern = paymentExtra.getPaymentPattern();
 
-        Assert.notNull(paymentChannel, "未选择支付渠道");
+        Assert.notNull(paymentPattern, "未选择支付渠道");
 
-        RefundService refundService = serviceMap.get(paymentChannel);
+        RefundService refundService = serviceMap.get(paymentPattern);
         if (refundService == null) {
-            throw new BusinessException(paymentChannel.getMessage() + "暂不开放");
+            throw new BusinessException(paymentPattern.getMessage() + "暂不开放");
         }
 
         refundService.refund(businessOrderId, refundOrderId, orderAmount, refundAmount, paymentExtra);

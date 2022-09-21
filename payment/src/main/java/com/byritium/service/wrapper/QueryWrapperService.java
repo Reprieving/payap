@@ -1,6 +1,6 @@
 package com.byritium.service.wrapper;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.exception.BusinessException;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Service
 public class QueryWrapperService implements ApplicationContextAware, QueryService {
-    private static Map<PaymentChannel, QueryService> serviceMap;
+    private static Map<PaymentPattern, QueryService> serviceMap;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -31,19 +31,19 @@ public class QueryWrapperService implements ApplicationContextAware, QueryServic
     }
 
     @Override
-    public PaymentChannel channel() {
+    public PaymentPattern channel() {
         return null;
     }
 
     @Override
     public PaymentResult query(String businessOrderId, PaymentExtra paymentExtra) {
-        PaymentChannel paymentChannel = paymentExtra.getPaymentChannel();
+        PaymentPattern paymentPattern = paymentExtra.getPaymentPattern();
 
-        Assert.notNull(paymentChannel, "未选择支付渠道");
+        Assert.notNull(paymentPattern, "未选择支付渠道");
 
-        QueryService queryService = serviceMap.get(paymentChannel);
+        QueryService queryService = serviceMap.get(paymentPattern);
         if (queryService == null) {
-            throw new BusinessException(paymentChannel.getMessage() + "暂不开放");
+            throw new BusinessException(paymentPattern.getMessage() + "暂不开放");
         }
 
         return queryService.query(businessOrderId, paymentExtra);

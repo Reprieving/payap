@@ -1,12 +1,11 @@
 package com.byritium.service.transaction.impl;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.TransactionType;
 import com.byritium.dto.*;
 import com.byritium.entity.transaction.TransactionPayOrder;
 import com.byritium.entity.transaction.TransactionTradeOrder;
-import com.byritium.exception.BusinessException;
 import com.byritium.service.payment.PaymentService;
 import com.byritium.service.transaction.ITransactionCallBackService;
 import com.byritium.service.transaction.ITransactionCallService;
@@ -20,10 +19,6 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -50,7 +45,7 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
 
     public TransactionResult call(TransactionParam param) {
         TransactionResult transactionResult = new TransactionResult();
-        PaymentChannel paymentChannel = param.getPaymentChannel();
+        PaymentPattern paymentPattern = param.getPaymentPattern();
 
         List<TransactionPayOrder> list = new ArrayList<>();
         String userId = param.getUserId();
@@ -69,8 +64,8 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
             list.add(transactionPayOrder);
         }
 
-        if (paymentChannel != null) {
-            TransactionPayOrder transactionPayOrder = payOrderService.buildCoreOrder(paymentChannel, userId, orderAmount);
+        if (paymentPattern != null) {
+            TransactionPayOrder transactionPayOrder = payOrderService.buildCoreOrder(paymentPattern, userId, orderAmount);
             list.add(transactionPayOrder);
         }
 
@@ -78,7 +73,7 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
         transactionOrderService.save(transactionTradeOrder);
 
         PaymentResult paymentResult = paymentService.pay(list);
-        PaymentResultItem item = paymentResult.get(paymentChannel);
+        PaymentResultItem item = paymentResult.get(paymentPattern);
         Assert.notNull(item, "null paymentResultItem");
         transactionResult.setPaySign(item.getSign());
 

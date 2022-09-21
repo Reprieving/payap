@@ -1,15 +1,14 @@
 package com.byritium.dto;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Getter
 @Setter
 public class Deduction {
-    private PaymentChannel paymentChannel;
+    private PaymentPattern paymentPattern;
     private BigDecimal amount;
 }

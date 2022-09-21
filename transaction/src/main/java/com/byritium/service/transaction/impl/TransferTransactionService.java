@@ -1,6 +1,6 @@
 package com.byritium.service.transaction.impl;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.constance.TransactionType;
 import com.byritium.dao.TransferOrderDao;
 import com.byritium.dto.TransactionParam;
@@ -36,9 +36,9 @@ public class TransferTransactionService implements ITransactionCallService {
         String senderId = param.getSenderId();
         String receiverId = param.getReceiverId();
         BigDecimal orderAmount = param.getOrderAmount();
-        PaymentChannel paymentChannel = param.getPaymentChannel();
+        PaymentPattern paymentPattern = param.getPaymentPattern();
         TransactionTransferOrder transactionTransferOrder = new TransactionTransferOrder(
-                clientId, businessOrderId, senderId, receiverId, orderAmount, paymentChannel);
+                clientId, businessOrderId, senderId, receiverId, orderAmount, paymentPattern);
         transferOrderDao.save(transactionTransferOrder);
 
 

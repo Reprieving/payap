@@ -1,6 +1,6 @@
 package com.byritium.service.payment;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.dao.PayOrderDao;
 import com.byritium.dto.IdContainer;
 import com.byritium.dto.PaymentResult;
@@ -23,11 +23,11 @@ public class PayService {
         this.channelPaymentRpc = channelPaymentRpc;
     }
 
-    public PaymentResult call(PaymentChannel channel, IdContainer idContainer, String subject, BigDecimal payAmount) {
+    public PaymentResult call(PaymentPattern channel, IdContainer idContainer, String subject, BigDecimal payAmount) {
 
         List<PayOrder> orderList = new ArrayList<>();
         payOrderDao.saveAll(orderList);
-        PayOrder payOrder = orderList.stream().filter(order -> channel == order.getPaymentChannel()).findFirst().get();
+        PayOrder payOrder = orderList.stream().filter(order -> channel == order.getPaymentPattern()).findFirst().get();
 
         ResponseBody<PaymentResult> rsp = channelPaymentRpc.pay(payOrder);
         PaymentResult paymentResult = rsp.getData();

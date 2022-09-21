@@ -1,6 +1,6 @@
 package com.byritium.dto;
 
-import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentPattern;
 import com.byritium.constance.PaymentState;
 import com.byritium.entity.payment.PaymentRechargeOrder;
 import com.byritium.entity.payment.PaymentRefundOrder;
@@ -11,8 +11,8 @@ import java.util.Map;
 
 @Data
 public class TransactionResult {
-    private Map<PaymentChannel, PaymentRechargeOrder> paymentOrders;
-    private Map<PaymentChannel, PaymentRefundOrder> refundOrders;
+    private Map<PaymentPattern, PaymentRechargeOrder> paymentOrders;
+    private Map<PaymentPattern, PaymentRefundOrder> refundOrders;
     private TransactionTradeOrder tradeOrder;
     private PaymentState paymentState;
     private String transactionOrderId;
