@@ -24,6 +24,11 @@ public enum PaymentPattern {//支付模式
 
     ;
     private final String pattern;
+    private PaymentScene scene;
+    private PaymentProduct product;
+    private PaymentChannel channel;
+    private PaymentCurrency currency;
+
     private final String message;
 
     PaymentPattern(String pattern, String message) {
