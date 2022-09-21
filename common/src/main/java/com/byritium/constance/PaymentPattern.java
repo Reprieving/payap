@@ -3,7 +3,7 @@ package com.byritium.constance;
 import lombok.Getter;
 
 @Getter
-public enum PaymentPattern {//支付渠道
+public enum PaymentPattern {//支付模式
     ACCOUNT_PAY("ACCOUNT_PAY", "账户支付"),
 
     ALI_PAY("ALI_PAY", "支付宝支付"),
@@ -23,28 +23,16 @@ public enum PaymentPattern {//支付渠道
 
 
     ;
-    private final String channel;
+    private final String pattern;
     private final String message;
 
-    PaymentPattern(String channel, String message) {
-        this.channel = channel;
+    PaymentPattern(String pattern, String message) {
+        this.pattern = pattern;
         this.message = message;
     }
 
-    public String channel() {
-        return this.channel;
-    }
-
-    public static void verify(String type) {
-        if (type == null) {
-            throw new IllegalArgumentException("非法支付渠道");
-        }
-        for (PaymentPattern businessType : PaymentPattern.values()) {
-            if (businessType.channel.equals(type)) {
-                return;
-            }
-        }
-        throw new IllegalArgumentException("非法支付渠道");
+    public String pattern() {
+        return this.pattern;
     }
 
 
