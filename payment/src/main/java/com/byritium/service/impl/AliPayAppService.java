@@ -7,8 +7,7 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
-import com.byritium.constance.BaseConst;
-import com.byritium.constance.PaymentPattern;
+import com.byritium.constance.*;
 import com.byritium.dto.AliPayConfig;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
@@ -24,6 +23,12 @@ import java.math.BigDecimal;
 @Service
 @Slf4j
 public class AliPayAppService extends AliPayService implements QuickPayService {
+
+    private final PaymentScene scene = PaymentScene.ONLINE;
+    private final PaymentChannel channel = PaymentChannel.ALI_PAY;
+    private final PaymentProduct product = PaymentProduct.QUICK_PAY;
+    private final PaymentCurrency currency = PaymentCurrency.RMB;
+
 
     @Override
     public PaymentPattern pattern() {
