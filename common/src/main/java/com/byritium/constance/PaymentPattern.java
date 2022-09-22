@@ -22,6 +22,8 @@ public enum PaymentPattern {//支付模式
     APPLE_PAY("APPLE_PAY", "苹果支付"),
 
 
+    APP_PAY("APP_PAY", "APP"),
+
     ;
     private final String pattern;
     private PaymentScene scene;

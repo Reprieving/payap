@@ -25,8 +25,9 @@ import java.math.BigDecimal;
 public class AliPayAppService extends AliPayService implements QuickPayService {
 
     private final PaymentScene scene = PaymentScene.ONLINE;
-    private final PaymentChannel channel = PaymentChannel.ALI_PAY;
     private final PaymentProduct product = PaymentProduct.QUICK_PAY;
+    private final PaymentChannel channel = PaymentChannel.ALI_PAY;
+    private final PaymentPattern pattern = PaymentPattern.APP_PAY;
     private final PaymentCurrency currency = PaymentCurrency.RMB;
 
 
