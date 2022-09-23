@@ -37,6 +37,11 @@ public class AliPayAppService extends AliPayService implements QuickPayService {
     }
 
     @Override
+    public String key() {
+        return String.valueOf(scene) + product + channel + pattern + currency;
+    }
+
+    @Override
     public PaymentResult pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra) {
         AliPayConfig aliPayConfig = new AliPayConfig();
 

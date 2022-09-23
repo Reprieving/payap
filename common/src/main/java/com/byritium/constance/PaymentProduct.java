@@ -16,4 +16,8 @@ public enum PaymentProduct {
         this.product = product;
         this.message = message;
     }
+
+    public String product() {
+        return this.product;
+    }
 }

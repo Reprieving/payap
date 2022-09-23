@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 public interface QuickPayService {
     PaymentPattern pattern();
 
+    String key();
+
     PaymentResult pay(String businessOrderId, String subject, BigDecimal payAmount, PaymentExtra paymentExtra);
 
 }
