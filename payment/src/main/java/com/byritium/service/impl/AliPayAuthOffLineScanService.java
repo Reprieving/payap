@@ -26,8 +26,8 @@ import java.math.BigDecimal;
 public class AliPayAuthOffLineScanService extends AliPayService implements QuickPayService {
 
     @Override
-    public PaymentPattern pattern() {
-        return PaymentPattern.ALI_PAY_AUTH_OFFLINE_SCAN;
+    public String key() {
+        return null;
     }
 
     @Override

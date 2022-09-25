@@ -22,23 +22,16 @@ import java.math.BigDecimal;
 
 @Service
 @Slf4j
-public class AliPayAppService extends AliPayService implements QuickPayService {
+public class AliPayOnlineQuickAppService extends AliPayService implements QuickPayService {
 
     private final PaymentScene scene = PaymentScene.ONLINE;
     private final PaymentProduct product = PaymentProduct.QUICK_PAY;
     private final PaymentChannel channel = PaymentChannel.ALI_PAY;
     private final PaymentPattern pattern = PaymentPattern.APP_PAY;
-    private final PaymentCurrency currency = PaymentCurrency.RMB;
-
-
-    @Override
-    public PaymentPattern pattern() {
-        return PaymentPattern.ALI_PAY_APP;
-    }
 
     @Override
     public String key() {
-        return String.valueOf(scene) + product + channel + pattern + currency;
+        return String.valueOf(scene) + product + channel + pattern;
     }
 
     @Override
@@ -50,9 +43,7 @@ public class AliPayAppService extends AliPayService implements QuickPayService {
         AlipayClient alipayClient;
         try {
             alipayClient = new DefaultAlipayClient(certAlipayRequest);
-            //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.transaction
             AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
-            //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
             AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
             model.setSubject(subject);
             model.setOutTradeNo(businessOrderId);
@@ -62,7 +53,6 @@ public class AliPayAppService extends AliPayService implements QuickPayService {
             request.setBizModel(model);
             request.setNotifyUrl(BaseConst.ALIPAY_NOTICE_URL);
 
-            //这里和普通的接口调用不同，使用的是sdkExecute
             AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
             String body = response.getBody();
             Assert.state(!StringUtils.hasText(body), "支付宝签名失败");

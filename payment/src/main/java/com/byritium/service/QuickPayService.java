@@ -7,7 +7,6 @@ import com.byritium.dto.PaymentExtra;
 import java.math.BigDecimal;
 
 public interface QuickPayService {
-    PaymentPattern pattern();
 
     String key();
 
