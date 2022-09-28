@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("pay")
 public class PayController {
 
-    @RequestMapping("order")
-    public void order(@RequestBody PayParam param) {
+    @RequestMapping("execute")
+    public void execute(@RequestBody PayParam param) {
 
     }
 
