@@ -7,15 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("auth")
-public class AuthPayController {
+public class AuthController {
 
     @RequestMapping("freeze")
     public void freeze(@RequestBody PayParam param) {
-
-    }
-
-    @RequestMapping("pay")
-    public void pay(@RequestBody PayParam param) {
 
     }
 
@@ -29,13 +24,8 @@ public class AuthPayController {
 
     }
 
-    @RequestMapping("close")
+    @RequestMapping("cancel")
     public void close(@RequestBody PayParam param) {
-
-    }
-
-    @RequestMapping("notice")
-    public void notice(@RequestBody PayParam param) {
 
     }
 }
