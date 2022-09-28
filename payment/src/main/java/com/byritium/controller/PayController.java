@@ -6,16 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("quick")
-public class QuickPayController {
+@RequestMapping("pay")
+public class PayController {
 
     @RequestMapping("order")
     public void order(@RequestBody PayParam param) {
-
-    }
-
-    @RequestMapping("pay")
-    public void pay(@RequestBody PayParam param) {
 
     }
 
