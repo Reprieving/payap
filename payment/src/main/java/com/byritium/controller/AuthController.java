@@ -25,7 +25,7 @@ public class AuthController {
     }
 
     @RequestMapping("cancel")
-    public void close(@RequestBody PayParam param) {
+    public void cancel(@RequestBody PayParam param) {
 
     }
 }
