@@ -15,6 +15,4 @@ public class PayParam {
     private long paymentPatternId;
     private String subject;
     private BigDecimal orderAmount;
-    private BigDecimal payAmount;
-    private List<Long> couponId;
 }
