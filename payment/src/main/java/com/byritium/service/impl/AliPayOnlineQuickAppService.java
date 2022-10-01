@@ -27,11 +27,11 @@ public class AliPayOnlineQuickAppService extends AliPayService implements QuickP
     private final PaymentScene scene = PaymentScene.ONLINE;
     private final PaymentProduct product = PaymentProduct.QUICK_PAY;
     private final PaymentChannel channel = PaymentChannel.ALI_PAY;
-    private final PaymentPattern pattern = PaymentPattern.APP_PAY;
+    private final PaymentApplication application = PaymentApplication.APP;
 
     @Override
     public String key() {
-        return String.valueOf(scene) + product + channel + pattern;
+        return String.valueOf(scene) + product + channel + application;
     }
 
     @Override
