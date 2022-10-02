@@ -4,8 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum PaymentApplication {
-    APP("APP", "手机APP"),
-
+    APP("APP", "APP"),
+    WAP("WAP", "WAP"),
+    PC("APP", "PC"),
     ;
     private final String application;
     private final String message;

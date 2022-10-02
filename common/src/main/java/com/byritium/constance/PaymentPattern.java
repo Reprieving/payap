@@ -21,24 +21,27 @@ public enum PaymentPattern {//支付模式
 
     APPLE_PAY("APPLE_PAY", "苹果支付"),
 
+    ONLINE_QUICK_ALIPAY_APP(PaymentChannel.ALI_PAY, PaymentScene.ONLINE, PaymentApplication.APP, PaymentProduct.QUICK_PAY, "支付宝线上APP快捷支付"),
+    ONLINE_QUICK_ALIPAY_WAP(PaymentChannel.ALI_PAY, PaymentScene.ONLINE, PaymentApplication.WAP, PaymentProduct.QUICK_PAY, "支付宝线上WAP快捷支付"),
+    ONLINE_QUICK_ALIPAY_PC(PaymentChannel.ALI_PAY, PaymentScene.ONLINE, PaymentApplication.PC, PaymentProduct.QUICK_PAY, "支付宝线上PC快捷支付");
 
-    APP_PAY("APP_PAY", "APP"),
-
-    ;
-    private PaymentScene scene;
-    private PaymentProduct product;
     private PaymentChannel channel;
-    private PaymentCurrency currency;
-
+    private PaymentScene scene;
+    private PaymentApplication application;
+    private PaymentProduct product;
     private final String message;
 
     PaymentPattern(String pattern, String message) {
+
         this.pattern = pattern;
         this.message = message;
     }
 
-    PaymentPattern(PaymentScene scene,PaymentProduct product,PaymentChannel channel,PaymentApplication application, String message) {
-
+    PaymentPattern(PaymentChannel channel, PaymentScene scene, PaymentApplication application, PaymentProduct product, String message) {
+        this.channel = channel;
+        this.scene = scene;
+        this.application = application;
+        this.product = product;
         this.message = message;
     }
 
