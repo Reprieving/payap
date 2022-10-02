@@ -4,7 +4,7 @@ import com.byritium.constance.*;
 import lombok.Data;
 
 @Data
-public class PaymentPattern {
+public class PaymentSetting {
     private PaymentScene scene;
     private PaymentProduct product;
     private PaymentChannel channel;

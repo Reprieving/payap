@@ -45,8 +45,8 @@ public class TransactionOrderService {
     }
 
     public TransactionResult trade(String clientId, TransactionParam param) {
-//        PaymentPattern paymentChannel = param.getPaymentPattern();
-//        Map<PaymentPattern, TransactionPayOrder> map = new HashMap<>();
+//        PaymentSetting paymentChannel = param.getPaymentPattern();
+//        Map<PaymentSetting, TransactionPayOrder> map = new HashMap<>();
 //        String userId = param.getUserId();
 //
 //        BigDecimal reductionAmount = BigDecimal.ZERO;
@@ -55,7 +55,7 @@ public class TransactionOrderService {
 //        String couponId = param.getCouponId();
 //        if (StringUtils.hasText(couponId) && reductionAmountQuota.compareTo(BigDecimal.ZERO) > 0) {
 //            TransactionPayOrder transactionPayOrder = payOrderService.buildCouponOrder(couponId);
-//            map.put(PaymentPattern.COUPON_PAY, transactionPayOrder);
+//            map.put(PaymentSetting.COUPON_PAY, transactionPayOrder);
 //            reductionAmount = reductionAmount.add(transactionPayOrder.getOrderAmount());
 //        }
 //
@@ -80,7 +80,7 @@ public class TransactionOrderService {
 //                transactionOrderService.save(transactionTradeOrder);
 //                String transactionOrderId = transactionTradeOrder.getId();
 //
-//                for (Map.Entry<PaymentPattern, TransactionPayOrder> entry : map.entrySet()) {
+//                for (Map.Entry<PaymentSetting, TransactionPayOrder> entry : map.entrySet()) {
 //                    TransactionPayOrder transactionPayOrder = entry.getValue();
 //                    transactionPayOrder.setTransactionOrderId(transactionOrderId);
 //                    payOrderService.save(transactionPayOrder);

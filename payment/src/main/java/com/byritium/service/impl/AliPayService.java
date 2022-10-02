@@ -18,7 +18,7 @@ import com.byritium.dto.AliPayConfig;
 import com.byritium.dto.IdContainer;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
-import com.byritium.entity.payment.PaymentPattern;
+import com.byritium.entity.payment.PaymentSetting;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.PayService;
 import com.byritium.service.QueryService;
@@ -61,7 +61,9 @@ public class AliPayService implements PayService, RefundService, WithdrawService
     }
 
     @Override
-    public PaymentResult pay(PaymentPattern pattern, IdContainer idContainer, String subject, BigDecimal orderAmount) {
+    public PaymentResult pay(PaymentSetting setting, IdContainer idContainer, String subject, BigDecimal orderAmount) {
+
+
         return null;
     }
 

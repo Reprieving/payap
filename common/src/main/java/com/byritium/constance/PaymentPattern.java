@@ -25,7 +25,6 @@ public enum PaymentPattern {//支付模式
     APP_PAY("APP_PAY", "APP"),
 
     ;
-    private final String pattern;
     private PaymentScene scene;
     private PaymentProduct product;
     private PaymentChannel channel;
@@ -35,6 +34,11 @@ public enum PaymentPattern {//支付模式
 
     PaymentPattern(String pattern, String message) {
         this.pattern = pattern;
+        this.message = message;
+    }
+
+    PaymentPattern(PaymentScene scene,PaymentProduct product,PaymentChannel channel,PaymentApplication application, String message) {
+
         this.message = message;
     }
 
