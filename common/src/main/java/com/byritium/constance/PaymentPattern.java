@@ -23,7 +23,12 @@ public enum PaymentPattern {//支付模式
 
     ONLINE_QUICK_ALIPAY_APP(PaymentChannel.ALI_PAY, PaymentScene.ONLINE, PaymentApplication.APP, PaymentProduct.QUICK_PAY, "支付宝线上APP快捷支付"),
     ONLINE_QUICK_ALIPAY_WAP(PaymentChannel.ALI_PAY, PaymentScene.ONLINE, PaymentApplication.WAP, PaymentProduct.QUICK_PAY, "支付宝线上WAP快捷支付"),
-    ONLINE_QUICK_ALIPAY_PC(PaymentChannel.ALI_PAY, PaymentScene.ONLINE, PaymentApplication.PC, PaymentProduct.QUICK_PAY, "支付宝线上PC快捷支付");
+    ONLINE_QUICK_ALIPAY_PC(PaymentChannel.ALI_PAY, PaymentScene.ONLINE, PaymentApplication.PC, PaymentProduct.QUICK_PAY, "支付宝线上PC快捷支付"),
+    OFFLINE_QUICK_ALIPAY_CREATE_CODE(PaymentChannel.ALI_PAY, PaymentScene.OFFLINE, PaymentApplication.CREATE_CODE, PaymentProduct.QUICK_PAY, "支付宝线下付款码快捷支付"),
+    OFFLINE_QUICK_ALIPAY_SCAN_CODE(PaymentChannel.ALI_PAY, PaymentScene.OFFLINE, PaymentApplication.SCAN_CODE, PaymentProduct.QUICK_PAY, "支付宝线下扫码快捷支付"),
+    ONLINE_AUTH_ALIPAY_APP(PaymentChannel.ALI_PAY, PaymentScene.ONLINE, PaymentApplication.APP, PaymentProduct.AUTH_PAY, "支付宝线上APP授权支付"),
+    OFFLINE_AUTH_ALIPAY_CREATE_CODE(PaymentChannel.ALI_PAY, PaymentScene.OFFLINE, PaymentApplication.CREATE_CODE, PaymentProduct.AUTH_PAY, "支付宝线下付款码授权支付"),
+    OFFLINE_AUTH_ALIPAY_SCAN_CODE(PaymentChannel.ALI_PAY, PaymentScene.OFFLINE, PaymentApplication.SCAN_CODE, PaymentProduct.AUTH_PAY, "支付宝线下扫码授权支付");
 
     private PaymentChannel channel;
     private PaymentScene scene;
