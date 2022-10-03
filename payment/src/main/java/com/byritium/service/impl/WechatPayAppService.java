@@ -1,13 +1,17 @@
 package com.byritium.service.impl;
 
 import com.byritium.constance.BaseConst;
+import com.byritium.constance.PaymentChannel;
+import com.byritium.dto.IdContainer;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
 import com.byritium.dto.WechatPayConfig;
 import com.byritium.dto.wechat.WechatPayAmount;
 import com.byritium.dto.wechat.WechatPayRequest;
 import com.byritium.dto.wechat.WechatPayResult;
+import com.byritium.entity.payment.PaymentSetting;
 import com.byritium.exception.BusinessException;
+import com.byritium.service.PayService;
 import com.byritium.service.QuickPayService;
 import com.byritium.utils.OkHttpUtils;
 import com.byritium.utils.RandomUtils;
@@ -26,9 +30,18 @@ import java.util.Map;
 
 @Slf4j
 @Service
-public class WechatPayAppService extends WechatPayService implements QuickPayService {
+public class WechatPayAppService extends WechatPayService implements PayService {
 
     @Override
+    public PaymentChannel channel() {
+        return null;
+    }
+
+    @Override
+    public PaymentResult pay(PaymentSetting pattern, IdContainer idContainer, String subject, BigDecimal orderAmount) {
+        return null;
+    }
+
     public PaymentResult pay(String businessOrderId, String subject, BigDecimal orderAmount, PaymentExtra paymentExtra) {
         WechatPayConfig wechatPayConfig = new WechatPayConfig();
 
@@ -70,6 +83,8 @@ public class WechatPayAppService extends WechatPayService implements QuickPaySer
         return null;
     }
 
+
+
     @Override
     public void refund(String businessOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount, PaymentExtra paymentExtra) {
         super.refund(businessOrderId, refundOrderId, orderAmount, refundAmount, paymentExtra);
@@ -79,4 +94,6 @@ public class WechatPayAppService extends WechatPayService implements QuickPaySer
     public PaymentResult query(String businessOrderId, PaymentExtra paymentExtra) {
         return super.query(businessOrderId, paymentExtra);
     }
+
+
 }

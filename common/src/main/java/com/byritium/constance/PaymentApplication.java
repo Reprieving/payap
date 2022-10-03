@@ -9,6 +9,7 @@ public enum PaymentApplication {
     PC("APP", "PC"),
     CREATE_CODE("CREATE_CODE", "付款码支付"),
     SCAN_CODE("SCAN_CODE", "扫码支付"),
+    IOS("IOS", "IOS"),
     ;
     private final String application;
     private final String message;

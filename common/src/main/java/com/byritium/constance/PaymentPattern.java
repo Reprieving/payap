@@ -1,26 +1,10 @@
 package com.byritium.constance;
 
+import com.byritium.entity.payment.PaymentSetting;
 import lombok.Getter;
 
 @Getter
 public enum PaymentPattern {//支付模式
-    ACCOUNT_PAY("ACCOUNT_PAY", "账户支付"),
-
-    ALI_PAY("ALI_PAY", "支付宝支付"),
-    ALI_PAY_APP("ALI_PAY_APP", "支付宝APP支付"),
-    ALI_PAY_WAP("ALI_PAY_WAP", "支付手机网站支付"),
-    ALI_PAY_PC("ALI_PAY_PC", "支付宝电脑网站支付"),
-    ALI_PAY_SCAN_CODE("ALI_PAY_PC", "支付宝当面扫码支付"),
-    ALI_PAY_CREATE_CODE("ALI_PAY_CREATE_CODE", "支付宝付款码支付"),
-    ALI_PAY_AUTH_ONLINE("ALI_PAY_AUTH_ONLINE", "支付宝线上授权支付"),
-    ALI_PAY_AUTH_OFFLINE_SCAN("ALI_PAY_AUTH_OFFLINE_SCAN", "支付宝线下授权支付(扫码)"),
-    ALI_PAY_AUTH_OFFLINE_SHOW("ALI_PAY_AUTH_OFFLINE_SHOW", "支付宝线下授权支付(发码)"),
-
-    WECHAT_PAY("WECHAT_PAY", "微信支付"),
-    WECHAT_APP_PAY("WECHAT_APP_PAY", "微信APP支付"),
-
-    APPLE_PAY("APPLE_PAY", "苹果支付"),
-
     ONLINE_QUICK_ALIPAY_APP(PaymentChannel.ALI_PAY, PaymentScene.ONLINE, PaymentApplication.APP, PaymentProduct.QUICK_PAY, "支付宝线上APP快捷支付"),
     ONLINE_QUICK_ALIPAY_WAP(PaymentChannel.ALI_PAY, PaymentScene.ONLINE, PaymentApplication.WAP, PaymentProduct.QUICK_PAY, "支付宝线上WAP快捷支付"),
     ONLINE_QUICK_ALIPAY_PC(PaymentChannel.ALI_PAY, PaymentScene.ONLINE, PaymentApplication.PC, PaymentProduct.QUICK_PAY, "支付宝线上PC快捷支付"),
@@ -28,7 +12,21 @@ public enum PaymentPattern {//支付模式
     OFFLINE_QUICK_ALIPAY_SCAN_CODE(PaymentChannel.ALI_PAY, PaymentScene.OFFLINE, PaymentApplication.SCAN_CODE, PaymentProduct.QUICK_PAY, "支付宝线下扫码快捷支付"),
     ONLINE_AUTH_ALIPAY_APP(PaymentChannel.ALI_PAY, PaymentScene.ONLINE, PaymentApplication.APP, PaymentProduct.AUTH_PAY, "支付宝线上APP授权支付"),
     OFFLINE_AUTH_ALIPAY_CREATE_CODE(PaymentChannel.ALI_PAY, PaymentScene.OFFLINE, PaymentApplication.CREATE_CODE, PaymentProduct.AUTH_PAY, "支付宝线下付款码授权支付"),
-    OFFLINE_AUTH_ALIPAY_SCAN_CODE(PaymentChannel.ALI_PAY, PaymentScene.OFFLINE, PaymentApplication.SCAN_CODE, PaymentProduct.AUTH_PAY, "支付宝线下扫码授权支付");
+    OFFLINE_AUTH_ALIPAY_SCAN_CODE(PaymentChannel.ALI_PAY, PaymentScene.OFFLINE, PaymentApplication.SCAN_CODE, PaymentProduct.AUTH_PAY, "支付宝线下扫码授权支付"),
+
+    ONLINE_QUICK_WECHATPAY_APP(PaymentChannel.WECHAT_PAY, PaymentScene.ONLINE, PaymentApplication.APP, PaymentProduct.QUICK_PAY, "微信线上APP快捷支付"),
+    ONLINE_QUICK_WECHATPAY_WAP(PaymentChannel.WECHAT_PAY, PaymentScene.ONLINE, PaymentApplication.WAP, PaymentProduct.QUICK_PAY, "微信线上WAP快捷支付"),
+    ONLINE_QUICK_WECHATPAY_PC(PaymentChannel.WECHAT_PAY, PaymentScene.ONLINE, PaymentApplication.PC, PaymentProduct.QUICK_PAY, "微信线上PC快捷支付"),
+    OFFLINE_QUICK_WECHATPAY_CREATE_CODE(PaymentChannel.WECHAT_PAY, PaymentScene.ONLINE, PaymentApplication.CREATE_CODE, PaymentProduct.QUICK_PAY, "微信线下付款码快捷支付"),
+    OFFLINE_QUICK_WECHATPAY_SCAN_CODE(PaymentChannel.WECHAT_PAY, PaymentScene.ONLINE, PaymentApplication.SCAN_CODE, PaymentProduct.QUICK_PAY, "微信线下扫码快捷支付"),
+
+    ONLINE_QUICK_UNION_APP(PaymentChannel.PAYPAL, PaymentScene.ONLINE, PaymentApplication.APP, PaymentProduct.QUICK_PAY, "云闪付线上快捷支付"),
+
+    ONLINE_QUICK_PAYPAL_APP(PaymentChannel.PAYPAL, PaymentScene.ONLINE, PaymentApplication.APP, PaymentProduct.QUICK_PAY, "PAYPAL线上快捷支付"),
+
+    ONLINE_QUICK_IOS_APP(PaymentChannel.APPLE_PAY, PaymentScene.ONLINE, PaymentApplication.APP, PaymentProduct.QUICK_PAY, "IOS线上快捷支付");
+
+
 
     private PaymentChannel channel;
     private PaymentScene scene;
@@ -37,8 +35,6 @@ public enum PaymentPattern {//支付模式
     private final String message;
 
     PaymentPattern(String pattern, String message) {
-
-        this.pattern = pattern;
         this.message = message;
     }
 
@@ -50,8 +46,8 @@ public enum PaymentPattern {//支付模式
         this.message = message;
     }
 
-    public String pattern() {
-        return this.pattern;
+    public static PaymentPattern pattern(PaymentSetting setting) {
+        return PaymentPattern.valueOf(String.valueOf(setting.getScene()) + setting.getChannel() + setting.getProduct() + setting.getApplication());
     }
 
 

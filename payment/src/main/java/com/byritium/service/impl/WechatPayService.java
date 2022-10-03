@@ -136,10 +136,6 @@ public abstract class WechatPayService implements RefundService, WithdrawService
         }
     }
 
-    public PaymentPattern pattern() {
-        return PaymentPattern.WECHAT_PAY;
-    }
-
     @Override
     public void refund(String paymentOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount, PaymentExtra paymentExtra) {
         WechatPayConfig wechatPayConfig = new WechatPayConfig();

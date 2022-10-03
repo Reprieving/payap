@@ -4,15 +4,10 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.CertAlipayRequest;
 import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.domain.AlipayFundTransAppPayModel;
-import com.alipay.api.domain.AlipayTradeRefundModel;
-import com.alipay.api.domain.Participant;
-import com.alipay.api.request.AlipayFundTransUniTransferRequest;
-import com.alipay.api.request.AlipayTradeRefundRequest;
-import com.alipay.api.response.AlipayFundTransUniTransferResponse;
-import com.alipay.api.response.AlipayTradeRefundResponse;
-import com.byritium.constance.BaseConst;
-import com.byritium.constance.PaymentChannel;
+import com.alipay.api.domain.*;
+import com.alipay.api.request.*;
+import com.alipay.api.response.*;
+import com.byritium.constance.*;
 import com.byritium.constance.alipay.AliPayCode;
 import com.byritium.dto.AliPayConfig;
 import com.byritium.dto.IdContainer;
@@ -26,6 +21,8 @@ import com.byritium.service.RefundService;
 import com.byritium.service.WithdrawService;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 
@@ -62,9 +59,192 @@ public class AliPayService implements PayService, RefundService, WithdrawService
 
     @Override
     public PaymentResult pay(PaymentSetting setting, IdContainer idContainer, String subject, BigDecimal orderAmount) {
+        PaymentPattern pattern = PaymentPattern.pattern(setting);
+        long businessOrderId = idContainer.getBizOrderId();
+        AliPayConfig aliPayConfig = new AliPayConfig();
+        CertAlipayRequest certAlipayRequest = buildRequest(aliPayConfig);
+        AlipayClient alipayClient;
+        switch (pattern) {
+            case ONLINE_QUICK_ALIPAY_APP:
+                try {
+                    alipayClient = new DefaultAlipayClient(certAlipayRequest);
+                    AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+                    AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+                    model.setSubject(subject);
+                    model.setOutTradeNo(String.valueOf(businessOrderId));
+                    model.setTimeExpire("30m");
+                    model.setTotalAmount(orderAmount.toPlainString());
+                    model.setProductCode("QUICK_MSECURITY_PAY");
+                    request.setBizModel(model);
+                    request.setNotifyUrl(BaseConst.ALIPAY_NOTICE_URL);
+                    AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
+                    String body = response.getBody();
+                    Assert.state(!StringUtils.hasText(body), "支付宝签名失败");
+                    PaymentResult paymentResult = new PaymentResult();
+                    paymentResult.setPrePayId(body);
+                    return paymentResult;
+                } catch (AlipayApiException e) {
+                    log.error("支付宝渠道支付失败，支付订单id：{}", businessOrderId, e);
+                    throw new BusinessException("支付宝渠道支付失败");
+                }
 
+            case ONLINE_QUICK_ALIPAY_WAP:
+                try {
+                    alipayClient = new DefaultAlipayClient(certAlipayRequest);
+                    AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
+                    AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
+                    model.setSubject(subject);
+                    model.setOutTradeNo(String.valueOf(businessOrderId));
+                    model.setTimeExpire("30m");
+                    model.setTotalAmount(orderAmount.toPlainString());
+                    request.setBizModel(model);
+                    request.setNotifyUrl(BaseConst.ALIPAY_NOTICE_URL);
 
-        return null;
+                    AlipayTradeWapPayResponse response = alipayClient.pageExecute(request);
+                    String body = response.getBody();
+                    Assert.state(!StringUtils.hasText(body), "支付宝签名失败");
+
+                    PaymentResult paymentResult = new PaymentResult();
+                    paymentResult.setPrePayId(body);
+
+                    return paymentResult;
+                } catch (AlipayApiException e) {
+                    log.error("支付宝渠道支付失败，支付订单id：{}", businessOrderId, e);
+                    throw new BusinessException("支付宝渠道支付失败");
+                }
+
+            case ONLINE_QUICK_ALIPAY_PC:
+                try {
+                    alipayClient = new DefaultAlipayClient(certAlipayRequest);
+                    AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
+                    AlipayTradePagePayModel model = new AlipayTradePagePayModel();
+                    model.setSubject(subject);
+                    model.setOutTradeNo(String.valueOf(businessOrderId));
+                    model.setTimeExpire("30m");
+                    model.setTotalAmount(orderAmount.toPlainString());
+                    model.setProductCode("FAST_INSTANT_TRADE_PAY");
+                    request.setBizModel(model);
+                    request.setNotifyUrl(BaseConst.ALIPAY_NOTICE_URL);
+
+                    AlipayTradePagePayResponse response = alipayClient.pageExecute(request);
+                    String body = response.getBody();
+                    Assert.state(!StringUtils.hasText(body), "支付宝签名失败");
+
+                    PaymentResult paymentResult = new PaymentResult();
+                    paymentResult.setPrePayId(body);
+
+                    return paymentResult;
+                } catch (AlipayApiException e) {
+                    log.error("支付宝渠道支付失败，支付订单id：{}", businessOrderId, e);
+                    throw new BusinessException("支付宝渠道支付失败");
+                }
+
+            case OFFLINE_QUICK_ALIPAY_CREATE_CODE:
+                try {
+                    alipayClient = new DefaultAlipayClient(certAlipayRequest);
+                    AlipayTradePayRequest request = new AlipayTradePayRequest();
+                    AlipayTradePayModel model = new AlipayTradePayModel();
+                    model.setSubject(subject);
+                    model.setOutTradeNo(String.valueOf(businessOrderId));
+                    model.setTotalAmount(orderAmount.toPlainString());
+                    model.setProductCode("FAST_INSTANT_TRADE_PAY");
+                    request.setBizModel(model);
+                    request.setNotifyUrl(BaseConst.ALIPAY_NOTICE_URL);
+
+                    AlipayTradePayResponse response = alipayClient.pageExecute(request);
+                    String body = response.getBody();
+                    Assert.state(!StringUtils.hasText(body), "支付宝签名失败");
+
+                    PaymentResult paymentResult = new PaymentResult();
+                    paymentResult.setPrePayId(body);
+
+                    return paymentResult;
+                } catch (AlipayApiException e) {
+                    log.error("支付宝渠道支付失败，支付订单id：{}", businessOrderId, e);
+                    throw new BusinessException("支付宝渠道支付失败");
+                }
+
+            case OFFLINE_QUICK_ALIPAY_SCAN_CODE:
+                try {
+                    alipayClient = new DefaultAlipayClient(certAlipayRequest);
+                    AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
+                    AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();
+                    model.setSubject(subject);
+                    model.setOutTradeNo(String.valueOf(businessOrderId));
+                    model.setTotalAmount(orderAmount.toPlainString());
+                    request.setBizModel(model);
+                    request.setNotifyUrl(BaseConst.ALIPAY_NOTICE_URL);
+
+                    AlipayTradePrecreateResponse response = alipayClient.execute(request);
+                    String body = response.getBody();
+                    Assert.state(!StringUtils.hasText(body), "支付宝签名失败");
+
+                    PaymentResult paymentResult = new PaymentResult();
+                    paymentResult.setPrePayId(body);
+
+                    return paymentResult;
+                } catch (AlipayApiException e) {
+                    log.error("支付宝渠道支付失败，支付订单id：{}", businessOrderId, e);
+                    throw new BusinessException("支付宝渠道支付失败");
+                }
+
+            case ONLINE_AUTH_ALIPAY_APP:
+                try {
+                    alipayClient = new DefaultAlipayClient(certAlipayRequest);
+                    AlipayFundAuthOrderFreezeRequest request = new AlipayFundAuthOrderFreezeRequest  ();
+                    AlipayFundAuthOrderFreezeModel model = new AlipayFundAuthOrderFreezeModel();
+                    model.setAuthCode("");
+                    model.setOutOrderNo(String.valueOf(businessOrderId));
+                    model.setOutRequestNo(String.valueOf(businessOrderId));
+                    model.setOrderTitle(subject);
+                    model.setAmount(orderAmount.toPlainString());
+                    model.setProductCode("PRE_AUTH");
+                    request.setBizModel(model);
+                    request.setNotifyUrl(BaseConst.ALIPAY_NOTICE_URL);
+
+                    AlipayFundAuthOrderFreezeResponse response = alipayClient.sdkExecute(request);
+                    String body = response.getBody();
+                    Assert.state(!StringUtils.hasText(body), "支付宝签名失败");
+
+                    PaymentResult paymentResult = new PaymentResult();
+                    paymentResult.setPrePayId(body);
+
+                    return paymentResult;
+                } catch (AlipayApiException e) {
+                    log.error("支付宝渠道支付失败，支付订单id：{}", businessOrderId, e);
+                    throw new BusinessException("支付宝渠道支付失败");
+                }
+
+            case OFFLINE_AUTH_ALIPAY_CREATE_CODE:
+                try {
+                    alipayClient = new DefaultAlipayClient(certAlipayRequest);
+                    AlipayFundAuthOrderFreezeRequest request = new AlipayFundAuthOrderFreezeRequest  ();
+                    AlipayFundAuthOrderFreezeModel model = new AlipayFundAuthOrderFreezeModel();
+                    model.setAuthCode("");
+                    model.setOutOrderNo(String.valueOf(businessOrderId));
+                    model.setOutRequestNo(String.valueOf(businessOrderId));
+                    model.setOrderTitle(subject);
+                    model.setAmount(orderAmount.toPlainString());
+                    model.setProductCode("PRE_AUTH_ONLINE");
+                    request.setBizModel(model);
+                    request.setNotifyUrl(BaseConst.ALIPAY_NOTICE_URL);
+
+                    AlipayFundAuthOrderFreezeResponse response = alipayClient.sdkExecute(request);
+                    String body = response.getBody();
+                    Assert.state(!StringUtils.hasText(body), "支付宝签名失败");
+
+                    PaymentResult paymentResult = new PaymentResult();
+                    paymentResult.setPrePayId(body);
+
+                    return paymentResult;
+                } catch (AlipayApiException e) {
+                    log.error("支付宝渠道支付失败，支付订单id：{}", businessOrderId, e);
+                    throw new BusinessException("支付宝渠道支付失败");
+                }
+
+            default:
+                throw new BusinessException("error setting");
+        }
     }
 
     @Override
