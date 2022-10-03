@@ -3,16 +3,13 @@ package com.byritium.service.impl;
 
 import com.byritium.constance.BaseConst;
 import com.byritium.constance.InterfaceProvider;
+import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentPattern;
-import com.byritium.dto.PaymentResult;
-import com.byritium.dto.PaymentExtra;
-import com.byritium.dto.SSLRequest;
-import com.byritium.dto.WechatPayConfig;
-import com.byritium.dto.wechat.WechatPayResult;
-import com.byritium.dto.wechat.WechatRefundAmount;
-import com.byritium.dto.wechat.WechatRefundRequest;
-import com.byritium.dto.wechat.WechatWithdrawRequest;
+import com.byritium.dto.*;
+import com.byritium.dto.wechat.*;
+import com.byritium.entity.payment.PaymentSetting;
 import com.byritium.exception.BusinessException;
+import com.byritium.service.PayService;
 import com.byritium.service.QueryService;
 import com.byritium.service.RefundService;
 import com.byritium.service.WithdrawService;
@@ -43,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-public abstract class WechatPayService implements RefundService, WithdrawService, QueryService {
+public class WechatPayService implements PayService, RefundService, WithdrawService, QueryService {
     protected Map<String, String> buildHeader(String method, String url, String body, String nonceStr, String michId, String certificateSerialNo, String privateKeyPath) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException {
         long timestamp = System.currentTimeMillis() / 1000;
         String message = buildMessage(method, url, timestamp, nonceStr, body);
@@ -135,6 +132,78 @@ public abstract class WechatPayService implements RefundService, WithdrawService
             throw new RuntimeException("无效的密钥格式");
         }
     }
+
+    @Override
+    public PaymentChannel channel() {
+        return null;
+    }
+
+    @Override
+    public PaymentResult pay(ClientInfo clientInfo, PaymentSetting setting, IdContainer idContainer, String subject, BigDecimal orderAmount) {
+        WechatPayConfig wechatPayConfig = new WechatPayConfig();
+
+        String appId = wechatPayConfig.getAppId();
+        String michId = wechatPayConfig.getMichId();
+        String url = wechatPayConfig.getPayUrl();
+        String nonceStr = RandomUtils.uuid();
+        String certificateSerialNo = wechatPayConfig.getCertificateSerialNo();
+        String privateKeyPath = wechatPayConfig.getPrivateKeyPath();
+
+        long businessOrderId = idContainer.getBizOrderId();
+        long transactionOrderId = idContainer.getTxOrderId();
+        PaymentPattern pattern = PaymentPattern.pattern(setting);
+
+        WechatPayRequest wechatPayRequest = new WechatPayRequest();
+        wechatPayRequest.setAppid(appId);
+        wechatPayRequest.setMchid(michId);
+        wechatPayRequest.setDescription(subject);
+        wechatPayRequest.setOut_trade_no(String.valueOf(businessOrderId));
+        wechatPayRequest.setAmount(new WechatPayAmount(orderAmount));
+        wechatPayRequest.setNotify_url(BaseConst.WECHATPAY_NOTICE_URL);
+
+
+        switch (pattern) {
+            case ONLINE_QUICK_WECHATPAY_APP:
+                url = "https://api.mch.weixin.qq.com/v3/pay/transactions/app";
+                break;
+
+            case ONLINE_QUICK_WECHATPAY_WAP:
+                url = "https://api.mch.weixin.qq.com/v3/pay/transactions/h5";
+                break;
+
+            case ONLINE_QUICK_WECHATPAY_PC:
+                url = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi";
+                break;
+
+            case OFFLINE_QUICK_WECHATPAY_CREATE_CODE:
+                url = "https://api.mch.weixin.qq.com/v3/pay/transactions/native";
+                break;
+
+        }
+
+
+        Gson gson = new Gson();
+        String json = gson.toJson(wechatPayRequest);
+
+        String str;
+        try {
+            Map<String, String> map = buildHeader(HttpMethod.POST.toString(), url, json, nonceStr, michId, certificateSerialNo, privateKeyPath);
+            str = OkHttpUtils.httpPostJson(url, map, json);
+        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | IOException e) {
+            throw new BusinessException("微信支付渠道支付失败");
+        }
+
+        WechatPayResult wechatPayResult = gson.fromJson(str, WechatPayResult.class);
+        if (!StringUtils.hasText(wechatPayResult.getCode())) {
+            log.error("微信支付失败,{}", str);
+            throw new BusinessException("支付失败");
+        }
+
+        PaymentResult paymentResult = new PaymentResult();
+        paymentResult.setPrePayId(wechatPayResult.getPrepay_id());
+        return paymentResult;
+    }
+
 
     @Override
     public void refund(String paymentOrderId, String refundOrderId, BigDecimal orderAmount, BigDecimal refundAmount, PaymentExtra paymentExtra) {

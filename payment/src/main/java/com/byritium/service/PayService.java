@@ -1,6 +1,7 @@
 package com.byritium.service;
 
 import com.byritium.constance.PaymentChannel;
+import com.byritium.dto.ClientInfo;
 import com.byritium.dto.IdContainer;
 import com.byritium.dto.PaymentResult;
 import com.byritium.entity.payment.PaymentSetting;
@@ -11,6 +12,6 @@ public interface PayService {
 
     PaymentChannel channel();
 
-    PaymentResult pay(PaymentSetting pattern, IdContainer idContainer, String subject, BigDecimal orderAmount);
+    PaymentResult pay(ClientInfo clientInfo, PaymentSetting setting, IdContainer idContainer, String subject, BigDecimal orderAmount);
 
 }

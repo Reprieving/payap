@@ -10,6 +10,7 @@ import com.alipay.api.response.*;
 import com.byritium.constance.*;
 import com.byritium.constance.alipay.AliPayCode;
 import com.byritium.dto.AliPayConfig;
+import com.byritium.dto.ClientInfo;
 import com.byritium.dto.IdContainer;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.PaymentExtra;
@@ -58,7 +59,7 @@ public class AliPayService implements PayService, RefundService, WithdrawService
     }
 
     @Override
-    public PaymentResult pay(PaymentSetting setting, IdContainer idContainer, String subject, BigDecimal orderAmount) {
+    public PaymentResult pay(ClientInfo clientInfo, PaymentSetting setting, IdContainer idContainer, String subject, BigDecimal orderAmount) {
         PaymentPattern pattern = PaymentPattern.pattern(setting);
         long businessOrderId = idContainer.getBizOrderId();
         AliPayConfig aliPayConfig = new AliPayConfig();
@@ -191,7 +192,7 @@ public class AliPayService implements PayService, RefundService, WithdrawService
             case ONLINE_AUTH_ALIPAY_APP:
                 try {
                     alipayClient = new DefaultAlipayClient(certAlipayRequest);
-                    AlipayFundAuthOrderFreezeRequest request = new AlipayFundAuthOrderFreezeRequest  ();
+                    AlipayFundAuthOrderFreezeRequest request = new AlipayFundAuthOrderFreezeRequest();
                     AlipayFundAuthOrderFreezeModel model = new AlipayFundAuthOrderFreezeModel();
                     model.setAuthCode("");
                     model.setOutOrderNo(String.valueOf(businessOrderId));
@@ -218,7 +219,7 @@ public class AliPayService implements PayService, RefundService, WithdrawService
             case OFFLINE_AUTH_ALIPAY_CREATE_CODE:
                 try {
                     alipayClient = new DefaultAlipayClient(certAlipayRequest);
-                    AlipayFundAuthOrderFreezeRequest request = new AlipayFundAuthOrderFreezeRequest  ();
+                    AlipayFundAuthOrderFreezeRequest request = new AlipayFundAuthOrderFreezeRequest();
                     AlipayFundAuthOrderFreezeModel model = new AlipayFundAuthOrderFreezeModel();
                     model.setAuthCode("");
                     model.setOutOrderNo(String.valueOf(businessOrderId));
