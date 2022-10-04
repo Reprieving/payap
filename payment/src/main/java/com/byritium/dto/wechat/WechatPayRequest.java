@@ -14,5 +14,6 @@ public class WechatPayRequest {
     private String out_trade_no;//商户订单号
     private String notify_url;
     private WechatPayAmount amount;
-
+    private WechatPaySceneInfo scene_info;
+    private WechatSettleInfo settle_info;
 }
