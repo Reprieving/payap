@@ -17,7 +17,6 @@ import com.byritium.utils.MD5Util;
 import com.byritium.utils.OkHttpUtils;
 import com.byritium.utils.RandomUtils;
 import com.byritium.utils.XmlUtils;
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
@@ -35,10 +34,7 @@ import java.nio.file.Paths;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -57,11 +53,11 @@ public class WechatPayService implements PayService, RefundService, WithdrawServ
 
         log.info("wechat pay token:{}", token);
 
-        return ImmutableMap.of(
-                "Authorization", "WECHATPAY2-SHA256-RSA2048 " + token,
-                "Content-Type", "application/json",
-                "Accept", "application/json"
-        );
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Authorization", "WECHATPAY2-SHA256-RSA2048 " + token);
+        map.put("Content-Type", "application/json");
+        map.put("Accept", "application/json");
+        return map;
     }
 
     private String buildMessage(String method, String url, long timestamp, String nonceStr, String body) {
@@ -159,9 +155,9 @@ public class WechatPayService implements PayService, RefundService, WithdrawServ
         wechatPayRequest.setAppid(appId);
         wechatPayRequest.setMchid(michId);
         wechatPayRequest.setDescription(subject);
-        wechatPayRequest.setOut_trade_no(String.valueOf(businessOrderId));
+        wechatPayRequest.setOutTradeNo(String.valueOf(businessOrderId));
         wechatPayRequest.setAmount(new WechatPayAmount(orderAmount));
-        wechatPayRequest.setNotify_url(BaseConst.WECHATPAY_NOTICE_URL);
+        wechatPayRequest.setNotifyUrl(BaseConst.WECHATPAY_NOTICE_URL);
 
 
         switch (pattern) {

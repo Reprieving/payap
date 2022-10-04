@@ -1,9 +1,10 @@
 package com.byritium.dto.wechat;
 
-import com.byritium.constance.ClientType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class WechatSettleInfo {
-    private boolean profit_sharing;
+    @JsonProperty("profit_sharing")
+    private boolean profitSharing;
 }
