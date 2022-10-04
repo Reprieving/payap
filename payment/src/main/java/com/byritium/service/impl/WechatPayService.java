@@ -23,6 +23,7 @@ import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
 import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -40,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@Service
 public class WechatPayService implements PayService, RefundService, WithdrawService, QueryService {
     protected Map<String, String> buildHeader(String method, String url, String body, String nonceStr, String michId, String certificateSerialNo, String privateKeyPath) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException {
         long timestamp = System.currentTimeMillis() / 1000;

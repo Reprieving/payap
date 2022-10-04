@@ -22,12 +22,14 @@ import com.byritium.service.RefundService;
 import com.byritium.service.WithdrawService;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 
 @Slf4j
+@Service
 public class AliPayService implements PayService, RefundService, WithdrawService, QueryService {
     protected CertAlipayRequest buildRequest(AliPayConfig aliPayConfig) {
         //构造client
