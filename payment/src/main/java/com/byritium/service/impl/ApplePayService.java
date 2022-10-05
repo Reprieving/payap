@@ -5,10 +5,13 @@ import com.byritium.constance.PaymentChannel;
 import com.byritium.dto.ClientInfo;
 import com.byritium.dto.IdContainer;
 import com.byritium.dto.PaymentResult;
+import com.byritium.dto.applepay.ApplePayRes;
 import com.byritium.entity.payment.PaymentSetting;
+import com.byritium.exception.BusinessException;
 import com.byritium.service.PayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.net.ssl.*;
 import java.io.BufferedOutputStream;
@@ -84,11 +87,17 @@ public class ApplePayService implements PayService {
 
             InputStream is = conn.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String line = null;
-            StringBuffer sb = new StringBuffer();
+            String line;
+            StringBuilder sb = new StringBuilder();
             while ((line = reader.readLine()) != null) {
                 sb.append(line);
             }
+
+            String verifyResult = sb.toString();
+            if (!StringUtils.hasText(verifyResult)) {
+                throw new BusinessException("无订单信息!");
+            }
+
 
             return null;
         } catch (Exception ex) {
