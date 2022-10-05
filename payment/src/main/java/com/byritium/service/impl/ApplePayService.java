@@ -5,10 +5,14 @@ import com.byritium.constance.PaymentChannel;
 import com.byritium.dto.ClientInfo;
 import com.byritium.dto.IdContainer;
 import com.byritium.dto.PaymentResult;
+import com.byritium.dto.applepay.ApplePayParam;
 import com.byritium.dto.applepay.ApplePayRes;
+import com.byritium.dto.applepay.Receipt;
+import com.byritium.dto.applepay.ReceiptInApp;
 import com.byritium.entity.payment.PaymentSetting;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.PayService;
+import com.byritium.utils.GsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -22,6 +26,9 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -55,15 +62,18 @@ public class ApplePayService implements PayService {
 
     @Override
     public PaymentResult pay(ClientInfo clientInfo, PaymentSetting setting, IdContainer idContainer, String subject, BigDecimal orderAmount) {
-        //环境判断 线上/开发环境用不同的请求链接
-        int type = 0;
+
+        ApplePayParam applePayParam = clientInfo.getApplePayParam();
+        Integer environmentType = applePayParam.getEnvironmentType();
+        String clientTransactionId = applePayParam.getTransactionId();
+
         String url = "";
-        if (type == 0) {
+        if (environmentType == 0) {
             url = "https://sandbox.itunes.apple.com/verifyReceipt"; //沙盒测试
         } else {
             url = "https://buy.itunes.apple.com/verifyReceipt"; //线上测试
         }
-        String receipt = "";
+        String receiptData = "";
         try {
             SSLContext sc = SSLContext.getInstance("SSL");
             sc.init(null, new TrustManager[]{new TrustAnyTrustManager()}, new java.security.SecureRandom());
@@ -78,11 +88,11 @@ public class ApplePayService implements PayService {
             conn.setDoOutput(true);
             BufferedOutputStream hurlBufOus = new BufferedOutputStream(conn.getOutputStream());
 
-            JSONObject obj = new JSONObject();
-            obj.put("receipt-data", receipt);
+            Map<String, Object> map = new HashMap<>();
+            map.put("receipt-data", receiptData);
             //自动续费产品加上password
-            // obj.put("password", "**************");
-            hurlBufOus.write(obj.toString().getBytes());
+            // map.put("password", "**************");
+            hurlBufOus.write(GsonUtils.serialize(map).getBytes());
             hurlBufOus.flush();
 
             InputStream is = conn.getInputStream();
@@ -96,6 +106,23 @@ public class ApplePayService implements PayService {
             String verifyResult = sb.toString();
             if (!StringUtils.hasText(verifyResult)) {
                 throw new BusinessException("无订单信息!");
+            }
+            ApplePayRes res = GsonUtils.deserializeEntity(verifyResult, ApplePayRes.class);
+            Integer status = res.getStatus();
+            if (0 == status) {
+                Receipt receipt = res.getReceipt();
+                List<ReceiptInApp> inAppList = receipt.getInApp();
+                if (inAppList == null || inAppList.size() == 0) {
+                    throw new BusinessException("数据异常");
+                }
+                ReceiptInApp inApp = receipt.getInApp().get(inAppList.size() - 1);
+                String transactionId = inApp.getTransactionId();
+                String productId = inApp.getProductId();
+                String inAppOwnershipType = inApp.getInAppOwnershipType();
+
+                if (transactionId.equals(clientTransactionId) && inAppOwnershipType.equals("PURCHASED")) {
+
+                }
             }
 
 
