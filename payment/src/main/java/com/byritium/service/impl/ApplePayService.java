@@ -35,11 +35,11 @@ import java.util.Map;
 public class ApplePayService implements PayService {
     private static class TrustAnyTrustManager implements X509TrustManager {
 
-        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        public void checkServerTrusted(X509Certificate[] chain, String authType) {
         }
 
         @Override
-        public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+        public void checkClientTrusted(X509Certificate[] x509Certificates, String s) {
 
         }
 
@@ -62,7 +62,6 @@ public class ApplePayService implements PayService {
 
     @Override
     public PaymentResult pay(ClientInfo clientInfo, PaymentSetting setting, IdContainer idContainer, String subject, BigDecimal orderAmount) {
-
         ApplePayParam applePayParam = clientInfo.getApplePayParam();
         Integer environmentType = applePayParam.getEnvironmentType();
         String clientTransactionId = applePayParam.getTransactionId();

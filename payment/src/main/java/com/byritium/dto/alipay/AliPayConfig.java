@@ -1,4 +1,4 @@
-package com.byritium.dto;
+package com.byritium.dto.alipay;
 
 import lombok.Data;
 import lombok.Getter;

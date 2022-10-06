@@ -1,28 +1,17 @@
 package com.byritium.service.callback;
 
-import com.alipay.api.internal.util.AlipaySignature;
-import com.byritium.constance.alipay.AliPayStatus;
 import com.byritium.constance.wechatpay.WechatPayStatus;
-import com.byritium.dto.AliPayConfig;
-import com.byritium.dto.WechatPayConfig;
+import com.byritium.dto.wechat.WechatPayConfig;
 import com.byritium.dto.wechat.WechatPayCallBackNotifyParam;
 import com.byritium.dto.wechat.WechatPayCallBackResource;
 import com.byritium.dto.wechat.WechatPayCallBackResult;
-import com.byritium.exception.AliPayCallbackException;
 import com.byritium.exception.WechatPayCallbackException;
 import com.byritium.rpc.SecretFeign;
 import com.byritium.utils.WechatUtils;
 import com.google.gson.Gson;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 @Service
 @Slf4j

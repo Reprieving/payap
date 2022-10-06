@@ -9,7 +9,7 @@ import com.alipay.api.request.*;
 import com.alipay.api.response.*;
 import com.byritium.constance.*;
 import com.byritium.constance.alipay.AliPayCode;
-import com.byritium.dto.AliPayConfig;
+import com.byritium.dto.alipay.AliPayConfig;
 import com.byritium.dto.ClientInfo;
 import com.byritium.dto.IdContainer;
 import com.byritium.dto.PaymentResult;

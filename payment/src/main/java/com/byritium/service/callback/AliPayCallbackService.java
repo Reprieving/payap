@@ -2,7 +2,7 @@ package com.byritium.service.callback;
 
 import com.alipay.api.internal.util.AlipaySignature;
 import com.byritium.constance.alipay.AliPayStatus;
-import com.byritium.dto.AliPayConfig;
+import com.byritium.dto.alipay.AliPayConfig;
 import com.byritium.exception.AliPayCallbackException;
 import com.byritium.rpc.SecretFeign;
 import com.google.gson.Gson;
