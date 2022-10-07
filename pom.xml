@@ -21,6 +21,7 @@
         <module>withdraw</module>
         <module>common</module>
         <module>cashier</module>
+        <module>merchant</module>
     </modules>
 
     <name>payap</name>

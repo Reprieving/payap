@@ -8,12 +8,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="liquidation" />
-        <module name="common" />
         <module name="configuration" />
+        <module name="merchant" />
+        <module name="secret" />
+        <module name="common" />
         <module name="recharge" />
         <module name="cashier" />
         <module name="payment" />
-        <module name="secret" />
         <module name="gateway" />
         <module name="account" />
         <module name="transaction" />
@@ -38,6 +39,7 @@
       <module name="finance" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="liquidation" options="-parameters" />
+      <module name="merchant" options="-parameters" />
       <module name="payap" options="-parameters" />
       <module name="payment" options="-parameters" />
       <module name="recharge" options="-parameters" />
