@@ -2,7 +2,8 @@ package com.byritium.controller;
 
 import com.byritium.dto.TransactionResult;
 import com.byritium.dto.transaction.*;
-import com.byritium.service.transaction.impl.GuaranteeTransactionService;
+import com.byritium.service.transaction.TransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,8 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("launch")
 public class LaunchController {
 
+    @Autowired
+    TransactionService transactionService;
+
     @RequestMapping("trade")
     public TransactionResult trade(@RequestBody TradeParam param) {
+        transactionService.trade(param);
+
+
         return null;
     }
 

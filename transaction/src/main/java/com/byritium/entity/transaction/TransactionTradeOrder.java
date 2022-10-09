@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class TransactionTradeOrder extends CommonEntity {
-    private String id;
+    private Long id;
     private String clientId;
     private String bizOrderId;
     private String userId;

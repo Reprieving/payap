@@ -12,7 +12,6 @@ public class TradeParam {
     private Long userId;
     private Long payerId;
     private Long payeeId;
-    private BigDecimal orderAmount;
     private BigDecimal payAmount;
     private String title;
     private Long paymentPatternId;

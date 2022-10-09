@@ -1,6 +1,5 @@
 package com.byritium.service.transaction.order;
 
-import com.byritium.dao.TradeOrderDao;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.transaction.TransactionTradeOrder;
@@ -15,20 +14,6 @@ import javax.annotation.Resource;
 @Slf4j
 public class TransactionOrderService {
 
-    @Resource
-    private TradeOrderDao tradeOrderDao;
-
-    public TransactionTradeOrder save(TransactionTradeOrder transactionTradeOrder) {
-        return tradeOrderDao.save(transactionTradeOrder);
-    }
-
-    public TransactionTradeOrder findByBizOrderId(String orderId) {
-        return tradeOrderDao.findByBizOrderId(orderId);
-    }
-
-    @Resource
-    private PayOrderService payOrderService;
-
 
     @Resource
     private PayService payService;
@@ -39,10 +24,6 @@ public class TransactionOrderService {
 
     @Resource
     private TransactionTemplate transactionTemplate;
-
-    public TransactionTradeOrder get(String id) {
-        return tradeOrderDao.findById(id).orElse(null);
-    }
 
     public TransactionResult trade(String clientId, TransactionParam param) {
 //        PaymentSetting paymentChannel = param.getPaymentPattern();
