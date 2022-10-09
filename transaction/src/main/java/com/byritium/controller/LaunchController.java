@@ -18,13 +18,8 @@ public class LaunchController {
         this.guaranteeTransactionService = guaranteeTransactionService;
     }
 
-    @RequestMapping("guarantee")
+    @RequestMapping("trade")
     public TransactionResult guarantee(@RequestHeader String clientId, @RequestBody GuaranteeTxReq request) {
-        return null;
-    }
-
-    @RequestMapping("instant")
-    public TransactionResult instant(@RequestHeader String clientId, @RequestBody InstantTxReq request) {
         return null;
     }
 
