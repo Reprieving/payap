@@ -2,7 +2,6 @@ package com.byritium.service.transaction.order;
 
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
-import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.service.payment.PayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -54,7 +53,7 @@ public class TransactionOrderService {
 //            map.put(paymentChannel, payOrderService.buildCoreOrder(paymentChannel, userId, corePaymentOrderAmount));
 //        }
 //
-//        TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder(clientId, param);
+//        TransactionOrder transactionTradeOrder = new TransactionOrder(clientId, param);
 //        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 //            @Override
 //            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {

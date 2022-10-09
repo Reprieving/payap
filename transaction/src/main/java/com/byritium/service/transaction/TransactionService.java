@@ -1,6 +1,7 @@
 package com.byritium.service.transaction;
 
 import com.byritium.dto.transaction.TradeParam;
+import com.byritium.entity.transaction.TransactionOrder;
 import com.byritium.service.TransactionPaymentOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ public class TransactionService {
     private TransactionPaymentOrderService transactionPaymentOrderService;
 
     public void trade(TradeParam param) {
+        TransactionOrder transactionOrder = new TransactionOrder();
 
     }
 
