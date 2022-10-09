@@ -5,8 +5,8 @@ import com.byritium.constance.TransactionType;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.transaction.TransactionFreezeOrder;
+import com.byritium.service.payment.PayService;
 import com.byritium.service.transaction.order.FreezeOrderService;
-import com.byritium.service.payment.PaymentService;
 import com.byritium.service.transaction.ITransactionCallService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class FreezeTransactionService implements ITransactionCallService {
     private FreezeOrderService freezeOrderService;
 
     @Autowired
-    private  PaymentService paymentService;
+    private PayService payService;
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {

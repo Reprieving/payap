@@ -7,7 +7,7 @@ import com.byritium.entity.transaction.TransactionRefundOrder;
 import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.transaction.order.RefundOrderService;
-import com.byritium.service.payment.PaymentService;
+import com.byritium.service.payment.PayService;
 import com.byritium.service.transaction.ITransactionCallService;
 import com.byritium.service.transaction.order.TransactionOrderService;
 import com.byritium.service.transaction.order.PayOrderService;
@@ -18,18 +18,18 @@ import java.math.BigDecimal;
 
 @Service
 public class RefundTransactionService implements ITransactionCallService {
-    public RefundTransactionService(TransactionTemplate transactionTemplate, TransactionOrderService transactionOrderService, PayOrderService payOrderService, PaymentService paymentService, RefundOrderService refundOrderService) {
+    public RefundTransactionService(TransactionTemplate transactionTemplate, TransactionOrderService transactionOrderService, PayOrderService payOrderService, PayService payService, RefundOrderService refundOrderService) {
         this.transactionTemplate = transactionTemplate;
         this.transactionOrderService = transactionOrderService;
         this.payOrderService = payOrderService;
-        this.paymentService = paymentService;
+        this.payService = payService;
         this.refundOrderService = refundOrderService;
     }
 
     private final TransactionTemplate transactionTemplate;
     private final TransactionOrderService transactionOrderService;
     private final PayOrderService payOrderService;
-    private final PaymentService paymentService;
+    private final PayService payService;
     private final RefundOrderService refundOrderService;
 
     @Override

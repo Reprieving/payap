@@ -6,7 +6,7 @@ import com.byritium.dao.TransferOrderDao;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.transaction.TransactionTransferOrder;
-import com.byritium.service.payment.PaymentService;
+import com.byritium.service.payment.PayService;
 import com.byritium.service.transaction.ITransactionCallService;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +14,9 @@ import java.math.BigDecimal;
 
 @Service
 public class TransferTransactionService implements ITransactionCallService {
-    public TransferTransactionService(TransferOrderDao transferOrderDao, PaymentService paymentService) {
+    public TransferTransactionService(TransferOrderDao transferOrderDao, PayService payService) {
         this.transferOrderDao = transferOrderDao;
-        this.paymentService = paymentService;
+        this.payService = payService;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class TransferTransactionService implements ITransactionCallService {
 
     private final TransferOrderDao transferOrderDao;
 
-    private final PaymentService paymentService;
+    private final PayService payService;
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {

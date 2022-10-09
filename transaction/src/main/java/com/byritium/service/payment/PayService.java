@@ -12,12 +12,12 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class PaymentService {
+public class PayService {
     private final PaymentRpc paymentRpc;
 
     private final RpcRspService<PaymentResult> rpcRspService;
 
-    public PaymentService(PaymentRpc paymentRpc, RpcRspService<PaymentResult> rpcRspService) {
+    public PayService(PaymentRpc paymentRpc, RpcRspService<PaymentResult> rpcRspService) {
         this.paymentRpc = paymentRpc;
         this.rpcRspService = rpcRspService;
     }

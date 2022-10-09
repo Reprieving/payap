@@ -12,14 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("launch")
 public class LaunchController {
 
-    private final GuaranteeTransactionService guaranteeTransactionService;
-
-    public LaunchController(GuaranteeTransactionService guaranteeTransactionService) {
-        this.guaranteeTransactionService = guaranteeTransactionService;
-    }
-
     @RequestMapping("trade")
-    public TransactionResult guarantee(@RequestHeader String clientId, @RequestBody GuaranteeTxReq request) {
+    public TransactionResult trade(@RequestBody TradeParam param) {
         return null;
     }
 

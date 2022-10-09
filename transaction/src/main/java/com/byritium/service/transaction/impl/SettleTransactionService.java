@@ -8,7 +8,7 @@ import com.byritium.entity.transaction.TransactionSettleOrder;
 import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.transaction.order.PayOrderService;
-import com.byritium.service.payment.PaymentService;
+import com.byritium.service.payment.PayService;
 import com.byritium.service.transaction.order.SettleOrderService;
 import com.byritium.service.transaction.ITransactionCallService;
 import com.byritium.service.transaction.order.TransactionOrderService;
@@ -23,16 +23,16 @@ public class SettleTransactionService implements ITransactionCallService {
         return TransactionType.SETTLE;
     }
 
-    public SettleTransactionService(TransactionOrderService transactionOrderService, PayOrderService payOrderService, PaymentService paymentService, SettleOrderService settleOrderService) {
+    public SettleTransactionService(TransactionOrderService transactionOrderService, PayOrderService payOrderService, PayService payService, SettleOrderService settleOrderService) {
         this.transactionOrderService = transactionOrderService;
         this.payOrderService = payOrderService;
-        this.paymentService = paymentService;
+        this.payService = payService;
         this.settleOrderService = settleOrderService;
     }
 
     private final TransactionOrderService transactionOrderService;
     private final PayOrderService payOrderService;
-    private final PaymentService paymentService;
+    private final PayService payService;
     private final SettleOrderService settleOrderService;
 
     @Override

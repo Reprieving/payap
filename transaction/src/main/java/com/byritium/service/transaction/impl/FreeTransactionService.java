@@ -6,9 +6,9 @@ import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.transaction.TransactionFreeOrder;
 import com.byritium.entity.transaction.TransactionFreezeOrder;
+import com.byritium.service.payment.PayService;
 import com.byritium.service.transaction.order.FreeOrderService;
 import com.byritium.service.transaction.order.FreezeOrderService;
-import com.byritium.service.payment.PaymentService;
 import com.byritium.service.transaction.ITransactionCallService;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +16,10 @@ import java.math.BigDecimal;
 
 @Service
 public class FreeTransactionService implements ITransactionCallService {
-    public FreeTransactionService(FreezeTransactionService freezeTransactionService, FreezeOrderService freezeOrderService, FreeOrderService freeOrderService, PaymentService paymentService) {
+    public FreeTransactionService(FreezeTransactionService freezeTransactionService, FreezeOrderService freezeOrderService, FreeOrderService freeOrderService, PayService payService) {
         this.freezeOrderService = freezeOrderService;
         this.freeOrderService = freeOrderService;
-        this.paymentService = paymentService;
+        this.payService = payService;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class FreeTransactionService implements ITransactionCallService {
 
     private final FreezeOrderService freezeOrderService;
     private final FreeOrderService freeOrderService;
-    private final PaymentService paymentService;
+    private final PayService payService;
 
     @Override
     public TransactionResult call(String clientId, TransactionParam param) {

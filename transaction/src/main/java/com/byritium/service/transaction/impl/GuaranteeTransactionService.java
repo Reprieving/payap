@@ -6,7 +6,7 @@ import com.byritium.constance.TransactionType;
 import com.byritium.dto.*;
 import com.byritium.entity.transaction.TransactionPayOrder;
 import com.byritium.entity.transaction.TransactionTradeOrder;
-import com.byritium.service.payment.PaymentService;
+import com.byritium.service.payment.PayService;
 import com.byritium.service.transaction.ITransactionCallBackService;
 import com.byritium.service.transaction.ITransactionCallService;
 import com.byritium.service.transaction.order.PayOrderService;
@@ -23,10 +23,10 @@ import java.util.List;
 @Service
 @Slf4j
 public class GuaranteeTransactionService implements ITransactionCallService, ITransactionCallBackService {
-    public GuaranteeTransactionService(TransactionOrderService transactionOrderService, PayOrderService payOrderService, PaymentService paymentService) {
+    public GuaranteeTransactionService(TransactionOrderService transactionOrderService, PayOrderService payOrderService, PayService payService) {
         this.transactionOrderService = transactionOrderService;
         this.payOrderService = payOrderService;
-        this.paymentService = paymentService;
+        this.payService = payService;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
 
     private final TransactionOrderService transactionOrderService;
     private final PayOrderService payOrderService;
-    private final PaymentService paymentService;
+    private final PayService payService;
 
     public TransactionResult call(String clientId, TransactionParam param) {
         return null;
@@ -72,7 +72,7 @@ public class GuaranteeTransactionService implements ITransactionCallService, ITr
         TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder(param);
         transactionOrderService.save(transactionTradeOrder);
 
-        PaymentResult paymentResult = paymentService.pay(list);
+        PaymentResult paymentResult = payService.pay(list);
         PaymentResultItem item = paymentResult.get(paymentPattern);
         Assert.notNull(item, "null paymentResultItem");
         transactionResult.setPaySign(item.getSign());

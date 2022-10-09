@@ -4,7 +4,7 @@ import com.byritium.dao.TradeOrderDao;
 import com.byritium.dto.TransactionParam;
 import com.byritium.dto.TransactionResult;
 import com.byritium.entity.transaction.TransactionTradeOrder;
-import com.byritium.service.payment.PaymentService;
+import com.byritium.service.payment.PayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -31,7 +31,7 @@ public class TransactionOrderService {
 
 
     @Resource
-    private PaymentService paymentService;
+    private PayService payService;
 
 
     @Resource

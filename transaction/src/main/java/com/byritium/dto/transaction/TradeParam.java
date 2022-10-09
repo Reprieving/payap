@@ -1,13 +1,12 @@
 package com.byritium.dto.transaction;
 
-import com.byritium.dto.Deduction;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-public class GuaranteeTxReq {
+public class TradeParam {
     private Long clientId;
     private Long businessOrderId;
     private Long userId;
