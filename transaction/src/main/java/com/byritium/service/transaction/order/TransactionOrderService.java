@@ -53,7 +53,7 @@ public class TransactionOrderService {
 //            map.put(paymentChannel, payOrderService.buildCoreOrder(paymentChannel, userId, corePaymentOrderAmount));
 //        }
 //
-//        TransactionOrder transactionTradeOrder = new TransactionOrder(clientId, param);
+//        TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder(clientId, param);
 //        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 //            @Override
 //            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {

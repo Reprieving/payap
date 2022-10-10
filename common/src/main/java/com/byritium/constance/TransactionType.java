@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum TransactionType {
-    GUARANTEE("GUARANTEE", "担保交易"),
+    TRADE("TRADE", "收单交易"),
     INSTANT("INSTANT", "即时交易"),
     SETTLE("SETTLE", "结算"),
     REFUND("REFUND", "退款"),
