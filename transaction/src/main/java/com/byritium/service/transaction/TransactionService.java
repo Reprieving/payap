@@ -1,6 +1,7 @@
 package com.byritium.service.transaction;
 
 import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentChannelType;
 import com.byritium.dto.VirtualCurrency;
 import com.byritium.dto.transaction.TradeParam;
 import com.byritium.entity.transaction.PaymentOrder;
@@ -52,7 +53,7 @@ public class TransactionService {
             List<Long> discountIds = param.getDiscountIds();
             for (Long id : discountIds) {
                 BigDecimal orderAmount = BigDecimal.ZERO;
-                PaymentOrder paymentOrder = new PaymentOrder(transactionTradeOrder, PaymentChannel.DISCOUNT, id, orderAmount);
+                PaymentOrder paymentOrder = new PaymentOrder(transactionTradeOrder, PaymentChannelType.MARKETING, id, orderAmount);
             }
 
         }
@@ -61,7 +62,7 @@ public class TransactionService {
             List<Long> couponIds = param.getCouponIds();
             for (Long id : couponIds) {
                 BigDecimal orderAmount = BigDecimal.ZERO;
-                PaymentOrder paymentOrder = new PaymentOrder(transactionTradeOrder, PaymentChannel.COUPON, id, orderAmount);
+                PaymentOrder paymentOrder = new PaymentOrder(transactionTradeOrder, PaymentChannelType.MARKETING, id, orderAmount);
             }
         }
 
@@ -69,7 +70,7 @@ public class TransactionService {
             List<VirtualCurrency> virtualCurrencies = param.getVirtualCurrencies();
             for (VirtualCurrency virtualCurrency : virtualCurrencies) {
                 BigDecimal orderAmount = virtualCurrency.getAmount();
-                PaymentOrder paymentOrder = new PaymentOrder(transactionTradeOrder, PaymentChannel.VIRTUAL_CURRENCY, virtualCurrency.getId(), orderAmount);
+                PaymentOrder paymentOrder = new PaymentOrder(transactionTradeOrder, PaymentChannelType.ACCOUNT_PAY, virtualCurrency.getId(), orderAmount);
             }
         }
 
