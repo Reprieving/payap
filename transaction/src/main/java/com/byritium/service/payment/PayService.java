@@ -2,7 +2,6 @@ package com.byritium.service.payment;
 
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.ResponseBody;
-import com.byritium.entity.transaction.TransactionPayOrder;
 import com.byritium.rpc.PaymentRpc;
 import com.byritium.service.common.RpcRspService;
 import lombok.extern.slf4j.Slf4j;

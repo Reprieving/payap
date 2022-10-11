@@ -25,6 +25,11 @@ public class TransactionService {
         transactionTradeOrder.setSubject(param.getSubject());
         transactionTradeOrder.setOrderAmount(param.getOrderAmount());
         transactionTradeOrder.setPaymentPatternId(param.getPaymentPatternId());
+        transactionOrderService.save(transactionTradeOrder);
+
+
+
+
     }
 
 

@@ -11,7 +11,7 @@ public class TransactionOrderService {
     @Autowired
     private TransactionTradeOrderMapper transactionTradeOrderMapper;
 
-    private int save(TransactionTradeOrder transactionTradeOrder) {
+    public int save(TransactionTradeOrder transactionTradeOrder) {
         return transactionTradeOrderMapper.insert(transactionTradeOrder);
     }
 

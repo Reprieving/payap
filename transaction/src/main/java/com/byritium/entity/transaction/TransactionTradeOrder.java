@@ -11,9 +11,9 @@ import java.math.BigDecimal;
 @Data
 public class TransactionTradeOrder extends CommonEntity {
     private Long id;
+    private Long uid;
     private Long clientId;
     private Long bizOrderId;
-    private Long uid;
     private Long payerId;
     private Long payeeId;
     private String subject;
