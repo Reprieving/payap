@@ -1,5 +1,6 @@
 package com.byritium.dto.transaction;
 
+import com.byritium.dto.VirtualCurrency;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -16,6 +17,6 @@ public class TradeParam {
     private String subject;
     private Long paymentPatternId;
     private List<Long> discountIds;
-    private List<Long> couponId;
-    private List<Long> virtualCurrencyIds;
+    private List<Long> couponIds;
+    private List<VirtualCurrency> virtualCurrencies;
 }

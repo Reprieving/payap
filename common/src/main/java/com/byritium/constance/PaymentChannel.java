@@ -9,6 +9,10 @@ public enum PaymentChannel {
     WECHAT_PAY("WECHAT_PAY", "微信"),
     PAYPAL("PAYPAL", "PAYPAL"),
     UNION("UNION", "云闪付"),
+
+    DISCOUNT("DISCOUNT", "优惠支付"),
+    COUPON("COUPON", "优惠券支付"),
+    VIRTUAL_CURRENCY("VIRTUAL_CURRENCY", "虚拟资产支付"),
     ;
     private final String channel;
     private final String message;
