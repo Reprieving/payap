@@ -38,15 +38,7 @@ public class TransactionService {
 
 
         if (param.getPaymentPatternId() != null) {
-            PaymentOrder paymentOrder = new PaymentOrder();
-            paymentOrder.setUid(transactionTradeOrder.getUid());
-            paymentOrder.setBizOrderId(transactionTradeOrder.getBizOrderId());
-            paymentOrder.setTxOrderId(transactionTradeOrder.getId());
-            paymentOrder.setPayerId(transactionTradeOrder.getPayerId());
-            paymentOrder.setPayeeId(transactionTradeOrder.getPayeeId());
-            paymentOrder.setSubject(transactionTradeOrder.getSubject());
-            paymentOrder.setOrderAmount(transactionTradeOrder.getOrderAmount());
-            paymentOrder.setPaymentPatternId(transactionTradeOrder.getPaymentPatternId());
+            PaymentOrder paymentOrder = new PaymentOrder(transactionTradeOrder);
         }
 
         {

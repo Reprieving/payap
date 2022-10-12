@@ -20,9 +20,4 @@ public class PayService {
         this.paymentRpc = paymentRpc;
         this.rpcRspService = rpcRspService;
     }
-
-    public PaymentResult pay(List<TransactionPayOrder> transactionPayOrder) {
-        ResponseBody<PaymentResult> responseBody = paymentRpc.pay(transactionPayOrder);
-        return rpcRspService.get(responseBody);
-    }
 }

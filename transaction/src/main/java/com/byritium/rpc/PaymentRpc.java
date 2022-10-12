@@ -16,7 +16,4 @@ public interface PaymentRpc {
     @RequestMapping("call")
     ResponseBody<PaymentResult> call(@RequestBody PaymentRequest paymentRequest);
 
-
-    @RequestMapping("pay")
-    ResponseBody<PaymentResult> pay(@RequestBody List<TransactionPayOrder> transactionPayOrder);
 }

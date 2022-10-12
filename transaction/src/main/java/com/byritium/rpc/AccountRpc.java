@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 
 @FeignClient(value = "account")
 public interface AccountRpc {
-    @RequestMapping("record")
-    ResponseBody<Void> record(AccountJournal accountJournal);
+    @RequestMapping("pay")
+    ResponseBody<Void> pay(AccountJournal accountJournal);
 
     @RequestMapping("query")
     ResponseBody<AccountBalance> query(AccountQuery accountQuery);
