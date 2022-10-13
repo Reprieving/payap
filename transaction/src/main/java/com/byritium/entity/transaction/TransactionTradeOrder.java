@@ -20,7 +20,7 @@ public class TransactionTradeOrder extends CommonEntity {
     private BigDecimal orderAmount;
     private TransactionState transactionState = TransactionState.TRANSACTION_PENDING;
     private RefundState refundState = RefundState.TRANSACTION_NONE;
-    private Long paymentPatternId;
+    private Long paymentSettingId;
     private PaymentState paymentState = PaymentState.PAYMENT_WAITING;
 
 }

@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum PaymentChannel {
-    ACCOUNT_PAY("ACCOUNT_PAY", "账户支付"),
+    BALANCE_PAY("BALANCE_PAY", "余额支付"),
     APPLE_PAY("APPLE_PAY", "苹果支付"),
     ALI_PAY("ALI_PAY", "支付宝"),
     WECHAT_PAY("WECHAT_PAY", "微信"),

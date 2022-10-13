@@ -15,7 +15,7 @@ public class TradeParam {
     private Long payeeId;
     private BigDecimal orderAmount;
     private String subject;
-    private Long paymentPatternId;
+    private Long paymentSettingId;
     private List<Long> discountIds;
     private List<Long> couponIds;
     private List<VirtualCurrency> virtualCurrencies;

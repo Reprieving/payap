@@ -4,9 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum PaymentType {
-    PAY("PAY", "支付"),
-    REFUND("REFUND", "退款"),
-    SETTLE("SETTLE", "结算"),
+    ACCOUNT_PAY("ACCOUNT_PAY", "账户支付"),
+    PAYMENT_AGENT("PAYMENT_AGENT", "支付机构"),
+    DISCOUNT_PAY("DISCOUNT_PAY", "优惠活动支付"),
+    COUPON_PAY("COUPON_PAY", "优惠券支付"),
     ;
     private final String type;
     private final String message;

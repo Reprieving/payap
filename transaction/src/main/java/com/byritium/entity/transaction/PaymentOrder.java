@@ -1,9 +1,6 @@
 package com.byritium.entity.transaction;
 
-import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentChannelType;
-import com.byritium.constance.PaymentState;
-import com.byritium.constance.RefundState;
+import com.byritium.constance.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +18,7 @@ public class PaymentOrder {
     private Long payeeId;
     private String subject;
     private BigDecimal orderAmount;
-    private PaymentChannelType paymentChannelType;
+    private PaymentType paymentType;
     private PaymentChannel paymentChannel;
     private Long paymentPatternId;
     private PaymentState paymentState = PaymentState.PAYMENT_WAITING;
@@ -37,10 +34,10 @@ public class PaymentOrder {
         paymentOrder.setPayeeId(transactionTradeOrder.getPayeeId());
         paymentOrder.setSubject(transactionTradeOrder.getSubject());
         paymentOrder.setOrderAmount(transactionTradeOrder.getOrderAmount());
-        paymentOrder.setPaymentPatternId(transactionTradeOrder.getPaymentPatternId());
+        paymentOrder.setPaymentPatternId(transactionTradeOrder.getPaymentSettingId());
     }
 
-    public PaymentOrder(TransactionTradeOrder transactionTradeOrder, PaymentChannelType paymentChannelType, Long mediumId, BigDecimal orderAmount) {
+    public PaymentOrder(TransactionTradeOrder transactionTradeOrder, PaymentType paymentType, Long mediumId, BigDecimal orderAmount) {
         PaymentOrder paymentOrder = new PaymentOrder();
         paymentOrder.setUid(transactionTradeOrder.getUid());
         paymentOrder.setBizOrderId(transactionTradeOrder.getBizOrderId());
@@ -49,7 +46,7 @@ public class PaymentOrder {
         paymentOrder.setPayerId(transactionTradeOrder.getPayerId());
         paymentOrder.setPayeeId(transactionTradeOrder.getPayeeId());
         paymentOrder.setSubject(transactionTradeOrder.getSubject());
-        paymentOrder.setPaymentChannelType(paymentChannelType);
+        paymentOrder.setPaymentType(paymentType);
         paymentOrder.setOrderAmount(orderAmount);
     }
 
