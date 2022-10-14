@@ -5,7 +5,7 @@ import com.byritium.constance.PaymentType;
 import com.byritium.dto.VirtualCurrency;
 import com.byritium.dto.transaction.TradeParam;
 import com.byritium.entity.payment.PaymentSetting;
-import com.byritium.entity.transaction.PaymentOrder;
+import com.byritium.entity.transaction.TransactionPaymentOrder;
 import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.service.TransactionPaymentOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +38,11 @@ public class TransactionService {
 
         {
             PaymentSetting paymentSetting = new PaymentSetting();
-            PaymentOrder paymentOrder = new PaymentOrder(transactionTradeOrder);
+            TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder);
             if (paymentSetting.getChannel() == PaymentChannel.BALANCE_PAY) {
-                paymentOrder.setPaymentType(PaymentType.ACCOUNT_PAY);
+                transactionPaymentOrder.setPaymentType(PaymentType.ACCOUNT_PAY);
             } else {
-                paymentOrder.setPaymentType(PaymentType.PAYMENT_AGENT);
+                transactionPaymentOrder.setPaymentType(PaymentType.PAYMENT_AGENT);
             }
         }
 
@@ -51,7 +51,7 @@ public class TransactionService {
             List<Long> discountIds = param.getDiscountIds();
             for (Long id : discountIds) {
                 BigDecimal orderAmount = BigDecimal.ZERO;
-                PaymentOrder paymentOrder = new PaymentOrder(transactionTradeOrder, PaymentType.DISCOUNT_PAY, id, orderAmount);
+                TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder, PaymentType.DISCOUNT_PAY, id, orderAmount);
             }
 
         }
@@ -60,7 +60,7 @@ public class TransactionService {
             List<Long> couponIds = param.getCouponIds();
             for (Long id : couponIds) {
                 BigDecimal orderAmount = BigDecimal.ZERO;
-                PaymentOrder paymentOrder = new PaymentOrder(transactionTradeOrder, PaymentType.COUPON_PAY, id, orderAmount);
+                TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder, PaymentType.COUPON_PAY, id, orderAmount);
             }
         }
 
@@ -68,7 +68,7 @@ public class TransactionService {
             List<VirtualCurrency> virtualCurrencies = param.getVirtualCurrencies();
             for (VirtualCurrency virtualCurrency : virtualCurrencies) {
                 BigDecimal orderAmount = virtualCurrency.getAmount();
-                PaymentOrder paymentOrder = new PaymentOrder(transactionTradeOrder, PaymentType.PAYMENT_AGENT, virtualCurrency.getId(), orderAmount);
+                TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder, PaymentType.ACCOUNT_PAY, virtualCurrency.getId(), orderAmount);
             }
         }
 
