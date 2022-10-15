@@ -10,6 +10,9 @@ import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.service.TransactionPaymentOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,54 +26,56 @@ public class TransactionService {
     @Autowired
     private TransactionPaymentOrderService transactionPaymentOrderService;
 
+    @Autowired
+    private TransactionTemplate transactionTemplate;
+
     public void trade(TradeParam param) {
-        TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder();
-        transactionTradeOrder.setUid(param.getUid());
-        transactionTradeOrder.setClientId(param.getClientId());
-        transactionTradeOrder.setBizOrderId(param.getBizOrderId());
-        transactionTradeOrder.setUid(param.getUid());
-        transactionTradeOrder.setPayeeId(param.getPayeeId());
-        transactionTradeOrder.setPayeeId(param.getPayeeId());
-        transactionTradeOrder.setSubject(param.getSubject());
-        transactionTradeOrder.setOrderAmount(param.getOrderAmount());
-        transactionTradeOrder.setPaymentSettingId(param.getPaymentSettingId());
-        transactionOrderService.save(transactionTradeOrder);
+        Boolean flag = transactionTemplate.execute(transactionStatus -> {
+            TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder(param);
+            transactionOrderService.save(transactionTradeOrder);
+            {
+                PaymentSetting paymentSetting = new PaymentSetting();
+                TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder);
+                if (paymentSetting.getChannel() == PaymentChannel.BALANCE_PAY) {
+                    transactionPaymentOrder.setPaymentType(PaymentType.ACCOUNT_PAY);
+                } else {
+                    transactionPaymentOrder.setPaymentType(PaymentType.PAYMENT_AGENT);
+                }
 
-        {
-            PaymentSetting paymentSetting = new PaymentSetting();
-            TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder);
-            if (paymentSetting.getChannel() == PaymentChannel.BALANCE_PAY) {
-                transactionPaymentOrder.setPaymentType(PaymentType.ACCOUNT_PAY);
-            } else {
-                transactionPaymentOrder.setPaymentType(PaymentType.PAYMENT_AGENT);
-            }
-        }
-
-
-        {
-            List<Long> discountIds = param.getDiscountIds();
-            for (Long id : discountIds) {
-                BigDecimal orderAmount = BigDecimal.ZERO;
-                TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder, PaymentType.DISCOUNT_PAY, id, orderAmount);
+                transactionPaymentOrderService.save(transactionPaymentOrder);
             }
 
-        }
 
-        {
-            List<Long> couponIds = param.getCouponIds();
-            for (Long id : couponIds) {
-                BigDecimal orderAmount = BigDecimal.ZERO;
-                TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder, PaymentType.COUPON_PAY, id, orderAmount);
-            }
-        }
+            {
+                List<Long> discountIds = param.getDiscountIds();
+                for (Long id : discountIds) {
+                    BigDecimal orderAmount = BigDecimal.ZERO;
+                    TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder, PaymentType.DISCOUNT_PAY, id, orderAmount);
+                    transactionPaymentOrderService.save(transactionPaymentOrder);
+                }
 
-        {
-            List<VirtualCurrency> virtualCurrencies = param.getVirtualCurrencies();
-            for (VirtualCurrency virtualCurrency : virtualCurrencies) {
-                BigDecimal orderAmount = virtualCurrency.getAmount();
-                TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder, PaymentType.ACCOUNT_PAY, virtualCurrency.getId(), orderAmount);
             }
-        }
+
+            {
+                List<Long> couponIds = param.getCouponIds();
+                for (Long id : couponIds) {
+                    BigDecimal orderAmount = BigDecimal.ZERO;
+                    TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder, PaymentType.COUPON_PAY, id, orderAmount);
+                    transactionPaymentOrderService.save(transactionPaymentOrder);
+                }
+            }
+
+            {
+                List<VirtualCurrency> virtualCurrencies = param.getVirtualCurrencies();
+                for (VirtualCurrency virtualCurrency : virtualCurrencies) {
+                    BigDecimal orderAmount = virtualCurrency.getAmount();
+                    TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder, PaymentType.ACCOUNT_PAY, virtualCurrency.getId(), orderAmount);
+                    transactionPaymentOrderService.save(transactionPaymentOrder);
+                }
+            }
+
+            return transactionStatus.isCompleted();
+        });
 
 
     }
