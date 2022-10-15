@@ -1,13 +1,10 @@
 package com.byritium.service.payment;
 
 import com.byritium.dto.PaymentResult;
-import com.byritium.dto.ResponseBody;
 import com.byritium.rpc.PaymentRpc;
 import com.byritium.service.common.RpcRspService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Slf4j
 @Service

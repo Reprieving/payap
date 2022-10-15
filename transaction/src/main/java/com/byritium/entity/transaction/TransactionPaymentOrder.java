@@ -26,28 +26,25 @@ public class TransactionPaymentOrder {
 
 
     public TransactionPaymentOrder(TransactionTradeOrder transactionTradeOrder) {
-        TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder();
-        transactionPaymentOrder.setUid(transactionTradeOrder.getUid());
-        transactionPaymentOrder.setBizOrderId(transactionTradeOrder.getBizOrderId());
-        transactionPaymentOrder.setTxOrderId(transactionTradeOrder.getId());
-        transactionPaymentOrder.setPayerId(transactionTradeOrder.getPayerId());
-        transactionPaymentOrder.setPayeeId(transactionTradeOrder.getPayeeId());
-        transactionPaymentOrder.setSubject(transactionTradeOrder.getSubject());
-        transactionPaymentOrder.setOrderAmount(transactionTradeOrder.getOrderAmount());
-        transactionPaymentOrder.setPaymentPatternId(transactionTradeOrder.getPaymentSettingId());
+        this.uid = transactionTradeOrder.getUid();
+        this.bizOrderId = transactionTradeOrder.getBizOrderId();
+        this.txOrderId = transactionTradeOrder.getId();
+        this.payerId = transactionTradeOrder.getPayerId();
+        this.payeeId = transactionTradeOrder.getPayeeId();
+        this.subject = transactionTradeOrder.getSubject();
+        this.orderAmount = transactionTradeOrder.getOrderAmount();
+        this.paymentPatternId = transactionTradeOrder.getPaymentSettingId();
     }
 
     public TransactionPaymentOrder(TransactionTradeOrder transactionTradeOrder, PaymentType paymentType, Long mediumId, BigDecimal orderAmount) {
-        TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder();
-        transactionPaymentOrder.setUid(transactionTradeOrder.getUid());
-        transactionPaymentOrder.setBizOrderId(transactionTradeOrder.getBizOrderId());
-        transactionPaymentOrder.setTxOrderId(transactionTradeOrder.getId());
-        transactionPaymentOrder.setMediumId(mediumId);
-        transactionPaymentOrder.setPayerId(transactionTradeOrder.getPayerId());
-        transactionPaymentOrder.setPayeeId(transactionTradeOrder.getPayeeId());
-        transactionPaymentOrder.setSubject(transactionTradeOrder.getSubject());
-        transactionPaymentOrder.setPaymentType(paymentType);
-        transactionPaymentOrder.setOrderAmount(orderAmount);
+        this.uid = transactionTradeOrder.getUid();
+        this.bizOrderId = transactionTradeOrder.getBizOrderId();
+        this.mediumId = mediumId;
+        this.payerId = transactionTradeOrder.getPayerId();
+        this.payeeId = transactionTradeOrder.getPayeeId();
+        this.subject = transactionTradeOrder.getSubject();
+        this.paymentType = paymentType;
+        this.orderAmount = orderAmount;
     }
 
 }

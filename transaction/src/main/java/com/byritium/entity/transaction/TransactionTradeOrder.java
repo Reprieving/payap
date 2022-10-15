@@ -23,4 +23,8 @@ public class TransactionTradeOrder extends CommonEntity {
     private Long paymentSettingId;
     private PaymentState paymentState = PaymentState.PAYMENT_WAITING;
 
+
+
+
+
 }
