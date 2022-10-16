@@ -1,10 +1,11 @@
 package com.byritium.service;
 
 import com.byritium.constance.PaymentType;
-import com.byritium.entity.payment.PaymentOrder;
+import com.byritium.dto.PaymentResult;
 import com.byritium.entity.transaction.TransactionPaymentOrder;
 import com.byritium.rpc.AccountRpc;
-import com.byritium.rpc.MarketingRpc;
+import com.byritium.rpc.MarketingCouponRpc;
+import com.byritium.rpc.MarketingDiscountRpc;
 import com.byritium.rpc.PaymentRpc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,13 +20,15 @@ public class PaymentExecutor {
     private PaymentRpc paymentRpc;
 
     @Autowired
-    private MarketingRpc marketingRpc;
+    private MarketingCouponRpc marketingCouponRpc;
 
+    @Autowired
+    private MarketingDiscountRpc marketingDiscountRpc;
 
-    public void pay(TransactionPaymentOrder transactionPaymentOrder) {
+    public PaymentResult pay(TransactionPaymentOrder transactionPaymentOrder) {
         PaymentType paymentType = transactionPaymentOrder.getPaymentType();
         switch (paymentType) {
-            case ACCOUNT_PAY:
+            case BALANCE_PAY:
                 accountRpc.pay(transactionPaymentOrder);
                 break;
 
@@ -34,18 +37,26 @@ public class PaymentExecutor {
                 break;
 
             case COUPON_PAY:
-                marketingRpc.lockCoupon(transactionPaymentOrder);
+                marketingCouponRpc.lock(transactionPaymentOrder);
                 break;
 
             case DISCOUNT_PAY:
-                marketingRpc.discountRecord(transactionPaymentOrder);
+                marketingDiscountRpc.record(transactionPaymentOrder);
+                break;
+
+            case VIRTUAL_CURRENCY_PAY:
+                accountRpc.lock(transactionPaymentOrder);
                 break;
         }
 
+        return null;
     }
 
     public void payCallback(TransactionPaymentOrder transactionPaymentOrder) {
-
+        PaymentType paymentType = transactionPaymentOrder.getPaymentType();
+        if (paymentType == PaymentType.COUPON_PAY) {
+            marketingCouponRpc.clip(transactionPaymentOrder);
+        }
     }
 
 }

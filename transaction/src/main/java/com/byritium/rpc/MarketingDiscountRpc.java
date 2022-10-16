@@ -9,11 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient(value = "marketing")
 @Component
-public interface MarketingRpc {
+public interface MarketingDiscountRpc {
     @RequestMapping("get")
     ResponseBody<CouponInfo> get(String couponId);
 
-    void lockCoupon(TransactionPaymentOrder transactionPaymentOrder);
-
-    void discountRecord(TransactionPaymentOrder transactionPaymentOrder);
+    void record(TransactionPaymentOrder transactionPaymentOrder);
 }

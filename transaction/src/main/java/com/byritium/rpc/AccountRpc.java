@@ -17,6 +17,9 @@ public interface AccountRpc {
     @RequestMapping("pay")
     ResponseBody<Void> pay(TransactionPaymentOrder transactionPaymentOrder);
 
+    @RequestMapping("lock")
+    ResponseBody<Void> lock(TransactionPaymentOrder transactionPaymentOrder);
+
     @RequestMapping("query")
     ResponseBody<AccountBalance> query(AccountQuery accountQuery);
 }
