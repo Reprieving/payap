@@ -9,15 +9,14 @@ import com.byritium.dto.transaction.TransactionOrderMap;
 import com.byritium.entity.payment.PaymentSetting;
 import com.byritium.entity.transaction.TransactionPaymentOrder;
 import com.byritium.entity.transaction.TransactionTradeOrder;
+import com.byritium.exception.BusinessException;
 import com.byritium.service.PaymentExecutor;
 import com.byritium.service.TransactionPaymentOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
-
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -81,17 +80,14 @@ public class TransactionService {
             return transactionStatus.isCompleted();
         });
 
-        if (flag) {
-            CompletableFuture<PaymentResult> primaryFuture = CompletableFuture.supplyAsync(() -> paymentExecutor.pay(map.getPrimaryPaymentOrder()));
-            CompletableFuture<PaymentResult> couponFuture = CompletableFuture.supplyAsync(() -> paymentExecutor.pay(map.getCouponPaymentOrder()));
-            CompletableFuture<PaymentResult> virtualCurrencyFuture = CompletableFuture.supplyAsync(() -> paymentExecutor.pay(map.getVirtualCurrencyPaymentOrder()));
-
-
-            CompletableFuture cf = CompletableFuture.supplyAsync(() -> {
-                paymentExecutor.pay(map.getPrimaryPaymentOrder());
-                return null;
-            });
+        if (null == flag || !flag) {
+            throw new BusinessException("payment error");
         }
+
+
+        PaymentResult paymentResult = paymentExecutor.pay(map.getPrimaryPaymentOrder());
+
+
     }
 
 

@@ -3,8 +3,6 @@ package com.byritium.dto.transaction;
 import com.byritium.entity.transaction.TransactionPaymentOrder;
 import com.byritium.entity.transaction.TransactionTradeOrder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
 
