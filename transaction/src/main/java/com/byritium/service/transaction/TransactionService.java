@@ -15,6 +15,7 @@ import com.byritium.service.TransactionPaymentOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -35,7 +36,7 @@ public class TransactionService {
     private PaymentExecutor paymentExecutor;
 
 
-    public void trade(TradeParam param) throws ExecutionException, InterruptedException {
+    public PaymentResult trade(TradeParam param) {
         TransactionOrderMap map = new TransactionOrderMap();
 
         TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder(param);
@@ -84,10 +85,7 @@ public class TransactionService {
             throw new BusinessException("payment error");
         }
 
-
-        PaymentResult paymentResult = paymentExecutor.pay(map.getPrimaryPaymentOrder());
-
-
+        return paymentExecutor.pay(map.getPrimaryPaymentOrder());
     }
 
 

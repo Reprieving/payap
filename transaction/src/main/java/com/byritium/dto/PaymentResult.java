@@ -11,20 +11,7 @@ import java.util.List;
 public class PaymentResult {
     private String transactionOrderId;
     private PaymentPattern paymentPattern;
-    private List<PaymentResultItem> details;
     private PaymentState state;
-
-    public PaymentResultItem get(PaymentPattern paymentPattern) {
-        Assert.notNull(paymentPattern,"paymentPattern require");
-        return details.stream().filter(paymentResultItem -> paymentResultItem.getPaymentPattern() == paymentPattern)
-                .findFirst().orElse(null);
-
-    }
-
-    public PaymentResultItem get() {
-        Assert.notNull(paymentPattern,"paymentPattern require");
-        return details.stream().filter(paymentResultItem -> paymentResultItem.getPaymentPattern() == paymentPattern)
-                .findFirst().orElse(null);
-
-    }
+    private String sign;
+    private String qrCode;
 }
