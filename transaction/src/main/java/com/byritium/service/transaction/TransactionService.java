@@ -1,6 +1,7 @@
 package com.byritium.service.transaction;
 
 import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentState;
 import com.byritium.constance.PaymentType;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.VirtualCurrency;
@@ -18,7 +19,9 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
 
 @Service
 public class TransactionService {
@@ -85,7 +88,29 @@ public class TransactionService {
             throw new BusinessException("payment error");
         }
 
-        return paymentExecutor.pay(map.getPrimaryPaymentOrder());
+        CompletableFuture<PaymentResult> c1 = CompletableFuture.supplyAsync(() -> paymentExecutor.pay(map.getPrimaryPaymentOrder()));
+        CompletableFuture<PaymentResult> c2 = CompletableFuture.supplyAsync(() -> paymentExecutor.pay(map.getCouponPaymentOrder()));
+        CompletableFuture<PaymentResult> c3 = CompletableFuture.supplyAsync(() -> paymentExecutor.pay(map.getVirtualCurrencyPaymentOrder()));
+
+        try {
+            PaymentResult p1 = c1.get();
+            PaymentResult p2 = c2.get();
+            PaymentResult p3 = c3.get();
+
+            if (PaymentState.PAYMENT_FAIL == p1.getState()
+                    || PaymentState.PAYMENT_FAIL == p2.getState()
+                    || PaymentState.PAYMENT_FAIL == p3.getState()) {
+                //TODO REFUND ALL OF ORDER
+            }
+
+            if (PaymentState.PAYMENT_SUCCESS == p1.getState()) {
+                //TODO PAY ALL OF ORDER
+            }
+
+            return p1;
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
