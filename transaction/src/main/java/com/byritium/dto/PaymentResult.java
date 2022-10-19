@@ -14,4 +14,5 @@ public class PaymentResult {
     private PaymentState state;
     private String sign;
     private String qrCode;
+
 }

@@ -13,6 +13,7 @@ import com.byritium.entity.transaction.TransactionTradeOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.service.PaymentExecutor;
 import com.byritium.service.TransactionPaymentOrderService;
+import com.byritium.service.common.ValidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -37,6 +38,9 @@ public class TransactionService {
 
     @Autowired
     private PaymentExecutor paymentExecutor;
+
+    @Autowired
+    private ValidateService validateService;
 
 
     public PaymentResult trade(TradeParam param) {
@@ -97,13 +101,11 @@ public class TransactionService {
             PaymentResult p2 = c2.get();
             PaymentResult p3 = c3.get();
 
-            if (PaymentState.PAYMENT_FAIL == p1.getState()
-                    || PaymentState.PAYMENT_FAIL == p2.getState()
-                    || PaymentState.PAYMENT_FAIL == p3.getState()) {
+            if (validateService.anyPaymentFail(p1,p2,p3)) {
                 //TODO REFUND ALL OF ORDER
             }
 
-            if (PaymentState.PAYMENT_SUCCESS == p1.getState()) {
+            if (validateService.allPaymentSuccess(p1,p2,p3)) {
                 //TODO PAY ALL OF ORDER
             }
 
@@ -112,6 +114,8 @@ public class TransactionService {
             throw new RuntimeException(e);
         }
     }
+
+
 
 
 }
