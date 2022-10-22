@@ -25,7 +25,7 @@ public class PaymentExecutor {
     @Autowired
     private MarketingDiscountRpc marketingDiscountRpc;
 
-    public PaymentResult pay(TransactionPaymentOrder transactionPaymentOrder) {
+    public PaymentResult preparePay(TransactionPaymentOrder transactionPaymentOrder) {
         PaymentType paymentType = transactionPaymentOrder.getPaymentType();
         switch (paymentType) {
             case BALANCE_PAY:

@@ -1,9 +1,9 @@
 package com.byritium.service.transaction;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentState;
 import com.byritium.constance.PaymentType;
 import com.byritium.dto.PaymentResult;
+import com.byritium.dto.TransactionResult;
 import com.byritium.dto.VirtualCurrency;
 import com.byritium.dto.transaction.TradeParam;
 import com.byritium.dto.transaction.TransactionOrderMap;
@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Supplier;
 
 @Service
 public class TransactionService {
@@ -43,7 +42,7 @@ public class TransactionService {
     private ValidateService validateService;
 
 
-    public PaymentResult trade(TradeParam param) {
+    public TransactionResult trade(TradeParam param) {
         TransactionOrderMap map = new TransactionOrderMap();
 
         TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder(param);
@@ -92,10 +91,12 @@ public class TransactionService {
             throw new BusinessException("payment error");
         }
 
-        CompletableFuture<PaymentResult> c1 = CompletableFuture.supplyAsync(() -> paymentExecutor.pay(map.getPrimaryPaymentOrder()));
-        CompletableFuture<PaymentResult> c2 = CompletableFuture.supplyAsync(() -> paymentExecutor.pay(map.getCouponPaymentOrder()));
-        CompletableFuture<PaymentResult> c3 = CompletableFuture.supplyAsync(() -> paymentExecutor.pay(map.getVirtualCurrencyPaymentOrder()));
+        CompletableFuture<PaymentResult> c1 = CompletableFuture.supplyAsync(() -> paymentExecutor.preparePay(map.getPrimaryPaymentOrder()));
+        CompletableFuture<PaymentResult> c2 = CompletableFuture.supplyAsync(() -> paymentExecutor.preparePay(map.getCouponPaymentOrder()));
+        CompletableFuture<PaymentResult> c3 = CompletableFuture.supplyAsync(() -> paymentExecutor.preparePay(map.getVirtualCurrencyPaymentOrder()));
 
+
+        TransactionResult result = new TransactionResult();
         try {
             PaymentResult p1 = c1.get();
             PaymentResult p2 = c2.get();
@@ -109,7 +110,9 @@ public class TransactionService {
                 //TODO PAY ALL OF ORDER
             }
 
-            return p1;
+
+
+            return result;
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }

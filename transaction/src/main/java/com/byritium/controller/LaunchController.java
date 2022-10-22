@@ -19,8 +19,6 @@ public class LaunchController {
     @RequestMapping("trade")
     public TransactionResult trade(@RequestBody TradeParam param) {
         transactionService.trade(param);
-
-
         return null;
     }
 
