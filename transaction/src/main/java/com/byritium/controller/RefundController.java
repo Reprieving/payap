@@ -10,13 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("refund")
 public class RefundController {
-    @RequestMapping("common")
-    public TransactionResult refundCommon(@RequestHeader String clientId, @RequestBody TradeParam request) {
+
+    //收单退款
+    @RequestMapping("trade")
+    public TransactionResult trade(@RequestHeader String clientId, @RequestBody TradeParam request) {
         return null;
     }
 
-    @RequestMapping("exception")
-    public TransactionResult refundException(@RequestHeader String clientId, @RequestBody RefundExceptionTxReq request) {
+    //分账退款
+    @RequestMapping("settle")
+    public TransactionResult common(@RequestHeader String clientId, @RequestBody TradeParam request) {
         return null;
     }
+
 }
