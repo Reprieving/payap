@@ -22,12 +22,6 @@
         <module name="withdraw" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="billing" target="1.8" />
-      <module name="consumer" target="1.8" />
-      <module name="settlement" target="1.8" />
-      <module name="untitled" target="11" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -35,7 +29,6 @@
       <module name="cashier" options="-parameters" />
       <module name="common" options="-parameters" />
       <module name="configuration" options="-parameters" />
-      <module name="consumer" options="-parameters" />
       <module name="finance" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="liquidation" options="-parameters" />
@@ -45,7 +38,6 @@
       <module name="recharge" options="-parameters" />
       <module name="secret" options="-parameters" />
       <module name="transaction" options="-parameters" />
-      <module name="untitled" options="-parameters" />
       <module name="withdraw" options="-parameters" />
     </option>
   </component>

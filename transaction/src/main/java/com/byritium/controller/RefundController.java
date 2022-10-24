@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("refund")
 public class RefundController {
 
-    //收单退款
+    //退货退款
     @RequestMapping("trade")
     public TransactionResult trade(@RequestHeader String clientId, @RequestBody TradeParam request) {
         return null;
@@ -23,4 +23,9 @@ public class RefundController {
         return null;
     }
 
+    //退单退款
+    @RequestMapping("order")
+    public TransactionResult order(@RequestHeader String clientId, @RequestBody TradeParam request) {
+        return null;
+    }
 }
