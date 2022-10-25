@@ -25,7 +25,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -38,98 +38,7 @@ import java.util.*;
 
 @Slf4j
 @Service
-public class WechatPayService implements PayService, RefundService, WithdrawService, QueryService {
-    protected Map<String, String> buildHeader(String method, String url, String body, String nonceStr, String michId, String certificateSerialNo, String privateKeyPath) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException {
-        long timestamp = System.currentTimeMillis() / 1000;
-        String message = buildMessage(method, url, timestamp, nonceStr, body);
-        String signature = sign(message.getBytes(StandardCharsets.UTF_8), privateKeyPath);
-
-
-        String token = "mchid=\"" + michId + "\","
-                + "nonce_str=\"" + nonceStr + "\","
-                + "timestamp=\"" + timestamp + "\","
-                + "serial_no=\"" + certificateSerialNo + "\","
-                + "signature=\"" + signature + "\"";
-
-        log.info("wechat pay token:{}", token);
-
-        HashMap<String, String> map = new HashMap<>();
-        map.put("Authorization", "WECHATPAY2-SHA256-RSA2048 " + token);
-        map.put("Content-Type", "application/json");
-        map.put("Accept", "application/json");
-        return map;
-    }
-
-    private String buildMessage(String method, String url, long timestamp, String nonceStr, String body) {
-        HttpUrl httpUrl = HttpUrl.parse(url);
-        Assert.notNull(httpUrl, "url空异常");
-        String canonicalUrl = httpUrl.encodedPath();
-        if (httpUrl.encodedQuery() != null) {
-            canonicalUrl += "?" + httpUrl.encodedQuery();
-        }
-        return method + "\n"
-                + canonicalUrl + "\n"
-                + timestamp + "\n"
-                + nonceStr + "\n"
-                + body + "\n";
-    }
-
-    private String sign(byte[] message, String privateKeyPath) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException {
-        Signature sign = Signature.getInstance("SHA256withRSA");
-        sign.initSign(getPrivateKey(privateKeyPath));
-        sign.update(message);
-
-        return Base64.getEncoder().encodeToString(sign.sign());
-    }
-
-    public String buildWechatSign(Map<String, String> map, String apiKey) {
-        try {
-            String result;
-            {
-                List<Map.Entry<String, String>> infoIds = new ArrayList<>(map.entrySet());
-                // 对所有传入参数按照字段名的 ASCII 码从小到大排序（字典序）
-                infoIds.sort(Map.Entry.comparingByKey());
-                // 构造签名键值对的格式
-                StringBuilder sb = new StringBuilder();
-                for (Map.Entry<String, String> item : infoIds) {
-                    String key = item.getKey();
-                    String val = item.getValue();
-                    if (!val.equals("")) {
-                        sb.append(key).append("=").append(val).append("&");
-                    }
-                }
-                sb.append("key").append("=").append(apiKey);
-                result = sb.toString();
-                result = MD5Util.MD5Encode(result).toUpperCase();
-                return result;
-            }
-        } catch (Exception e) {
-            throw new BusinessException("签名异常");
-        }
-
-    }
-
-    /**
-     * get private key
-     *
-     * @param filename
-     * @return
-     */
-    private PrivateKey getPrivateKey(String filename) throws IOException {
-        String content = Files.readString(Paths.get(filename));
-        try {
-            String privateKey = content.replace("-----BEGIN PRIVATE KEY-----", "")
-                    .replace("-----END PRIVATE KEY-----", "")
-                    .replaceAll("\\s+", "");
-            KeyFactory kf = KeyFactory.getInstance("RSA");
-            return kf.generatePrivate(
-                    new PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKey)));
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("当前Java环境不支持RSA", e);
-        } catch (InvalidKeySpecException e) {
-            throw new RuntimeException("无效的密钥格式");
-        }
-    }
+public class WechatPayService extends WechatCommonService implements PayService, RefundService, WithdrawService, QueryService {
 
     @Override
     public PaymentChannel channel() {
@@ -137,15 +46,13 @@ public class WechatPayService implements PayService, RefundService, WithdrawServ
     }
 
     @Override
-    public PaymentResult pay(ClientInfo clientInfo, PaymentSetting setting, IdContainer idContainer, String subject, BigDecimal orderAmount) {
+    public PaymentResult pay(ClientInfo clientInfo, PaymentSetting setting, IdContainer idContainer, String subject, BigDecimal orderAmount) throws FileNotFoundException {
         WechatPayConfig wechatPayConfig = new WechatPayConfig();
 
         String appId = wechatPayConfig.getAppId();
         String michId = wechatPayConfig.getMichId();
         String url = wechatPayConfig.getPayUrl();
         String nonceStr = RandomUtils.uuid();
-        String certificateSerialNo = wechatPayConfig.getCertificateSerialNo();
-        String privateKeyPath = wechatPayConfig.getPrivateKeyPath();
 
         long businessOrderId = idContainer.getBizOrderId();
         long transactionOrderId = idContainer.getTxOrderId();
@@ -179,13 +86,12 @@ public class WechatPayService implements PayService, RefundService, WithdrawServ
 
         }
 
-
         Gson gson = new Gson();
         String json = gson.toJson(wechatPayRequest);
 
         String str;
         try {
-            Map<String, String> map = buildHeader(HttpMethod.POST.toString(), url, json, nonceStr, michId, certificateSerialNo, privateKeyPath);
+            Map<String, String> map = buildHeader(HttpMethod.POST.toString(), url, json,nonceStr);
             str = OkHttpUtils.httpPostJson(url, map, json);
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | IOException e) {
             throw new BusinessException("微信支付渠道支付失败");
@@ -208,10 +114,7 @@ public class WechatPayService implements PayService, RefundService, WithdrawServ
         WechatPayConfig wechatPayConfig = new WechatPayConfig();
         String url = wechatPayConfig.getRefundUrl();
 
-        String michId = wechatPayConfig.getMichId();
         String nonceStr = RandomUtils.uuid();
-        String certificateSerialNo = wechatPayConfig.getCertificateSerialNo();
-        String privateKeyPath = wechatPayConfig.getPrivateKeyPath();
 
         WechatRefundRequest wechatRefundRequest = new WechatRefundRequest();
         wechatRefundRequest.setOut_trade_no(paymentOrderId);
@@ -224,7 +127,7 @@ public class WechatPayService implements PayService, RefundService, WithdrawServ
         String str;
 
         try {
-            Map<String, String> map = buildHeader(HttpMethod.POST.toString(), url, json, nonceStr, michId, certificateSerialNo, privateKeyPath);
+            Map<String, String> map = buildHeader(HttpMethod.POST.toString(), url, json,nonceStr);
             str = OkHttpUtils.httpPostJson(url, map, json);
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | IOException e) {
             log.error("微信支付构建请求头失败:{}", json);
@@ -247,8 +150,6 @@ public class WechatPayService implements PayService, RefundService, WithdrawServ
         String apiKey = wechatPayConfig.getApiKey();
         String michId = wechatPayConfig.getMichId();
         String nonceStr = RandomUtils.uuid();
-        String certificateSerialNo = wechatPayConfig.getCertificateSerialNo();
-        String privateKeyPath = wechatPayConfig.getPrivateKeyPath();
 
         String p12Path = wechatPayConfig.getP12Path();
 
@@ -272,7 +173,8 @@ public class WechatPayService implements PayService, RefundService, WithdrawServ
         Map<String, String> param;
 
         try {
-            map = buildHeader(HttpMethod.POST.toString(), url, json, nonceStr, michId, certificateSerialNo, privateKeyPath);
+
+            map = buildHeader(HttpMethod.POST.toString(), url, json,nonceStr);
 
             param = gson.fromJson(json, TypeToken.getParameterized(Map.class, String.class, String.class).getType());
             String sign = buildWechatSign(param, apiKey);

@@ -6,12 +6,13 @@ import com.byritium.dto.IdContainer;
 import com.byritium.dto.PaymentResult;
 import com.byritium.entity.payment.PaymentSetting;
 
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 
 public interface PayService {
 
     PaymentChannel channel();
 
-    PaymentResult pay(ClientInfo clientInfo, PaymentSetting setting, IdContainer idContainer, String subject, BigDecimal orderAmount);
+    PaymentResult pay(ClientInfo clientInfo, PaymentSetting setting, IdContainer idContainer, String subject, BigDecimal orderAmount) throws FileNotFoundException;
 
 }
