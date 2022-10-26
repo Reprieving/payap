@@ -28,6 +28,33 @@ public class WechatUtils {
     private static final String ALGORITHM_MODE_PADDING = "AES/ECB/PKCS7Padding";
 
     /**
+     * AES加密（GCM）
+     *
+     * @param aesKey
+     * @param associatedData
+     * @param nonce
+     * @param ciphertext
+     * @return
+     * @throws GeneralSecurityException
+     */
+    public static String aseGSMEncrypt(String aesKey, String associatedData, String nonce, String ciphertext)
+            throws GeneralSecurityException {
+        try {
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            SecretKeySpec key = new SecretKeySpec(aesKey.getBytes(StandardCharsets.UTF_8), "AES");
+            GCMParameterSpec spec = new GCMParameterSpec(TAG_LENGTH_BIT, nonce.getBytes(StandardCharsets.UTF_8));
+            cipher.init(Cipher.ENCRYPT_MODE, key, spec);
+            cipher.updateAAD(associatedData.getBytes(StandardCharsets.UTF_8));
+            return new String(cipher.doFinal(Base64.getEncoder().encode(ciphertext.getBytes(StandardCharsets.UTF_8))),
+                    StandardCharsets.UTF_8);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            throw new IllegalStateException(e);
+        } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    /**
      * AES解密（GCM）
      *
      * @param aesKey

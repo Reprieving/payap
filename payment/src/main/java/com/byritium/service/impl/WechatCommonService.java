@@ -1,27 +1,28 @@
 package com.byritium.service.impl;
 
 import com.byritium.dto.wechat.CertificateVo;
+import com.byritium.dto.wechat.Certificates;
+import com.byritium.dto.wechat.WechatPayCallBackResource;
 import com.byritium.dto.wechat.WechatPayConfig;
 import com.byritium.exception.BusinessException;
-import com.byritium.utils.GsonUtils;
-import com.byritium.utils.MD5Util;
-import com.byritium.utils.OkHttpUtils;
-import com.byritium.utils.RandomUtils;
+import com.byritium.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.*;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -124,42 +125,27 @@ public class WechatCommonService {
         }
     }
 
-    public X509Certificate getCertificates() throws IOException, NoSuchAlgorithmException, SignatureException, InvalidKeyException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    public X509Certificate getCertificates() throws IOException, GeneralSecurityException {
         Map<String, String> map = buildHeader(HttpMethod.POST.toString(), URL_CERTIFICATES, "", RandomUtils.uuid());
         map.put("User-Agent", "https://zh.wikipedia.org/wiki/User_agent");
         String result = OkHttpUtils.httpGet(URL_CERTIFICATES, map, null);
 
         X509Certificate x509Certificate = null;
         CertificateVo certificateVo = GsonUtils.deserializeEntity(result,CertificateVo.class);
-
-//        try {
-//            CertificateVo certificateVo = JSONObject.parseObject(EntityUtils.toString(response.getEntity()), CertificateVo.class);
-//            for (Certificates certificates : certificateVo.getData()) {
-//                if (format.parse(certificates.getEffective_time()).before(new Date()) && format.parse(certificates.getExpire_time()).after(new Date())) {
-//                    EncryptCertificate encrypt_certificate = certificates.getEncrypt_certificate();
-//                    //解密
-//                    AesUtil aesUtil = new AesUtil(CommonParameters.apiV3Key.getBytes("utf-8"));
-//                    String pulicKey = aesUtil.decryptToString(encrypt_certificate.getAssociated_data().getBytes("utf-8"), encrypt_certificate.getNonce().getBytes("utf-8"), encrypt_certificate.getCiphertext());
-//
-//　　　　　　　　　　　　　　 //获取平台证书
-//                    final CertificateFactory cf = CertificateFactory.getInstance("X509");
-//
-//                    ByteArrayInputStream inputStream = new ByteArrayInputStream(pulicKey.getBytes(StandardCharsets.UTF_8));
-//
-//                    x509Certificate = (X509Certificate) cf.generateCertificate(inputStream);
-//                }
-//            }
-//            return x509Certificate;
-//
-//        } catch (GeneralSecurityException | ParseException e) {
-//            e.printStackTrace();
-//            return null;
-//        } finally {
-//            response.close();
-//            CommonUtils.after(httpClient);
-//        }
-
+        LocalDateTime now = LocalDateTime.now();
+        for (Certificates certificates : certificateVo.getData()) {
+            if(certificates.getEffective_time().isBefore(now) && certificates.getExpire_time().isAfter(now)){
+                WechatPayCallBackResource encrypt_certificate = certificates.getEncrypt_certificate();
+                String publicKey = WechatUtils.aseGSMDecrypt(
+                        encrypt_certificate.getAlgorithm(),
+                        encrypt_certificate.getAssociated_data(),
+                        encrypt_certificate.getNonce(),
+                        encrypt_certificate.getCiphertext());
+                final CertificateFactory cf = CertificateFactory.getInstance("X509");
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(publicKey.getBytes(StandardCharsets.UTF_8));
+                x509Certificate = (X509Certificate) cf.generateCertificate(inputStream);
+            }
+        }
         return x509Certificate;
     }
 
