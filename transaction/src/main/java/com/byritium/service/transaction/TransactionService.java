@@ -1,6 +1,7 @@
 package com.byritium.service.transaction;
 
 import com.byritium.constance.PaymentChannel;
+import com.byritium.constance.PaymentState;
 import com.byritium.constance.PaymentType;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.TransactionResult;
@@ -16,12 +17,14 @@ import com.byritium.service.TransactionPaymentOrderService;
 import com.byritium.service.common.ValidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 @Service
 public class TransactionService {
@@ -79,17 +82,11 @@ public class TransactionService {
             map.setVirtualCurrencyPaymentOrder(transactionPaymentOrder);
         }
 
-
-        Boolean flag = transactionTemplate.execute(transactionStatus -> {
+        transactionTemplate.executeWithoutResult(transactionStatus -> {
             transactionOrderService.save(map.getTransactionTradeOrder());
             List<TransactionPaymentOrder> list = map.getPaymentOrderList();
             transactionPaymentOrderService.saveBatch(list, list.size());
-            return transactionStatus.isCompleted();
         });
-
-        if (null == flag || !flag) {
-            throw new BusinessException("payment error");
-        }
 
         CompletableFuture<PaymentResult> c1 = CompletableFuture.supplyAsync(() -> paymentExecutor.preparePay(map.getPrimaryPaymentOrder()));
         CompletableFuture<PaymentResult> c2 = CompletableFuture.supplyAsync(() -> paymentExecutor.preparePay(map.getCouponPaymentOrder()));
@@ -109,8 +106,6 @@ public class TransactionService {
             if (validateService.allPaymentSuccess(p1,p2,p3)) {
                 //TODO PAY ALL OF ORDER
             }
-
-
 
             return result;
         } catch (InterruptedException | ExecutionException e) {

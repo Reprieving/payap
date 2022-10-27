@@ -15,4 +15,5 @@ public class PaymentResult {
     private String sign;
     private String qrCode;
 
+
 }
