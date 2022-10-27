@@ -29,6 +29,7 @@ public class PaymentExecutor {
         PaymentType paymentType = transactionPaymentOrder.getPaymentType();
         switch (paymentType) {
             case BALANCE_PAY:
+            case VIRTUAL_CURRENCY_PAY:
                 accountRpc.pay(transactionPaymentOrder);
                 break;
 
@@ -37,26 +38,15 @@ public class PaymentExecutor {
                 break;
 
             case COUPON_PAY:
-                marketingCouponRpc.lock(transactionPaymentOrder);
+                marketingCouponRpc.clip(transactionPaymentOrder);
                 break;
 
             case DISCOUNT_PAY:
                 marketingDiscountRpc.record(transactionPaymentOrder);
                 break;
-
-            case VIRTUAL_CURRENCY_PAY:
-                accountRpc.lock(transactionPaymentOrder);
-                break;
         }
 
         return null;
-    }
-
-    public void payCallback(TransactionPaymentOrder transactionPaymentOrder) {
-        PaymentType paymentType = transactionPaymentOrder.getPaymentType();
-        if (paymentType == PaymentType.COUPON_PAY) {
-            marketingCouponRpc.clip(transactionPaymentOrder);
-        }
     }
 
 }
