@@ -124,6 +124,7 @@ public class TransactionService {
         AssetsType assetsType = AssetsType.RMB;
         BigDecimal orderAmount = BigDecimal.ZERO;
 
+        TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder();
 
 
         switch (assetsType){
