@@ -1,14 +1,13 @@
 package com.byritium.dto.transaction;
 
 import com.byritium.entity.transaction.TransactionPaymentOrder;
-import com.byritium.entity.transaction.TransactionTradeOrder;
 import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class TransactionOrderMap {
-    private TransactionTradeOrder transactionTradeOrder;
+public class TransactionOrderMap<T> {
+    private T transactionOrder;
     private TransactionPaymentOrder primaryPaymentOrder;
     private TransactionPaymentOrder couponPaymentOrder;
     private TransactionPaymentOrder discountPaymentOrder;

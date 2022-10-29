@@ -1,7 +1,6 @@
 package com.byritium.service.transaction;
 
 import com.byritium.constance.PaymentChannel;
-import com.byritium.constance.PaymentState;
 import com.byritium.constance.PaymentType;
 import com.byritium.constance.account.AssetsType;
 import com.byritium.dto.PaymentResult;
@@ -12,27 +11,28 @@ import com.byritium.dto.transaction.TradeParam;
 import com.byritium.dto.transaction.TransactionOrderMap;
 import com.byritium.entity.payment.PaymentSetting;
 import com.byritium.entity.transaction.TransactionPaymentOrder;
+import com.byritium.entity.transaction.TransactionRechargeOrder;
 import com.byritium.entity.transaction.TransactionTradeOrder;
-import com.byritium.exception.BusinessException;
 import com.byritium.service.PaymentExecutor;
 import com.byritium.service.TransactionPaymentOrderService;
 import com.byritium.service.common.ValidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
 
 @Service
 public class TransactionService {
 
     @Autowired
-    private TransactionOrderService transactionOrderService;
+    private TransactionTradeOrderService transactionTradeOrderService;
+
+    @Autowired
+    private TransactionRechargeOrderService transactionRechargeOrderService;
 
     @Autowired
     private TransactionPaymentOrderService transactionPaymentOrderService;
@@ -48,10 +48,10 @@ public class TransactionService {
 
 
     public TransactionResult trade(TradeParam param) {
-        TransactionOrderMap map = new TransactionOrderMap();
+        TransactionOrderMap<TransactionTradeOrder> map = new TransactionOrderMap<>();
 
         TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder(param);
-        map.setTransactionTradeOrder(transactionTradeOrder);
+        map.setTransactionOrder(transactionTradeOrder);
         {
             PaymentSetting paymentSetting = new PaymentSetting();
             TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder);
@@ -85,7 +85,7 @@ public class TransactionService {
         }
 
         transactionTemplate.executeWithoutResult(transactionStatus -> {
-            transactionOrderService.save(map.getTransactionTradeOrder());
+            transactionTradeOrderService.save(map.getTransactionOrder());
             List<TransactionPaymentOrder> list = map.getPaymentOrderList();
             transactionPaymentOrderService.saveBatch(list, list.size());
         });
@@ -117,24 +117,49 @@ public class TransactionService {
 
 
     public void recharge(RechargeParam rechargeParam){
+        TransactionOrderMap<TransactionRechargeOrder> map = new TransactionOrderMap<>();
+
+        PaymentSetting paymentSetting = new PaymentSetting();
         Long rechargeId = rechargeParam.getRechargeId();
 
         //TODO get recharge info from cashier api
 
         AssetsType assetsType = AssetsType.RMB;
         BigDecimal orderAmount = BigDecimal.ZERO;
+        BigDecimal rechargeAmount = BigDecimal.ZERO;
 
-        TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder();
+        {
+            TransactionRechargeOrder rechargeOrder = new TransactionRechargeOrder();
+            rechargeOrder.setUid(rechargeParam.getUid());
+            rechargeOrder.setBizOrderId(rechargeParam.getBizOrderId());
+            rechargeOrder.setRechargeId(rechargeId);
+            rechargeOrder.setPaymentSettingId(rechargeParam.getPaymentSettingId());
+            rechargeOrder.setOrderAmount(orderAmount);
+            rechargeOrder.setRechargeAmount(rechargeAmount);
+            rechargeOrder.setSubject("");
 
-
-        switch (assetsType){
-            case RMB:
-
-                break;
-            case VIRTUAL_CURRENCY:
-
-                break;
+            map.setTransactionOrder(rechargeOrder);
         }
+
+        {
+            TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder();
+            transactionPaymentOrder.setUid(rechargeParam.getUid());
+            transactionPaymentOrder.setBizOrderId(rechargeParam.getBizOrderId());
+            transactionPaymentOrder.setPayerId(rechargeParam.getUid());
+            transactionPaymentOrder.setPayeeId(1L);
+            transactionPaymentOrder.setSubject("");
+            transactionPaymentOrder.setOrderAmount(orderAmount);
+            transactionPaymentOrder.setPaymentType(PaymentType.PAYMENT_AGENT);
+            transactionPaymentOrder.setPaymentChannel(paymentSetting.getChannel());
+            transactionPaymentOrder.setPaymentPatternId(rechargeParam.getPaymentSettingId());
+            map.setPrimaryPaymentOrder(transactionPaymentOrder);
+        }
+
+        transactionTemplate.executeWithoutResult(transactionStatus -> {
+            transactionRechargeOrderService.save(map.getTransactionOrder());
+            List<TransactionPaymentOrder> list = map.getPaymentOrderList();
+            transactionPaymentOrderService.saveBatch(list, list.size());
+        });
     }
 
 
