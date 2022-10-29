@@ -3,9 +3,11 @@ package com.byritium.service.transaction;
 import com.byritium.constance.PaymentChannel;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.PaymentType;
+import com.byritium.constance.account.AssetsType;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.TransactionResult;
 import com.byritium.dto.VirtualCurrency;
+import com.byritium.dto.transaction.RechargeParam;
 import com.byritium.dto.transaction.TradeParam;
 import com.byritium.dto.transaction.TransactionOrderMap;
 import com.byritium.entity.payment.PaymentSetting;
@@ -114,6 +116,25 @@ public class TransactionService {
     }
 
 
+    public void recharge(RechargeParam rechargeParam){
+        Long rechargeId = rechargeParam.getRechargeId();
+
+        //TODO get recharge info from cashier api
+
+        AssetsType assetsType = AssetsType.RMB;
+        BigDecimal orderAmount = BigDecimal.ZERO;
+
+
+
+        switch (assetsType){
+            case RMB:
+
+                break;
+            case VIRTUAL_CURRENCY:
+
+                break;
+        }
+    }
 
 
 }

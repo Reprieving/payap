@@ -23,17 +23,19 @@ public class LaunchController {
     }
 
     @RequestMapping("recharge")
-    public TransactionResult recharge(@RequestHeader String clientId, @RequestBody RechargeTxReq request) {
+    public TransactionResult recharge(@RequestHeader RechargeParam rechargeParam) {
+        transactionService.recharge(rechargeParam);
+
         return null;
     }
 
     @RequestMapping("withdraw")
-    public TransactionResult withdraw(@RequestHeader String clientId, @RequestBody WithdrawTxReq request) {
+    public TransactionResult withdraw(@RequestHeader String clientId) {
         return null;
     }
 
     @RequestMapping("transfer")
-    public TransactionResult transfer(@RequestHeader String clientId, @RequestBody TransferTxReq request) {
+    public TransactionResult transfer(@RequestHeader String clientId) {
         return null;
     }
 
