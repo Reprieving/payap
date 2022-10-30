@@ -18,24 +18,21 @@ public class LaunchController {
 
     @RequestMapping("trade")
     public TransactionResult trade(@RequestBody TradeParam param) {
-        transactionService.trade(param);
-        return null;
+        return transactionService.trade(param);
     }
 
     @RequestMapping("recharge")
-    public TransactionResult recharge(@RequestHeader RechargeParam rechargeParam) {
-        transactionService.recharge(rechargeParam);
-
-        return null;
+    public TransactionResult recharge(@RequestBody RechargeParam param) {
+        return transactionService.recharge(param);
     }
 
     @RequestMapping("withdraw")
-    public TransactionResult withdraw(@RequestHeader String clientId) {
+    public TransactionResult withdraw(@RequestBody WithdrawParam param) {
         return null;
     }
 
     @RequestMapping("transfer")
-    public TransactionResult transfer(@RequestHeader String clientId) {
+    public TransactionResult transfer(@RequestBody TransferParam param) {
         return null;
     }
 
