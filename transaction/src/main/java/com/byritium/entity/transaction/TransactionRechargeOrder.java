@@ -3,6 +3,7 @@ package com.byritium.entity.transaction;
 import com.byritium.constance.PaymentState;
 import com.byritium.constance.RefundState;
 import com.byritium.constance.TransactionState;
+import com.byritium.constance.account.AssetsType;
 import com.byritium.dto.transaction.TradeParam;
 import com.byritium.entity.CommonEntity;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class TransactionRechargeOrder extends CommonEntity {
     private Long uid;
     private Long clientId;
     private Long bizOrderId;
+    private AssetsType assetsType;
     private String subject;
     private BigDecimal orderAmount;
     private BigDecimal rechargeAmount;

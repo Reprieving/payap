@@ -13,9 +13,12 @@ import com.byritium.entity.payment.PaymentSetting;
 import com.byritium.entity.transaction.TransactionPaymentOrder;
 import com.byritium.entity.transaction.TransactionRechargeOrder;
 import com.byritium.entity.transaction.TransactionTradeOrder;
+import com.byritium.exception.BusinessException;
+import com.byritium.rpc.CashierRpc;
 import com.byritium.service.PaymentExecutor;
 import com.byritium.service.TransactionPaymentOrderService;
 import com.byritium.service.common.ValidateService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -26,6 +29,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Service
+@Slf4j
 public class TransactionService {
 
     @Autowired
@@ -44,6 +48,9 @@ public class TransactionService {
     private PaymentExecutor paymentExecutor;
 
     @Autowired
+    private CashierRpc cashierRpc;
+
+    @Autowired
     private ValidateService validateService;
 
 
@@ -53,7 +60,7 @@ public class TransactionService {
         TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder(param);
         map.setTransactionOrder(transactionTradeOrder);
         {
-            PaymentSetting paymentSetting = new PaymentSetting();
+            PaymentSetting paymentSetting = cashierRpc.getPaymentSetting(param.getPaymentSettingId());
             TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder);
             if (paymentSetting.getChannel() == PaymentChannel.BALANCE_PAY) {
                 transactionPaymentOrder.setPaymentType(PaymentType.BALANCE_PAY);
@@ -101,28 +108,27 @@ public class TransactionService {
             PaymentResult p2 = c2.get();
             PaymentResult p3 = c3.get();
 
-            if (validateService.anyPaymentFail(p1,p2,p3)) {
+            if (validateService.anyPaymentFail(p1, p2, p3)) {
                 //TODO REFUND ALL OF ORDER
             }
 
-            if (validateService.allPaymentSuccess(p1,p2,p3)) {
+            if (validateService.allPaymentSuccess(p1, p2, p3)) {
                 //TODO PAY ALL OF ORDER
             }
 
             return result;
         } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
+            log.error("payment error", e);
+            throw new BusinessException("payment error");
         }
     }
 
 
-    public void recharge(RechargeParam rechargeParam){
+    public TransactionResult recharge(RechargeParam rechargeParam) {
         TransactionOrderMap<TransactionRechargeOrder> map = new TransactionOrderMap<>();
 
-        PaymentSetting paymentSetting = new PaymentSetting();
+        PaymentSetting paymentSetting = cashierRpc.getPaymentSetting(rechargeParam.getPaymentSettingId());
         Long rechargeId = rechargeParam.getRechargeId();
-
-        //TODO get recharge info from cashier api
 
         AssetsType assetsType = AssetsType.RMB;
         BigDecimal orderAmount = BigDecimal.ZERO;
@@ -133,11 +139,11 @@ public class TransactionService {
             rechargeOrder.setUid(rechargeParam.getUid());
             rechargeOrder.setBizOrderId(rechargeParam.getBizOrderId());
             rechargeOrder.setRechargeId(rechargeId);
+            rechargeOrder.setAssetsType(assetsType);
             rechargeOrder.setPaymentSettingId(rechargeParam.getPaymentSettingId());
             rechargeOrder.setOrderAmount(orderAmount);
             rechargeOrder.setRechargeAmount(rechargeAmount);
             rechargeOrder.setSubject("");
-
             map.setTransactionOrder(rechargeOrder);
         }
 
@@ -160,6 +166,16 @@ public class TransactionService {
             List<TransactionPaymentOrder> list = map.getPaymentOrderList();
             transactionPaymentOrderService.saveBatch(list, list.size());
         });
+
+
+        PaymentResult paymentResult = paymentExecutor.preparePay(map.getPrimaryPaymentOrder());
+
+        TransactionResult result = new TransactionResult();
+
+        if (validateService.anyPaymentFail(paymentResult)) {
+            throw new BusinessException("payment error");
+        }
+        return result;
     }
 
 
