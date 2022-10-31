@@ -28,12 +28,12 @@ public class LaunchController {
 
     @RequestMapping("withdraw")
     public TransactionResult withdraw(@RequestBody WithdrawParam param) {
-        return null;
+        return transactionService.withdraw(param);
     }
 
     @RequestMapping("transfer")
     public TransactionResult transfer(@RequestBody TransferParam param) {
-        return null;
+        return transactionService.transfer(param);
     }
 
 

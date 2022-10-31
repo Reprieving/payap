@@ -6,9 +6,8 @@ import com.byritium.constance.account.AssetsType;
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.TransactionResult;
 import com.byritium.dto.VirtualCurrency;
-import com.byritium.dto.transaction.RechargeParam;
-import com.byritium.dto.transaction.TradeParam;
-import com.byritium.dto.transaction.TransactionOrderMap;
+import com.byritium.dto.recharge.RechargeProduct;
+import com.byritium.dto.transaction.*;
 import com.byritium.entity.payment.PaymentSetting;
 import com.byritium.entity.transaction.TransactionPaymentOrder;
 import com.byritium.entity.transaction.TransactionRechargeOrder;
@@ -129,10 +128,11 @@ public class TransactionService {
 
         PaymentSetting paymentSetting = cashierRpc.getPaymentSetting(rechargeParam.getPaymentSettingId());
         Long rechargeId = rechargeParam.getRechargeId();
+        RechargeProduct rechargeProduct = cashierRpc.getRecharges(rechargeId);
 
-        AssetsType assetsType = AssetsType.RMB;
-        BigDecimal orderAmount = BigDecimal.ZERO;
-        BigDecimal rechargeAmount = BigDecimal.ZERO;
+        AssetsType assetsType = rechargeProduct.getAssetsType();
+        BigDecimal orderAmount = rechargeProduct.getValue();
+        BigDecimal rechargeAmount = rechargeProduct.getNum();
 
         {
             TransactionRechargeOrder rechargeOrder = new TransactionRechargeOrder();
@@ -157,7 +157,7 @@ public class TransactionService {
             transactionPaymentOrder.setOrderAmount(orderAmount);
             transactionPaymentOrder.setPaymentType(PaymentType.PAYMENT_AGENT);
             transactionPaymentOrder.setPaymentChannel(paymentSetting.getChannel());
-            transactionPaymentOrder.setPaymentPatternId(rechargeParam.getPaymentSettingId());
+            transactionPaymentOrder.setPaymentSettingId(rechargeParam.getPaymentSettingId());
             map.setPrimaryPaymentOrder(transactionPaymentOrder);
         }
 
@@ -178,6 +178,13 @@ public class TransactionService {
         return result;
     }
 
+    public TransactionResult withdraw(WithdrawParam param) {
+        return null;
+    }
 
+
+    public TransactionResult transfer(TransferParam param) {
+        return null;
+    }
 }
 

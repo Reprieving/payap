@@ -2,6 +2,7 @@ package com.byritium.rpc;
 
 import com.byritium.dto.PaymentResult;
 import com.byritium.dto.ResponseBody;
+import com.byritium.dto.recharge.RechargeProduct;
 import com.byritium.entity.payment.PaymentSetting;
 import com.byritium.entity.transaction.TransactionPaymentOrder;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -16,6 +17,6 @@ public interface CashierRpc {
     PaymentSetting getPaymentSetting(Long paymentSettingId);
 
     @RequestMapping("recharges/get")
-    PaymentSetting getRecharges(Long rechargeId);
+    RechargeProduct getRecharges(Long rechargeId);
 
 }

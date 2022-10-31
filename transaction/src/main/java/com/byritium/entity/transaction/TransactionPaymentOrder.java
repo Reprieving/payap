@@ -20,7 +20,7 @@ public class TransactionPaymentOrder {
     private BigDecimal orderAmount;
     private PaymentType paymentType;
     private PaymentChannel paymentChannel;
-    private Long paymentPatternId;
+    private Long paymentSettingId;
     private PaymentState paymentState = PaymentState.PAYMENT_WAITING;
     private RefundState refundState = RefundState.TRANSACTION_NONE;
 
@@ -33,7 +33,7 @@ public class TransactionPaymentOrder {
         this.payeeId = transactionTradeOrder.getPayeeId();
         this.subject = transactionTradeOrder.getSubject();
         this.orderAmount = transactionTradeOrder.getOrderAmount();
-        this.paymentPatternId = transactionTradeOrder.getPaymentSettingId();
+        this.paymentSettingId = transactionTradeOrder.getPaymentSettingId();
     }
 
     public TransactionPaymentOrder(TransactionTradeOrder transactionTradeOrder, PaymentType paymentType, Long mediumId, BigDecimal orderAmount) {
