@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 public class WithdrawParam {
     private Long bizOrderId;
     private Long uid;
-    private Long rechargeId;
+    private Long freezeOrderId;
     private Long paymentSettingId;
-    private BigDecimal rechargeAmount;
+    private BigDecimal withdrawAmount;
 }

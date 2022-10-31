@@ -179,6 +179,8 @@ public class TransactionService {
     }
 
     public TransactionResult withdraw(WithdrawParam param) {
+        Long freeOrderId = param.getFreezeOrderId();
+
         return null;
     }
 
