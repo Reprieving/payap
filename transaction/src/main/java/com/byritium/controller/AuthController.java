@@ -17,12 +17,11 @@ public class AuthController {
 
     @RequestMapping("freeze")
     public TransactionResult freeze(@RequestBody FreezeParam freezeParam) {
-
-        return null;
+        return authService.free(freezeParam);
     }
 
     @RequestMapping("unfreeze")
     public TransactionResult unfreeze(@RequestBody UnFreezeParam unFreezeParam) {
-        return null;
+        return authService.unfree(unFreezeParam);
     }
 }
