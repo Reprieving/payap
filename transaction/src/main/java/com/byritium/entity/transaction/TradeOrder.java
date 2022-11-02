@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class TransactionTradeOrder extends CommonEntity {
+public class TradeOrder extends CommonEntity {
     private Long id;
     private Long uid;
     private Long clientId;
@@ -27,7 +27,7 @@ public class TransactionTradeOrder extends CommonEntity {
     private PaymentState paymentState = PaymentState.PAYMENT_WAITING;
 
 
-    public TransactionTradeOrder(TradeParam param){
+    public TradeOrder(TradeParam param){
         this.uid = param.getUid();
         this.clientId = param.getClientId();
         this.bizOrderId = param.getBizOrderId();

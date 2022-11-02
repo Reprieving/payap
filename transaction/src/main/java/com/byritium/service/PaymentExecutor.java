@@ -2,7 +2,7 @@ package com.byritium.service;
 
 import com.byritium.constance.PaymentType;
 import com.byritium.dto.PaymentResult;
-import com.byritium.entity.transaction.TransactionPaymentOrder;
+import com.byritium.entity.transaction.PayOrder;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.MarketingCouponRpc;
 import com.byritium.rpc.MarketingDiscountRpc;
@@ -25,24 +25,24 @@ public class PaymentExecutor {
     @Autowired
     private MarketingDiscountRpc marketingDiscountRpc;
 
-    public PaymentResult preparePay(TransactionPaymentOrder transactionPaymentOrder) {
-        PaymentType paymentType = transactionPaymentOrder.getPaymentType();
+    public PaymentResult preparePay(PayOrder payOrder) {
+        PaymentType paymentType = payOrder.getPaymentType();
         switch (paymentType) {
             case BALANCE_PAY:
             case VIRTUAL_CURRENCY_PAY:
-                accountRpc.pay(transactionPaymentOrder);
+                accountRpc.pay(payOrder);
                 break;
 
             case PAYMENT_AGENT:
-                paymentRpc.pay(transactionPaymentOrder);
+                paymentRpc.pay(payOrder);
                 break;
 
             case COUPON_PAY:
-                marketingCouponRpc.clip(transactionPaymentOrder);
+                marketingCouponRpc.clip(payOrder);
                 break;
 
             case DISCOUNT_PAY:
-                marketingDiscountRpc.record(transactionPaymentOrder);
+                marketingDiscountRpc.record(payOrder);
                 break;
         }
 

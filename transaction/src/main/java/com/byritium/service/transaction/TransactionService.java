@@ -9,13 +9,13 @@ import com.byritium.dto.VirtualCurrency;
 import com.byritium.dto.recharge.RechargeProduct;
 import com.byritium.dto.transaction.*;
 import com.byritium.entity.payment.PaymentSetting;
-import com.byritium.entity.transaction.TransactionPaymentOrder;
-import com.byritium.entity.transaction.TransactionRechargeOrder;
-import com.byritium.entity.transaction.TransactionTradeOrder;
+import com.byritium.entity.transaction.PayOrder;
+import com.byritium.entity.transaction.RechargeOrder;
+import com.byritium.entity.transaction.TradeOrder;
 import com.byritium.exception.BusinessException;
 import com.byritium.rpc.CashierRpc;
 import com.byritium.service.PaymentExecutor;
-import com.byritium.service.TransactionPaymentOrderService;
+import com.byritium.service.PaymentOrderService;
 import com.byritium.service.common.ValidateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +32,13 @@ import java.util.concurrent.ExecutionException;
 public class TransactionService {
 
     @Autowired
-    private TransactionTradeOrderService transactionTradeOrderService;
+    private TradeOrderService tradeOrderService;
 
     @Autowired
-    private TransactionRechargeOrderService transactionRechargeOrderService;
+    private RechargeOrderService rechargeOrderService;
 
     @Autowired
-    private TransactionPaymentOrderService transactionPaymentOrderService;
+    private PaymentOrderService paymentOrderService;
 
     @Autowired
     private TransactionTemplate transactionTemplate;
@@ -54,46 +54,46 @@ public class TransactionService {
 
 
     public TransactionResult trade(TradeParam param) {
-        TransactionOrderMap<TransactionTradeOrder> map = new TransactionOrderMap<>();
+        TransactionOrderMap<TradeOrder> map = new TransactionOrderMap<>();
 
-        TransactionTradeOrder transactionTradeOrder = new TransactionTradeOrder(param);
-        map.setTransactionOrder(transactionTradeOrder);
+        TradeOrder tradeOrder = new TradeOrder(param);
+        map.setTransactionOrder(tradeOrder);
         {
             PaymentSetting paymentSetting = cashierRpc.getPaymentSetting(param.getPaymentSettingId());
-            TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder);
+            PayOrder payOrder = new PayOrder(tradeOrder);
             if (paymentSetting.getChannel() == PaymentChannel.BALANCE_PAY) {
-                transactionPaymentOrder.setPaymentType(PaymentType.BALANCE_PAY);
+                payOrder.setPaymentType(PaymentType.BALANCE_PAY);
             } else {
-                transactionPaymentOrder.setPaymentType(PaymentType.PAYMENT_AGENT);
+                payOrder.setPaymentType(PaymentType.PAYMENT_AGENT);
             }
-            map.setPrimaryPaymentOrder(transactionPaymentOrder);
+            map.setPrimaryPaymentOrder(payOrder);
         }
 
         {
             Long id = param.getDiscountId();
             BigDecimal orderAmount = BigDecimal.ZERO;
-            TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder, PaymentType.DISCOUNT_PAY, id, orderAmount);
-            map.setDiscountPaymentOrder(transactionPaymentOrder);
+            PayOrder payOrder = new PayOrder(tradeOrder, PaymentType.DISCOUNT_PAY, id, orderAmount);
+            map.setDiscountPaymentOrder(payOrder);
         }
 
         {
             Long id = param.getCouponId();
             BigDecimal orderAmount = BigDecimal.ZERO;
-            TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder, PaymentType.COUPON_PAY, id, orderAmount);
-            map.setCouponPaymentOrder(transactionPaymentOrder);
+            PayOrder payOrder = new PayOrder(tradeOrder, PaymentType.COUPON_PAY, id, orderAmount);
+            map.setCouponPaymentOrder(payOrder);
         }
 
         {
             VirtualCurrency virtualCurrency = param.getVirtualCurrency();
             BigDecimal orderAmount = virtualCurrency.getAmount();
-            TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder(transactionTradeOrder, PaymentType.VIRTUAL_CURRENCY_PAY, virtualCurrency.getId(), orderAmount);
-            map.setVirtualCurrencyPaymentOrder(transactionPaymentOrder);
+            PayOrder payOrder = new PayOrder(tradeOrder, PaymentType.VIRTUAL_CURRENCY_PAY, virtualCurrency.getId(), orderAmount);
+            map.setVirtualCurrencyPaymentOrder(payOrder);
         }
 
         transactionTemplate.executeWithoutResult(transactionStatus -> {
-            transactionTradeOrderService.save(map.getTransactionOrder());
-            List<TransactionPaymentOrder> list = map.getPaymentOrderList();
-            transactionPaymentOrderService.saveBatch(list, list.size());
+            tradeOrderService.save(map.getTransactionOrder());
+            List<PayOrder> list = map.getPaymentOrderList();
+            paymentOrderService.saveBatch(list, list.size());
         });
 
         CompletableFuture<PaymentResult> c1 = CompletableFuture.supplyAsync(() -> paymentExecutor.preparePay(map.getPrimaryPaymentOrder()));
@@ -124,7 +124,7 @@ public class TransactionService {
 
 
     public TransactionResult recharge(RechargeParam rechargeParam) {
-        TransactionOrderMap<TransactionRechargeOrder> map = new TransactionOrderMap<>();
+        TransactionOrderMap<RechargeOrder> map = new TransactionOrderMap<>();
 
         PaymentSetting paymentSetting = cashierRpc.getPaymentSetting(rechargeParam.getPaymentSettingId());
         Long rechargeId = rechargeParam.getRechargeId();
@@ -135,7 +135,7 @@ public class TransactionService {
         BigDecimal rechargeAmount = rechargeProduct.getNum();
 
         {
-            TransactionRechargeOrder rechargeOrder = new TransactionRechargeOrder();
+            RechargeOrder rechargeOrder = new RechargeOrder();
             rechargeOrder.setUid(rechargeParam.getUid());
             rechargeOrder.setBizOrderId(rechargeParam.getBizOrderId());
             rechargeOrder.setRechargeId(rechargeId);
@@ -148,23 +148,23 @@ public class TransactionService {
         }
 
         {
-            TransactionPaymentOrder transactionPaymentOrder = new TransactionPaymentOrder();
-            transactionPaymentOrder.setUid(rechargeParam.getUid());
-            transactionPaymentOrder.setBizOrderId(rechargeParam.getBizOrderId());
-            transactionPaymentOrder.setPayerId(rechargeParam.getUid());
-            transactionPaymentOrder.setPayeeId(1L);
-            transactionPaymentOrder.setSubject("");
-            transactionPaymentOrder.setOrderAmount(orderAmount);
-            transactionPaymentOrder.setPaymentType(PaymentType.PAYMENT_AGENT);
-            transactionPaymentOrder.setPaymentChannel(paymentSetting.getChannel());
-            transactionPaymentOrder.setPaymentSettingId(rechargeParam.getPaymentSettingId());
-            map.setPrimaryPaymentOrder(transactionPaymentOrder);
+            PayOrder payOrder = new PayOrder();
+            payOrder.setUid(rechargeParam.getUid());
+            payOrder.setBizOrderId(rechargeParam.getBizOrderId());
+            payOrder.setPayerId(rechargeParam.getUid());
+            payOrder.setPayeeId(1L);
+            payOrder.setSubject("");
+            payOrder.setOrderAmount(orderAmount);
+            payOrder.setPaymentType(PaymentType.PAYMENT_AGENT);
+            payOrder.setPaymentChannel(paymentSetting.getChannel());
+            payOrder.setPaymentSettingId(rechargeParam.getPaymentSettingId());
+            map.setPrimaryPaymentOrder(payOrder);
         }
 
         transactionTemplate.executeWithoutResult(transactionStatus -> {
-            transactionRechargeOrderService.save(map.getTransactionOrder());
-            List<TransactionPaymentOrder> list = map.getPaymentOrderList();
-            transactionPaymentOrderService.saveBatch(list, list.size());
+            rechargeOrderService.save(map.getTransactionOrder());
+            List<PayOrder> list = map.getPaymentOrderList();
+            paymentOrderService.saveBatch(list, list.size());
         });
 
 

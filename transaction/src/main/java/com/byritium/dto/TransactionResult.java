@@ -3,9 +3,6 @@ package com.byritium.dto;
 import com.byritium.constance.PaymentPattern;
 import com.byritium.constance.PaymentState;
 import com.byritium.dto.payment.PrepayParam;
-import com.byritium.entity.payment.PaymentRechargeOrder;
-import com.byritium.entity.payment.PaymentRefundOrder;
-import com.byritium.entity.transaction.TransactionTradeOrder;
 import lombok.Data;
 
 import java.util.Map;
