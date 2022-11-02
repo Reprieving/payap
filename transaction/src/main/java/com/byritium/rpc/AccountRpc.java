@@ -19,4 +19,10 @@ public interface AccountRpc {
 
     @RequestMapping("query")
     ResponseBody<AccountBalance> query(AccountQuery accountQuery);
+
+    @RequestMapping("freeze")
+    ResponseBody<Void> freeze();
+
+    @RequestMapping("unfreeze")
+    ResponseBody<Void> unfreeze();
 }

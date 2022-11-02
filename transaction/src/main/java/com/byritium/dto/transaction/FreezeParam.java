@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 
 @Data
 public class FreezeParam {
+    private Long clientId;
     private Long bizOrderId;
     private Long uid;
     private BusinessType bizType;
