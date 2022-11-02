@@ -25,6 +25,7 @@ public class AuthService {
     private AccountRpc accountRpc;
 
     public TransactionResult free(FreezeParam freezeParam) {
+        TransactionResult transactionResult = new TransactionResult();
         FreezeOrder freezeOrder = new FreezeOrder();
         freezeOrder.setClientId(freezeParam.getClientId());
         freezeOrder.setBizOrderId(freezeOrder.getBizOrderId());
@@ -36,12 +37,12 @@ public class AuthService {
 
         accountRpc.freeze();
 
-        return null;
+        return transactionResult;
     }
 
     public TransactionResult unfree(UnFreezeParam unFreezeParam) {
+        TransactionResult transactionResult = new TransactionResult();
         FreezeOrder freezeOrder = freezeOrderService.getOne(new LambdaQueryWrapper<FreezeOrder>().eq(FreezeOrder::getBizOrderId, unFreezeParam.getBizOrderId()));
-
         UnfreezeOrder unfreezeOrder = new UnfreezeOrder();
         unfreezeOrder.setClientId(freezeOrder.getClientId());
         unfreezeOrder.setBizOrderId(freezeOrder.getBizOrderId());
@@ -50,6 +51,6 @@ public class AuthService {
         unfreezeOrder.setBizType(freezeOrder.getBizType());
         unfreezeOrder.setFreezeAmount(freezeOrder.getFreezeAmount());
 
-        return null;
+        return transactionResult;
     }
 }

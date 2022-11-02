@@ -4,7 +4,6 @@ import com.byritium.BusinessType;
 import com.byritium.constance.TransactionState;
 import com.byritium.entity.CommonEntity;
 import lombok.Data;
-
 import java.math.BigDecimal;
 
 @Data
