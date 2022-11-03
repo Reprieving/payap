@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.byritium.dto.TransactionResult;
 import com.byritium.dto.transaction.WithdrawParam;
 import com.byritium.entity.transaction.FreezeOrder;
+import com.byritium.entity.transaction.WithdrawExamine;
 import com.byritium.entity.transaction.WithdrawOrder;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.PaymentRpc;
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class WithdrawService {
     @Autowired
+    private WithdrawExamineService withdrawExamineService;
+
+    @Autowired
     private WithdrawOrderService withdrawOrderService;
 
     @Autowired
@@ -20,6 +24,29 @@ public class WithdrawService {
 
     @Autowired
     private PaymentRpc paymentRpc;
+
+    public TransactionResult apply(WithdrawParam param) {
+        TransactionResult transactionResult = new TransactionResult();
+        FreezeOrder freezeOrder = freezeOrderService.getOne(new LambdaQueryWrapper<FreezeOrder>().eq(FreezeOrder::getBizOrderId, param.getBizOrderId()));
+
+
+        WithdrawOrder withdrawOrder = new WithdrawOrder();
+        withdrawOrder.setClientId(param.getClientId());
+        withdrawOrder.setUid(param.getUid());
+        withdrawOrder.setBizOrderId(freezeOrder.getBizOrderId());
+        withdrawOrder.setSubject("");
+        withdrawOrder.setWithdrawAmount(freezeOrder.getFreezeAmount());
+        withdrawOrder.setPaymentSettingId(param.getPaymentSettingId());
+
+        withdrawOrderService.save(withdrawOrder);
+
+        WithdrawExamine withdrawExamine = new WithdrawExamine();
+        withdrawExamine.setWithdrawOrderId(withdrawOrder.getId());
+        withdrawExamineService.save(withdrawExamine);
+
+        return transactionResult;
+    }
+
 
     public TransactionResult withdraw(WithdrawParam param) {
         TransactionResult transactionResult = new TransactionResult();
