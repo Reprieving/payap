@@ -51,6 +51,8 @@ public class AuthService {
         unfreezeOrder.setBizType(freezeOrder.getBizType());
         unfreezeOrder.setFreezeAmount(freezeOrder.getFreezeAmount());
 
+        accountRpc.unfreeze();
+
         return transactionResult;
     }
 }

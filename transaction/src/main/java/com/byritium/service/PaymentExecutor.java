@@ -29,6 +29,32 @@ public class PaymentExecutor {
         PaymentType paymentType = payOrder.getPaymentType();
         switch (paymentType) {
             case BALANCE_PAY:
+                accountRpc.pay(payOrder);
+                break;
+
+            case VIRTUAL_CURRENCY_PAY:
+                accountRpc.freeze();
+                break;
+
+            case PAYMENT_AGENT:
+                paymentRpc.pay(payOrder);
+                break;
+
+            case COUPON_PAY:
+                marketingCouponRpc.lock(payOrder);
+                break;
+        }
+
+        return null;
+    }
+
+    public PaymentResult pay(PayOrder payOrder) {
+        PaymentType paymentType = payOrder.getPaymentType();
+        switch (paymentType) {
+            case BALANCE_PAY:
+                accountRpc.pay(payOrder);
+                break;
+
             case VIRTUAL_CURRENCY_PAY:
                 accountRpc.pay(payOrder);
                 break;
