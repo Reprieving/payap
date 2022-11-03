@@ -1,9 +1,11 @@
 package com.byritium.service.transaction;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.byritium.constance.account.ExamineFlag;
 import com.byritium.dto.TransactionResult;
 import com.byritium.dto.transaction.WithdrawParam;
 import com.byritium.entity.transaction.FreezeOrder;
+import com.byritium.entity.transaction.UnfreezeOrder;
 import com.byritium.entity.transaction.WithdrawExamine;
 import com.byritium.entity.transaction.WithdrawOrder;
 import com.byritium.rpc.AccountRpc;
@@ -23,12 +25,17 @@ public class WithdrawService {
     private FreezeOrderService freezeOrderService;
 
     @Autowired
+    private UnfreezeOrderService unfreezeOrderService;
+
+    @Autowired
     private PaymentRpc paymentRpc;
+
+    @Autowired
+    private AccountRpc accountRpc;
 
     public TransactionResult apply(WithdrawParam param) {
         TransactionResult transactionResult = new TransactionResult();
         FreezeOrder freezeOrder = freezeOrderService.getOne(new LambdaQueryWrapper<FreezeOrder>().eq(FreezeOrder::getBizOrderId, param.getBizOrderId()));
-
 
         WithdrawOrder withdrawOrder = new WithdrawOrder();
         withdrawOrder.setClientId(param.getClientId());
@@ -48,22 +55,20 @@ public class WithdrawService {
     }
 
 
-    public TransactionResult withdraw(WithdrawParam param) {
+    public TransactionResult examine(WithdrawParam param) {
+        ExamineFlag flag = param.getFlag();
         TransactionResult transactionResult = new TransactionResult();
-        FreezeOrder freezeOrder = freezeOrderService.getOne(new LambdaQueryWrapper<FreezeOrder>().eq(FreezeOrder::getBizOrderId, param.getBizOrderId()));
 
+        WithdrawExamine withdrawExamine = withdrawExamineService.getById(param.getExamineId());
+        WithdrawOrder withdrawOrder = withdrawOrderService.getById(withdrawExamine.getWithdrawOrderId());
 
-        WithdrawOrder withdrawOrder = new WithdrawOrder();
-        withdrawOrder.setClientId(param.getClientId());
-        withdrawOrder.setUid(param.getUid());
-        withdrawOrder.setBizOrderId(freezeOrder.getBizOrderId());
-        withdrawOrder.setSubject("");
-        withdrawOrder.setWithdrawAmount(freezeOrder.getFreezeAmount());
-        withdrawOrder.setPaymentSettingId(param.getPaymentSettingId());
-
-        withdrawOrderService.save(withdrawOrder);
-
-        paymentRpc.withdraw(withdrawOrder);
+        if (ExamineFlag.APPROVED == flag) {
+            paymentRpc.withdraw(withdrawOrder);
+        } else {
+            UnfreezeOrder unfreezeOrder = new UnfreezeOrder();
+            unfreezeOrderService.save(unfreezeOrder);
+            accountRpc.unfreeze();
+        }
 
         return transactionResult;
     }

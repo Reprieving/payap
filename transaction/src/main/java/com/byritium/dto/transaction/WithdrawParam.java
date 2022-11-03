@@ -1,5 +1,6 @@
 package com.byritium.dto.transaction;
 
+import com.byritium.constance.account.ExamineFlag;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -12,4 +13,7 @@ public class WithdrawParam {
     private Long freezeTxOrderId;
     private Long paymentSettingId;
     private BigDecimal withdrawAmount;
+
+    private Long examineId;
+    private ExamineFlag flag;
 }
