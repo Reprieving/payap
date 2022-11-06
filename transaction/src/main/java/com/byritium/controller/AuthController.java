@@ -1,5 +1,6 @@
 package com.byritium.controller;
 
+import com.byritium.BusinessType;
 import com.byritium.dto.TransactionResult;
 import com.byritium.dto.transaction.FreezeParam;
 import com.byritium.dto.transaction.UnFreezeParam;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("auth")
 public class AuthController {
@@ -17,7 +20,10 @@ public class AuthController {
 
     @RequestMapping("freeze")
     public TransactionResult freeze(@RequestBody FreezeParam freezeParam) {
-        return authService.free(freezeParam);
+        Long uid = freezeParam.getUid();
+        BusinessType businessType = freezeParam.getBizType();
+        BigDecimal amount = freezeParam.getFreezeAmount();
+        return authService.free(uid, businessType, amount);
     }
 
     @RequestMapping("unfreeze")
