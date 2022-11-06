@@ -46,16 +46,17 @@ public class AuthService {
         return transactionResult;
     }
 
-    public TransactionResult unfree(UnFreezeParam unFreezeParam) {
+    public TransactionResult unfree(Long uid, Long freeOrderId, BigDecimal amount) {
+        TransactionInfo transactionInfo = TrxInfoHolder.get();
         TransactionResult transactionResult = new TransactionResult();
-        FreezeOrder freezeOrder = freezeOrderService.getOne(new LambdaQueryWrapper<FreezeOrder>().eq(FreezeOrder::getBizOrderId, unFreezeParam.getBizOrderId()));
+        FreezeOrder freezeOrder = freezeOrderService.getOne(new LambdaQueryWrapper<FreezeOrder>().eq(FreezeOrder::getBizOrderId, freeOrderId));
         UnfreezeOrder unfreezeOrder = new UnfreezeOrder();
-        unfreezeOrder.setClientId(freezeOrder.getClientId());
-        unfreezeOrder.setBizOrderId(freezeOrder.getBizOrderId());
-        unfreezeOrder.setFreezeOrderId(freezeOrder.getId());
-        unfreezeOrder.setUid(freezeOrder.getUid());
+        unfreezeOrder.setClientId(transactionInfo.getClientId());
+        unfreezeOrder.setBizOrderId(transactionInfo.getBizOrderId());
+        unfreezeOrder.setFreezeOrderId(freeOrderId);
+        unfreezeOrder.setUid(uid);
         unfreezeOrder.setBizType(freezeOrder.getBizType());
-        unfreezeOrder.setFreezeAmount(freezeOrder.getFreezeAmount());
+        unfreezeOrder.setFreezeAmount(amount);
 
         unfreezeOrderService.save(unfreezeOrder);
 

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public class UnFreezeParam {
     private Long bizOrderId;
     private Long uid;
-    private Long freezeTxOrderId;
+    private Long freezeOrderId;
     private BusinessType bizType;
-    private BigDecimal freezeAmount;
+    private BigDecimal unfreezeAmount;
 }

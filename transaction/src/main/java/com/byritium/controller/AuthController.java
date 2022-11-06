@@ -28,6 +28,9 @@ public class AuthController {
 
     @RequestMapping("unfreeze")
     public TransactionResult unfreeze(@RequestBody UnFreezeParam unFreezeParam) {
-        return authService.unfree(unFreezeParam);
+        Long uid = unFreezeParam.getUid();
+        Long freeOrderId = unFreezeParam.getFreezeOrderId();
+        BigDecimal amount = unFreezeParam.getUnfreezeAmount();
+        return authService.unfree(uid, freeOrderId, amount);
     }
 }
