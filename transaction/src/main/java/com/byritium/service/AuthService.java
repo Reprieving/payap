@@ -8,9 +8,11 @@ import com.byritium.dto.transaction.FreezeParam;
 import com.byritium.dto.transaction.UnFreezeParam;
 import com.byritium.entity.transaction.FreezeOrder;
 import com.byritium.entity.transaction.UnfreezeOrder;
+import com.byritium.entity.transaction.WithdrawOrder;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.service.transaction.FreezeOrderService;
 import com.byritium.service.transaction.UnfreezeOrderService;
+import com.byritium.service.transaction.WithdrawOrderService;
 import com.byritium.utils.TrxInfoHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,9 @@ public class AuthService {
     private UnfreezeOrderService unfreezeOrderService;
 
     @Autowired
+    private WithdrawOrderService withdrawOrderService;
+
+    @Autowired
     private AccountRpc accountRpc;
 
     public TransactionResult free(Long uid, BusinessType businessType, BigDecimal amount) {
@@ -40,6 +45,20 @@ public class AuthService {
         freezeOrder.setFreezeAmount(amount);
 
         freezeOrderService.save(freezeOrder);
+
+        switch (businessType){
+            case FREE_WITHDRAW:
+                WithdrawOrder withdrawOrder = new WithdrawOrder();
+                withdrawOrder.setClientId(transactionInfo.getClientId());
+                withdrawOrder.setUid(uid);
+                withdrawOrder.setBizOrderId(transactionInfo.getBizOrderId());
+                withdrawOrder.setSubject("");
+                withdrawOrder.setWithdrawAmount(amount);
+                withdrawOrder.setPaymentSettingId(transactionInfo.getPaymentSettingId());
+                withdrawOrderService.save(withdrawOrder);
+                break;
+        }
+
 
         accountRpc.freeze();
 

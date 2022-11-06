@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum BusinessType {
 
+    FREE_WITHDRAW("FREE_WITHDRAW","提现冻结")
     ;
     private final String type;
     private final String message;

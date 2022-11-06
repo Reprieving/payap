@@ -10,6 +10,7 @@ import com.byritium.entity.transaction.WithdrawExamine;
 import com.byritium.entity.transaction.WithdrawOrder;
 import com.byritium.rpc.AccountRpc;
 import com.byritium.rpc.PaymentRpc;
+import com.byritium.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,27 +23,20 @@ public class WithdrawService {
     private WithdrawOrderService withdrawOrderService;
 
     @Autowired
-    private FreezeOrderService freezeOrderService;
-
-    @Autowired
-    private UnfreezeOrderService unfreezeOrderService;
+    private AuthService authService;
 
     @Autowired
     private PaymentRpc paymentRpc;
 
-    @Autowired
-    private AccountRpc accountRpc;
-
     public TransactionResult apply(WithdrawParam param) {
         TransactionResult transactionResult = new TransactionResult();
-        FreezeOrder freezeOrder = freezeOrderService.getOne(new LambdaQueryWrapper<FreezeOrder>().eq(FreezeOrder::getBizOrderId, param.getBizOrderId()));
 
         WithdrawOrder withdrawOrder = new WithdrawOrder();
         withdrawOrder.setClientId(param.getClientId());
         withdrawOrder.setUid(param.getUid());
-        withdrawOrder.setBizOrderId(freezeOrder.getBizOrderId());
+        withdrawOrder.setBizOrderId(param.getBizOrderId());
         withdrawOrder.setSubject("");
-        withdrawOrder.setWithdrawAmount(freezeOrder.getFreezeAmount());
+        withdrawOrder.setWithdrawAmount(param.getWithdrawAmount());
         withdrawOrder.setPaymentSettingId(param.getPaymentSettingId());
 
         withdrawOrderService.save(withdrawOrder);
@@ -65,9 +59,7 @@ public class WithdrawService {
         if (ExamineFlag.APPROVED == flag) {
             paymentRpc.withdraw(withdrawOrder);
         } else {
-            UnfreezeOrder unfreezeOrder = new UnfreezeOrder();
-            unfreezeOrderService.save(unfreezeOrder);
-            accountRpc.unfreeze();
+
         }
 
         return transactionResult;

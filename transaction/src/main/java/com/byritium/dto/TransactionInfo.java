@@ -6,4 +6,5 @@ import lombok.Data;
 public class TransactionInfo {
     private Long clientId;
     private Long bizOrderId;
+    private Long paymentSettingId;
 }
