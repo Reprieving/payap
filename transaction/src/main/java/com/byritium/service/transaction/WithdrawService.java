@@ -28,38 +28,21 @@ public class WithdrawService {
     @Autowired
     private PaymentRpc paymentRpc;
 
-    public TransactionResult apply(WithdrawParam param) {
+
+    public TransactionResult execute(Long uid, Long withdrawOrderId,Long examinerId, ExamineFlag flag,String remark) {
         TransactionResult transactionResult = new TransactionResult();
-
-        WithdrawOrder withdrawOrder = new WithdrawOrder();
-        withdrawOrder.setClientId(param.getClientId());
-        withdrawOrder.setUid(param.getUid());
-        withdrawOrder.setBizOrderId(param.getBizOrderId());
-        withdrawOrder.setSubject("");
-        withdrawOrder.setWithdrawAmount(param.getWithdrawAmount());
-        withdrawOrder.setPaymentSettingId(param.getPaymentSettingId());
-
-        withdrawOrderService.save(withdrawOrder);
+        WithdrawOrder withdrawOrder = withdrawOrderService.getById(withdrawOrderId);
 
         WithdrawExamine withdrawExamine = new WithdrawExamine();
-        withdrawExamine.setWithdrawOrderId(withdrawOrder.getId());
+        withdrawExamine.setWithdrawOrderId(withdrawOrderId);
+        withdrawExamine.setExaminerId(examinerId);
+        withdrawExamine.setRemark(remark);
         withdrawExamineService.save(withdrawExamine);
-
-        return transactionResult;
-    }
-
-
-    public TransactionResult examine(WithdrawParam param) {
-        ExamineFlag flag = param.getFlag();
-        TransactionResult transactionResult = new TransactionResult();
-
-        WithdrawExamine withdrawExamine = withdrawExamineService.getById(param.getExamineId());
-        WithdrawOrder withdrawOrder = withdrawOrderService.getById(withdrawExamine.getWithdrawOrderId());
 
         if (ExamineFlag.APPROVED == flag) {
             paymentRpc.withdraw(withdrawOrder);
         } else {
-
+            authService.unfree(uid, withdrawOrder.getFreeOrderId(), withdrawOrder.getWithdrawAmount());
         }
 
         return transactionResult;

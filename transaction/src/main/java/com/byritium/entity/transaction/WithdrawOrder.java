@@ -19,6 +19,7 @@ public class WithdrawOrder extends CommonEntity {
     private Long uid;
     private Long clientId;
     private Long bizOrderId;
+    private Long freeOrderId;
     private String subject;
     private BigDecimal withdrawAmount;
     private TransactionState transactionState = TransactionState.TRANSACTION_PENDING;

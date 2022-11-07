@@ -46,12 +46,13 @@ public class AuthService {
 
         freezeOrderService.save(freezeOrder);
 
-        switch (businessType){
+        switch (businessType) {
             case FREE_WITHDRAW:
                 WithdrawOrder withdrawOrder = new WithdrawOrder();
                 withdrawOrder.setClientId(transactionInfo.getClientId());
                 withdrawOrder.setUid(uid);
                 withdrawOrder.setBizOrderId(transactionInfo.getBizOrderId());
+                withdrawOrder.setFreeOrderId(freezeOrder.getId());
                 withdrawOrder.setSubject("");
                 withdrawOrder.setWithdrawAmount(amount);
                 withdrawOrder.setPaymentSettingId(transactionInfo.getPaymentSettingId());

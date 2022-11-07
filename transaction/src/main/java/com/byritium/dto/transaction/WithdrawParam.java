@@ -10,10 +10,11 @@ public class WithdrawParam {
     private Long clientId;
     private Long bizOrderId;
     private Long uid;
-    private Long freezeTxOrderId;
+    private Long withdrawOrderId;
     private Long paymentSettingId;
     private BigDecimal withdrawAmount;
 
-    private Long examineId;
+    private Long examinerId;
     private ExamineFlag flag;
+    private String remark;
 }
