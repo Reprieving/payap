@@ -39,8 +39,6 @@ public class TransactionService {
     @Autowired
     private PaymentOrderService paymentOrderService;
 
-
-
     @Autowired
     private TransactionTemplate transactionTemplate;
 

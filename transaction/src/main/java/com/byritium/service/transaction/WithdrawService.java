@@ -23,13 +23,16 @@ public class WithdrawService {
     private WithdrawOrderService withdrawOrderService;
 
     @Autowired
+    private TransferService transferService;
+
+    @Autowired
     private AuthService authService;
 
     @Autowired
     private PaymentRpc paymentRpc;
 
 
-    public TransactionResult execute(Long uid, Long withdrawOrderId,Long examinerId, ExamineFlag flag,String remark) {
+    public TransactionResult execute(Long uid, Long withdrawOrderId, Long examinerId, ExamineFlag flag, String remark) {
         TransactionResult transactionResult = new TransactionResult();
         WithdrawOrder withdrawOrder = withdrawOrderService.getById(withdrawOrderId);
 
