@@ -23,9 +23,6 @@ public class WithdrawService {
     private WithdrawOrderService withdrawOrderService;
 
     @Autowired
-    private TransferService transferService;
-
-    @Autowired
     private AuthService authService;
 
     @Autowired
