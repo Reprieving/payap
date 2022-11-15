@@ -1,4 +1,4 @@
-package com.byritium.flow;
+package com.byritium.compose.flow;
 
 public class MarketingPayFlow {
 }
