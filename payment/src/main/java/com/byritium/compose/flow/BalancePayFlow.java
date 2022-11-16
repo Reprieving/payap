@@ -1,4 +1,4 @@
 package com.byritium.compose.flow;
 
-public class AccountPayFlow {
+public class BalancePayFlow {
 }
