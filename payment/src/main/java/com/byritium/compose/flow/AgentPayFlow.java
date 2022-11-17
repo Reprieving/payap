@@ -2,7 +2,9 @@ package com.byritium.compose.flow;
 
 import com.byritium.componet.SpringContextComp;
 import com.byritium.compose.directive.AgentPayDirective;
+import com.byritium.compose.directive.AgentPayQueryDirective;
 import com.byritium.compose.directive.Directive;
+import com.byritium.compose.directive.RecordDirective;
 import com.byritium.service.callback.entity.PayOrder;
 import lombok.Data;
 import org.apache.catalina.core.ApplicationContext;
@@ -24,6 +26,8 @@ public class AgentPayFlow {
     @PostConstruct
     private void init() {
         directiveList.add(SpringContextComp.getBean(AgentPayDirective.class));
+        directiveList.add(SpringContextComp.getBean(AgentPayQueryDirective.class));
+        directiveList.add(SpringContextComp.getBean(RecordDirective.class));
     }
 
     public void start(PayOrder payOrder) {
