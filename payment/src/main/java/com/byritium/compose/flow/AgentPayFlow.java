@@ -6,6 +6,7 @@ import com.byritium.compose.directive.AgentPayQueryDirective;
 import com.byritium.compose.directive.Directive;
 import com.byritium.compose.directive.RecordDirective;
 import com.byritium.service.callback.entity.PayOrder;
+import com.byritium.service.callback.entity.PaymentOrder;
 import lombok.Data;
 import org.apache.catalina.core.ApplicationContext;
 import org.reflections.vfs.Vfs;
@@ -19,7 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Component
-public class AgentPayFlow {
+public class AgentPayFlow implements PaymentFlow {
 
     private static final List<Directive> directiveList = new ArrayList<>();
 
@@ -30,12 +31,14 @@ public class AgentPayFlow {
         directiveList.add(SpringContextComp.getBean(RecordDirective.class));
     }
 
-    public void start(Long paymentId) {
+
+    @Override
+    public void start() {
 
     }
 
-    public void goon(Long paymentId) {
+    @Override
+    public void goon() {
 
     }
-
 }
