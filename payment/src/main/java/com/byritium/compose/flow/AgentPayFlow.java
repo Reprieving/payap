@@ -30,7 +30,7 @@ public class AgentPayFlow {
         directiveList.add(SpringContextComp.getBean(RecordDirective.class));
     }
 
-    public void start(PayOrder payOrder) {
+    public void start(Long paymentId) {
 
     }
 
