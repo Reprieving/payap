@@ -1,8 +1,10 @@
 package com.byritium.compose.directive;
 
-public class AgentPayQueryDirective implements Directive{
+import com.byritium.service.callback.entity.PayOrder;
+
+public class AgentPayQueryDirective implements Directive<PayOrder>{
     @Override
-    public void execute(Long paymentId) {
+    public void execute(PayOrder payOrder) {
 
     }
 }

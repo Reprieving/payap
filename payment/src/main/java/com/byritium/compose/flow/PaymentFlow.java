@@ -15,5 +15,5 @@ public interface PaymentFlow<T> {
 
     void start(T paymentOrder);
 
-    void goon(Long paymentOrderId);
+    void goon(T paymentOrder);
 }

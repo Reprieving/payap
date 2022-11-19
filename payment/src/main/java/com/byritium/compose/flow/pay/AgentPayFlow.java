@@ -23,7 +23,7 @@ public class AgentPayFlow implements PaymentFlow<PayOrder> {
     @Autowired
     private RedisClient<String, PayOrder> redisClient;
 
-    private static final List<Directive> directiveList = new ArrayList<>();
+    private static final List<Directive<PayOrder>> directiveList = new ArrayList<>();
 
     @PostConstruct
     private void init() {
@@ -41,10 +41,13 @@ public class AgentPayFlow implements PaymentFlow<PayOrder> {
     public void start(PayOrder payOrder) {
         String key = cacheKeyPrefix + payOrder.getId();
         redisClient.set(key, payOrder, cacheExistTime());
+        for (Directive<PayOrder> directive : directiveList) {
+            directive.execute(payOrder);
+        }
     }
 
     @Override
-    public void goon(Long paymentOrderId) {
+    public void goon(PayOrder payOrder) {
 
     }
 }

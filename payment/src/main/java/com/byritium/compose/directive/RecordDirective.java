@@ -1,8 +1,10 @@
 package com.byritium.compose.directive;
 
-public class RecordDirective implements Directive{
+import com.byritium.service.callback.entity.PayOrder;
+
+public class RecordDirective implements Directive<PayOrder>{
     @Override
-    public void execute(Long paymentId) {
+    public void execute(PayOrder payOrder) {
 
     }
 }
