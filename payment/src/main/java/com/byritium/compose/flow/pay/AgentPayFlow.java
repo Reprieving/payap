@@ -1,26 +1,27 @@
-package com.byritium.compose.flow;
+package com.byritium.compose.flow.pay;
 
+import com.byritium.componet.RedisClient;
 import com.byritium.componet.SpringContextComp;
 import com.byritium.compose.directive.AgentPayDirective;
 import com.byritium.compose.directive.AgentPayQueryDirective;
 import com.byritium.compose.directive.Directive;
 import com.byritium.compose.directive.RecordDirective;
+import com.byritium.compose.flow.PaymentFlow;
+import com.byritium.constance.payment.PaymentFlowType;
 import com.byritium.service.callback.entity.PayOrder;
-import com.byritium.service.callback.entity.PaymentOrder;
-import lombok.Data;
-import org.apache.catalina.core.ApplicationContext;
-import org.reflections.vfs.Vfs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Component
 public class AgentPayFlow implements PaymentFlow<PayOrder> {
+    private static final String cacheKeyPrefix = "PAYMENT_PAYORDER_";
+
+    @Autowired
+    private RedisClient<String, PayOrder> redisClient;
 
     private static final List<Directive> directiveList = new ArrayList<>();
 
@@ -32,8 +33,14 @@ public class AgentPayFlow implements PaymentFlow<PayOrder> {
     }
 
     @Override
-    public void start(PayOrder payOrder) {
+    public PaymentFlowType type() {
+        return PaymentFlowType.PAY;
+    }
 
+    @Override
+    public void start(PayOrder payOrder) {
+        String key = cacheKeyPrefix + payOrder.getId();
+        redisClient.set(key, payOrder, cacheExistTime());
     }
 
     @Override

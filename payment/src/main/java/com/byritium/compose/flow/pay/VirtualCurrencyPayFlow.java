@@ -1,4 +1,4 @@
-package com.byritium.compose.flow;
+package com.byritium.compose.flow.pay;
 
 public class VirtualCurrencyPayFlow {
 }
