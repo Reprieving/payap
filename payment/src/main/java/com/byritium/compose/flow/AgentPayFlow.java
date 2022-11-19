@@ -20,7 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Component
-public class AgentPayFlow implements PaymentFlow {
+public class AgentPayFlow implements PaymentFlow<PayOrder> {
 
     private static final List<Directive> directiveList = new ArrayList<>();
 
@@ -31,14 +31,13 @@ public class AgentPayFlow implements PaymentFlow {
         directiveList.add(SpringContextComp.getBean(RecordDirective.class));
     }
 
-
     @Override
-    public void start() {
+    public void start(PayOrder payOrder) {
 
     }
 
     @Override
-    public void goon() {
+    public void goon(Long paymentOrderId) {
 
     }
 }
