@@ -1,6 +1,6 @@
 package com.byritium.feign;
 
-import com.byritium.dto.PayDetail;
+import com.byritium.dto.AgentPayParaml;
 import com.byritium.dto.PaymentResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Component
 public interface AccountRecordedFeign {
     @RequestMapping("execute")
-    PaymentResult execute(@RequestBody PayDetail payDetail);
+    PaymentResult execute(@RequestBody AgentPayParaml agentPayParaml);
     
     @RequestMapping("query")
-    PaymentResult query(@RequestBody PayDetail payDetail);
+    PaymentResult query(@RequestBody AgentPayParaml agentPayParaml);
 }

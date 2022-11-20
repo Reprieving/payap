@@ -1,14 +1,11 @@
 package com.byritium.dto;
 
-import com.byritium.constance.PaymentPattern;
-import com.byritium.service.callback.entity.PayOrder;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
-public class PayParam {
+public class PaymentParam {
     private long bizOrderId;
     private long txOrderId;
     private long uid;

@@ -1,6 +1,6 @@
 package com.byritium.controller;
 
-import com.byritium.dto.PayParam;
+import com.byritium.dto.PaymentParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class SettleController {
 
     @RequestMapping("execute")
-    public void execute(@RequestBody PayParam param) {
+    public void execute(@RequestBody PaymentParam param) {
 
     }
 
     @RequestMapping("query")
-    public void queryOrders(@RequestBody PayParam param) {
+    public void queryOrders(@RequestBody PaymentParam param) {
 
     }
 

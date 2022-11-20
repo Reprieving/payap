@@ -1,6 +1,6 @@
 package com.byritium.controller;
 
-import com.byritium.dto.PayParam;
+import com.byritium.dto.PaymentParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class AgreementController {
 
     @RequestMapping("sign")
-    public void sign(@RequestBody PayParam param) {
+    public void sign(@RequestBody PaymentParam param) {
 
     }
 
     @RequestMapping("query")
-    public void query(@RequestBody PayParam param) {
+    public void query(@RequestBody PaymentParam param) {
 
     }
 
     @RequestMapping("unsign")
-    public void unsign(@RequestBody PayParam param) {
+    public void unsign(@RequestBody PaymentParam param) {
 
     }
 }
