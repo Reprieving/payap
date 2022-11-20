@@ -1,10 +1,17 @@
 package com.byritium.compose.directive;
 
+import com.byritium.compose.flow.PaymentFlow;
 import com.byritium.service.callback.entity.PayOrder;
+import org.springframework.stereotype.Component;
 
-public class AgentPayDirective implements Directive<PayOrder> {
-    @Override
-    public void execute(PayOrder payOrder) {
+@Component
+public class AgentPayDirective {
+    public void execute() {
 
     }
+
+    public void query() {
+
+    }
+
 }

@@ -2,10 +2,7 @@ package com.byritium.compose.flow.pay;
 
 import com.byritium.componet.RedisClient;
 import com.byritium.componet.SpringContextComp;
-import com.byritium.compose.directive.AgentPayDirective;
-import com.byritium.compose.directive.AgentPayQueryDirective;
-import com.byritium.compose.directive.Directive;
-import com.byritium.compose.directive.RecordDirective;
+import com.byritium.compose.directive.*;
 import com.byritium.compose.flow.PaymentFlow;
 import com.byritium.constance.payment.PaymentFlowType;
 import com.byritium.service.callback.entity.PayOrder;
@@ -23,14 +20,11 @@ public class AgentPayFlow implements PaymentFlow<PayOrder> {
     @Autowired
     private RedisClient<String, PayOrder> redisClient;
 
-    private static final List<Directive<PayOrder>> directiveList = new ArrayList<>();
+    @Autowired
+    private AgentPayDirective agentPayDirective;
 
-    @PostConstruct
-    private void init() {
-        directiveList.add(SpringContextComp.getBean(AgentPayDirective.class));
-        directiveList.add(SpringContextComp.getBean(AgentPayQueryDirective.class));
-        directiveList.add(SpringContextComp.getBean(RecordDirective.class));
-    }
+    @Autowired
+    private RecordedDirective recordedDirective;
 
     @Override
     public PaymentFlowType type() {
@@ -41,9 +35,9 @@ public class AgentPayFlow implements PaymentFlow<PayOrder> {
     public void start(PayOrder payOrder) {
         String key = cacheKeyPrefix + payOrder.getId();
         redisClient.set(key, payOrder, cacheExistTime());
-        for (Directive<PayOrder> directive : directiveList) {
-            directive.execute(payOrder);
-        }
+        agentPayDirective.execute();
+        agentPayDirective.query();
+        recordedDirective.execute();
     }
 
     @Override
