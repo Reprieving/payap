@@ -8,11 +8,11 @@ import java.math.BigDecimal;
 
 @Data
 public class PayOrder {
-    private String id;
-    private String uid;
+    private Long id;
+    private Long uid;
     private String subject;
-    private String txOrderId;
-    private String bizOrderId;
+    private Long txOrderId;
+    private Long bizOrderId;
     private BigDecimal orderAmount;
     private PaymentPattern paymentPattern;
 }

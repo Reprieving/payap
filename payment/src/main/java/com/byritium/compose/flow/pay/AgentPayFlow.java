@@ -5,11 +5,13 @@ import com.byritium.componet.SpringContextComp;
 import com.byritium.compose.directive.*;
 import com.byritium.compose.flow.PaymentFlow;
 import com.byritium.constance.payment.PaymentFlowType;
+import com.byritium.dto.PaymentExtraParam;
 import com.byritium.service.callback.entity.PayOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +37,13 @@ public class AgentPayFlow implements PaymentFlow<PayOrder> {
     public void start(PayOrder payOrder) {
         String key = cacheKeyPrefix + payOrder.getId();
         redisClient.set(key, payOrder, cacheExistTime());
-        agentPayDirective.execute();
-        agentPayDirective.query();
+        Long payOrderId = payOrder.getId();
+        Long uid = payOrder.getUid();
+        BigDecimal orderAmount = payOrder.getOrderAmount();
+        String title = payOrder.getSubject();
+        PaymentExtraParam extraParam = new PaymentExtraParam();
+        agentPayDirective.execute(payOrderId, uid, orderAmount, title, extraParam);
+        agentPayDirective.query(payOrderId);
         recordedDirective.execute();
     }
 
