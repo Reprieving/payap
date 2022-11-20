@@ -41,9 +41,7 @@ public class AgentPayFlow implements PaymentFlow<PayOrder> {
         Long uid = payOrder.getUid();
         BigDecimal orderAmount = payOrder.getOrderAmount();
         String title = payOrder.getSubject();
-        PaymentExtraParam extraParam = new PaymentExtraParam();
-        agentPayDirective.execute(payOrderId, uid, orderAmount, title, extraParam);
-        agentPayDirective.query(payOrderId);
+
         recordedDirective.execute();
     }
 
