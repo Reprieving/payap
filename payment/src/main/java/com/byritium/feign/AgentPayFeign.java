@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Component
 public interface AgentPayFeign {
     @RequestMapping("order")
-    PaymentResult order(@RequestBody AgentPayParam agentPayParam);
+    PaymentResult order(Long payOrderId);
 
     @RequestMapping("query")
     PaymentResult query(Long payOrderId);

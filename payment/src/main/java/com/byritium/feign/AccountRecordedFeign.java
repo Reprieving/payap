@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Component
 public interface AccountRecordedFeign {
     @RequestMapping("execute")
-    PaymentResult execute(@RequestBody AgentPayParam agentPayParam);
+    PaymentResult execute(Long paymentOrderId);
     
     @RequestMapping("query")
     PaymentResult query(@RequestBody AgentPayParam agentPayParam);
