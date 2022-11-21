@@ -2,10 +2,11 @@ package com.byritium.compose.flow.pay;
 
 import com.byritium.componet.RedisClient;
 import com.byritium.componet.SpringContextComp;
-import com.byritium.compose.directive.*;
 import com.byritium.compose.flow.PaymentFlow;
 import com.byritium.constance.payment.PaymentFlowType;
 import com.byritium.dto.PaymentExtraParam;
+import com.byritium.feign.AccountRecordedFeign;
+import com.byritium.feign.AgentPayFeign;
 import com.byritium.service.callback.entity.PayOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,10 +24,10 @@ public class AgentPayFlow implements PaymentFlow<PayOrder> {
     private RedisClient<String, PayOrder> redisClient;
 
     @Autowired
-    private AgentPayDirective agentPayDirective;
+    private AgentPayFeign agentPayFeign;
 
     @Autowired
-    private RecordedDirective recordedDirective;
+    private AccountRecordedFeign accountRecordedFeign;
 
     @Override
     public PaymentFlowType type() {
@@ -42,7 +43,10 @@ public class AgentPayFlow implements PaymentFlow<PayOrder> {
         BigDecimal orderAmount = payOrder.getOrderAmount();
         String title = payOrder.getSubject();
 
-        recordedDirective.execute();
+//        agentPayFeign.order();
+//        agentPayFeign.query();
+//        agentPayFeign.query();
+
     }
 
     @Override

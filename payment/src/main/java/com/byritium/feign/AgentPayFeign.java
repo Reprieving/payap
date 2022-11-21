@@ -1,6 +1,6 @@
 package com.byritium.feign;
 
-import com.byritium.dto.AgentPayParaml;
+import com.byritium.dto.AgentPayParam;
 import com.byritium.dto.PaymentResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Component
 public interface AgentPayFeign {
     @RequestMapping("order")
-    PaymentResult order(@RequestBody AgentPayParaml agentPayParaml);
+    PaymentResult order(@RequestBody AgentPayParam agentPayParam);
 
     @RequestMapping("query")
     PaymentResult query(Long payOrderId);

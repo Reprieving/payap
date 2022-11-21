@@ -5,7 +5,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class AgentPayParaml {
+public class AgentPayParam {
     private Long payOrderId;
     private Long uid;
     private BigDecimal orderAmount;
