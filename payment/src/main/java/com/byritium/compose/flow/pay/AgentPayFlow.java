@@ -4,6 +4,7 @@ import com.byritium.componet.RedisClient;
 import com.byritium.componet.SpringContextComp;
 import com.byritium.compose.flow.PaymentFlow;
 import com.byritium.constance.payment.PaymentFlowType;
+import com.byritium.dto.AccountRecordedParam;
 import com.byritium.dto.AgentPayParam;
 import com.byritium.dto.PaymentExtraParam;
 import com.byritium.feign.AccountRecordedFeign;
@@ -45,14 +46,19 @@ public class AgentPayFlow implements PaymentFlow<PayOrder> {
         String title = payOrder.getSubject();
 
         {
+            AgentPayParam param = new AgentPayParam();
+            param.setPayOrderId(payOrderId);
+            param.setUid(uid);
+            param.setOrderAmount(orderAmount);
+            param.setTitle(title);
             agentPayFeign.order(payOrderId);
         }
         {
-
             agentPayFeign.query(payOrderId);
         }
         {
-            accountRecordedFeign.execute(payOrderId);
+            AccountRecordedParam param = new AccountRecordedParam();
+            accountRecordedFeign.execute(param);
         }
 
 

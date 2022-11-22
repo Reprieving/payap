@@ -1,5 +1,6 @@
 package com.byritium.feign;
 
+import com.byritium.dto.AccountRecordedParam;
 import com.byritium.dto.AgentPayParam;
 import com.byritium.dto.PaymentResult;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Component
 public interface AccountRecordedFeign {
     @RequestMapping("execute")
-    PaymentResult execute(Long paymentOrderId);
+    PaymentResult execute(@RequestBody AccountRecordedParam param);
     
     @RequestMapping("query")
-    PaymentResult query(@RequestBody AgentPayParam agentPayParam);
+    PaymentResult query(Long paymentOrderId);
 }
