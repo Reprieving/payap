@@ -3,6 +3,7 @@ package com.byritium.compose.flow.pay;
 import com.byritium.componet.RedisClient;
 import com.byritium.componet.SpringContextComp;
 import com.byritium.compose.flow.PaymentFlow;
+import com.byritium.compose.flow.PaymentFlowInit;
 import com.byritium.constance.payment.PaymentFlowType;
 import com.byritium.dto.AccountRecordedParam;
 import com.byritium.dto.AgentPayParam;
@@ -19,9 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class AgentPayFlow implements PaymentFlow<PayOrder> {
-    private static final String cacheKeyPrefix = "PAYMENT_PAYORDER_";
-
+public class AgentPayFlow extends PaymentFlowInit implements PaymentFlow<PayOrder> {
     @Autowired
     private RedisClient<String, PayOrder> redisClient;
 
@@ -30,6 +29,12 @@ public class AgentPayFlow implements PaymentFlow<PayOrder> {
 
     @Autowired
     private AccountRecordedFeign accountRecordedFeign;
+
+    @Override
+    protected void init() {
+        cacheKeyPrefix = "PAYMENT_PAYORDER_";
+        directiveList = new ArrayList<>();
+    }
 
     @Override
     public PaymentFlowType type() {
@@ -68,4 +73,6 @@ public class AgentPayFlow implements PaymentFlow<PayOrder> {
     public void goon(PayOrder payOrder) {
 
     }
+
+
 }
