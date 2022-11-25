@@ -1,5 +1,6 @@
 package com.byritium.compose.directive;
 
+import com.byritium.dto.flow.FlowResult;
 import com.byritium.feign.AgentPayFeign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,8 @@ public class AgentPayOrderDirective implements Directive{
     private AgentPayFeign agentPayFeign;
 
     @Override
-    public void execute(Long paymentOrderId) {
+    public FlowResult<String> execute(Long paymentOrderId) {
         agentPayFeign.order(null);
+        return null;
     }
 }
