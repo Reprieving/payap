@@ -2,6 +2,9 @@ package com.byritium.compose.flow.pay;
 
 import com.byritium.componet.RedisClient;
 import com.byritium.componet.SpringContextComp;
+import com.byritium.compose.directive.AccountRecordEntryDirective;
+import com.byritium.compose.directive.AgentPayOrderDirective;
+import com.byritium.compose.directive.AgentPayQueryDirective;
 import com.byritium.compose.flow.PaymentFlow;
 import com.byritium.compose.flow.PaymentFlowInit;
 import com.byritium.constance.payment.PaymentFlowType;
@@ -34,6 +37,9 @@ public class AgentPayFlow extends PaymentFlowInit implements PaymentFlow<PayOrde
     protected void init() {
         cacheKeyPrefix = "PAYMENT_PAYORDER_";
         directiveList = new ArrayList<>();
+        directiveList.add(SpringContextComp.getBean(AgentPayOrderDirective.class));
+        directiveList.add(SpringContextComp.getBean(AgentPayQueryDirective.class));
+        directiveList.add(SpringContextComp.getBean(AccountRecordEntryDirective.class));
     }
 
     @Override
@@ -49,22 +55,6 @@ public class AgentPayFlow extends PaymentFlowInit implements PaymentFlow<PayOrde
         Long uid = payOrder.getUid();
         BigDecimal orderAmount = payOrder.getOrderAmount();
         String title = payOrder.getSubject();
-
-        {
-            AgentPayParam param = new AgentPayParam();
-            param.setPayOrderId(payOrderId);
-            param.setUid(uid);
-            param.setOrderAmount(orderAmount);
-            param.setTitle(title);
-            agentPayFeign.order(payOrderId);
-        }
-        {
-            agentPayFeign.query(payOrderId);
-        }
-        {
-            AccountRecordedParam param = new AccountRecordedParam();
-            accountRecordedFeign.execute(param);
-        }
 
 
     }
