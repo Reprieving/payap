@@ -27,13 +27,8 @@ public class AgentPayFlow extends PaymentFlowInit implements PaymentFlow<PayOrde
     @Autowired
     private RedisClient<String, PayOrder> redisClient;
 
-    @Autowired
-    private AgentPayFeign agentPayFeign;
-
-    @Autowired
-    private AccountRecordedFeign accountRecordedFeign;
-
     @Override
+    @PostConstruct
     protected void init() {
         cacheKeyPrefix = "PAYMENT_PAYORDER_";
         directiveList = new ArrayList<>();
@@ -51,10 +46,6 @@ public class AgentPayFlow extends PaymentFlowInit implements PaymentFlow<PayOrde
     public void start(PayOrder payOrder) {
         String key = cacheKeyPrefix + payOrder.getId();
         redisClient.set(key, payOrder, cacheExistTime());
-        Long payOrderId = payOrder.getId();
-        Long uid = payOrder.getUid();
-        BigDecimal orderAmount = payOrder.getOrderAmount();
-        String title = payOrder.getSubject();
 
 
     }
