@@ -15,12 +15,14 @@ import com.byritium.dto.PaymentExtraParam;
 import com.byritium.feign.AccountRecordedFeign;
 import com.byritium.feign.AgentPayFeign;
 import com.byritium.service.callback.entity.PayOrder;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -32,7 +34,7 @@ public class AgentPayFlow extends PaymentFlowInit implements PaymentFlow<PayOrde
     @PostConstruct
     protected void init() {
         cacheKeyPrefix = "PAYMENT_PAYORDER_";
-        directiveList = new ArrayList<>();
+        directiveList = Lists.newArrayList(SpringContextComp.getBean(AgentPayOrderDirective.class),SpringContextComp.getBean(AgentPayQueryDirective.class),SpringContextComp.getBean(AccountRecordEntryDirective.class));
         directiveList.add(SpringContextComp.getBean(AgentPayOrderDirective.class));
         directiveList.add(SpringContextComp.getBean(AgentPayQueryDirective.class));
         directiveList.add(SpringContextComp.getBean(AccountRecordEntryDirective.class));
