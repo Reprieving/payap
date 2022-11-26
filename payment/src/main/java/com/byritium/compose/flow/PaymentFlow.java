@@ -3,6 +3,7 @@ package com.byritium.compose.flow;
 import com.byritium.compose.directive.Directive;
 import com.byritium.constance.PaymentType;
 import com.byritium.constance.payment.PaymentFlowType;
+import com.byritium.dto.PaymentDetail;
 import com.byritium.service.callback.entity.PayOrder;
 
 import javax.annotation.PostConstruct;
@@ -16,7 +17,7 @@ public interface PaymentFlow<T> {
         return 15;
     };
 
-    void start(T paymentOrder);
+    PaymentDetail start(T paymentOrder);
 
-    void goon(T paymentOrder);
+    PaymentDetail goon(T paymentOrder);
 }

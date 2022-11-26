@@ -10,6 +10,7 @@ import com.byritium.compose.flow.PaymentFlowInit;
 import com.byritium.constance.payment.PaymentFlowType;
 import com.byritium.dto.AccountRecordedParam;
 import com.byritium.dto.AgentPayParam;
+import com.byritium.dto.PaymentDetail;
 import com.byritium.dto.PaymentExtraParam;
 import com.byritium.feign.AccountRecordedFeign;
 import com.byritium.feign.AgentPayFeign;
@@ -43,16 +44,17 @@ public class AgentPayFlow extends PaymentFlowInit implements PaymentFlow<PayOrde
     }
 
     @Override
-    public void start(PayOrder payOrder) {
+    public PaymentDetail start(PayOrder payOrder) {
         String key = cacheKeyPrefix + payOrder.getId();
         redisClient.set(key, payOrder, cacheExistTime());
 
-
+        return null;
     }
 
     @Override
-    public void goon(PayOrder payOrder) {
+    public PaymentDetail goon(PayOrder payOrder) {
 
+        return null;
     }
 
 
