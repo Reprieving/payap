@@ -5,25 +5,18 @@ import com.byritium.componet.SpringContextComp;
 import com.byritium.compose.directive.AccountRecordEntryDirective;
 import com.byritium.compose.directive.AgentPayOrderDirective;
 import com.byritium.compose.directive.AgentPayQueryDirective;
+import com.byritium.compose.directive.Directive;
 import com.byritium.compose.flow.PaymentFlow;
 import com.byritium.compose.flow.PaymentFlowInit;
 import com.byritium.constance.payment.PaymentFlowType;
-import com.byritium.dto.AccountRecordedParam;
-import com.byritium.dto.AgentPayParam;
 import com.byritium.dto.PaymentDetail;
-import com.byritium.dto.PaymentExtraParam;
-import com.byritium.feign.AccountRecordedFeign;
-import com.byritium.feign.AgentPayFeign;
+import com.byritium.dto.flow.FlowResult;
 import com.byritium.service.callback.entity.PayOrder;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.PostConstruct;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.concurrent.Flow;
 
 @Component
 public class AgentPayFlow extends PaymentFlowInit implements PaymentFlow<PayOrder> {
@@ -34,10 +27,11 @@ public class AgentPayFlow extends PaymentFlowInit implements PaymentFlow<PayOrde
     @PostConstruct
     protected void init() {
         cacheKeyPrefix = "PAYMENT_PAYORDER_";
-        directiveList = Lists.newArrayList(SpringContextComp.getBean(AgentPayOrderDirective.class),SpringContextComp.getBean(AgentPayQueryDirective.class),SpringContextComp.getBean(AccountRecordEntryDirective.class));
-        directiveList.add(SpringContextComp.getBean(AgentPayOrderDirective.class));
-        directiveList.add(SpringContextComp.getBean(AgentPayQueryDirective.class));
-        directiveList.add(SpringContextComp.getBean(AccountRecordEntryDirective.class));
+        directiveList = Lists.newArrayList(
+                SpringContextComp.getBean(AgentPayOrderDirective.class),
+                SpringContextComp.getBean(AgentPayQueryDirective.class),
+                SpringContextComp.getBean(AccountRecordEntryDirective.class)
+        );
     }
 
     @Override
@@ -47,9 +41,15 @@ public class AgentPayFlow extends PaymentFlowInit implements PaymentFlow<PayOrde
 
     @Override
     public PaymentDetail start(PayOrder payOrder) {
-        String key = cacheKeyPrefix + payOrder.getId();
+        Long paymentOrderId = payOrder.getId();
+        String key = cacheKeyPrefix + paymentOrderId;
         redisClient.set(key, payOrder, cacheExistTime());
-
+        for(Directive directive:directiveList){
+            FlowResult flowResult = directive.execute(paymentOrderId);
+            if(!flowResult.isGoon()){
+                return flowResult.getData();
+            }
+        }
         return null;
     }
 
