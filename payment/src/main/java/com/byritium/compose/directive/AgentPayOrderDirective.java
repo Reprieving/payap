@@ -11,7 +11,7 @@ public class AgentPayOrderDirective implements Directive{
     private AgentPayFeign agentPayFeign;
 
     @Override
-    public FlowResult<String> execute(Long paymentOrderId) {
+    public FlowResult execute(Long paymentOrderId) {
         agentPayFeign.order(null);
         return null;
     }

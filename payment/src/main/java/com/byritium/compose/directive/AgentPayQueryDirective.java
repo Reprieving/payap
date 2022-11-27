@@ -9,7 +9,7 @@ public class AgentPayQueryDirective implements Directive{
     private AgentPayFeign agentPayFeign;
 
     @Override
-    public FlowResult<?> execute(Long paymentOrderId) {
+    public FlowResult execute(Long paymentOrderId) {
         agentPayFeign.query(paymentOrderId);
         return null;
     }
