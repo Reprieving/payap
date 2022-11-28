@@ -1,10 +1,11 @@
-package com.byritium.compose.directive;
+package com.byritium.compose.directive.agent;
 
+import com.byritium.compose.directive.Directive;
 import com.byritium.dto.flow.FlowResult;
 import com.byritium.feign.AgentPayFeign;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class AgentPayQueryDirective implements Directive{
+public class AgentPayQueryDirective implements Directive {
     @Autowired
     private AgentPayFeign agentPayFeign;
 

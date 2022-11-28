@@ -2,9 +2,9 @@ package com.byritium.compose.flow.pay;
 
 import com.byritium.componet.RedisClient;
 import com.byritium.componet.SpringContextComp;
-import com.byritium.compose.directive.AccountRecordEntryDirective;
-import com.byritium.compose.directive.AgentPayOrderDirective;
-import com.byritium.compose.directive.AgentPayQueryDirective;
+import com.byritium.compose.directive.account.AccountRecordEntryDirective;
+import com.byritium.compose.directive.agent.AgentPayOrderDirective;
+import com.byritium.compose.directive.agent.AgentPayQueryDirective;
 import com.byritium.compose.directive.Directive;
 import com.byritium.compose.flow.PaymentFlow;
 import com.byritium.compose.flow.PaymentFlowInit;
@@ -16,7 +16,6 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
-import java.util.concurrent.Flow;
 
 @Component
 public class AgentPayFlow extends PaymentFlowInit implements PaymentFlow<PayOrder> {
