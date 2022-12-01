@@ -5,5 +5,5 @@ import org.springframework.stereotype.Component;
 
 @FeignClient(value = "market/pay")
 @Component
-public class MarketCouponFeign {
+public interface MarketCouponFeign {
 }

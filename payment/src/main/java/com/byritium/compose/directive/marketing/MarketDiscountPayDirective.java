@@ -5,7 +5,7 @@ import com.byritium.dto.flow.FlowResult;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MarketCouponLockDirective implements Directive {
+public class MarketDiscountPayDirective implements Directive {
 
     @Override
     public FlowResult execute(Long paymentOrderId) {
